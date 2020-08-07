@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.experiment.ExperimentService;
 import com.uniovi.es.business.investigator.InvestigatorServiceImpl;
+import com.uniovi.es.exceptions.ExperimentException;
 
 @RestController
 @RequestMapping("/experiment")
@@ -22,23 +23,42 @@ public class ExperimentControllerImpl implements ExperimentController {
 
 	@Override
 	@RequestMapping(value = "/open/{id}", method = RequestMethod.PUT)
-	public void openExperiment(String id) {
+	public void openExperiment(String id) throws ExperimentException {
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- open experiment");
-
+		
+		experimentService.open(id);
+		
+		logger.info("[FINAL] EXPERIMENT CONTROLLER -- open experiment");
 	}
 
 	@Override
 	@RequestMapping(value = "/close/{id}", method = RequestMethod.PUT)
-	public void closeExperiment(String id) {
+	public void closeExperiment(String id) throws ExperimentException {
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- close experiment");
-
+		
+		experimentService.close(id);
+		
+		logger.info("[FINAL] EXPERIMENT CONTROLLER -- close experiment");
 	}
 
 	@Override
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.PUT)
-	public void deleteExperiment(String id) {
+	public void deleteExperiment(String id) throws ExperimentException {
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- delete experiment");
-
+		
+		experimentService.delete(id);
+		
+		logger.info("[FINAL] EXPERIMENT CONTROLLER -- delete experiment");
+	}
+	
+	@Override
+	@RequestMapping(value = "/reopen/{id}", method = RequestMethod.PUT)
+	public void reOpenExperiment(String id) throws ExperimentException {
+		logger.info("[INICIO] EXPERIMENT CONTROLLER -- reOpen experiment");
+		
+		experimentService.reOpen(id);
+		
+		logger.info("[FINAL] EXPERIMENT CONTROLLER -- reOpen experiment");
 	}
 
 	@Override
@@ -62,5 +82,7 @@ public class ExperimentControllerImpl implements ExperimentController {
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- update experiment");
 
 	}
+
+	
 	
 }

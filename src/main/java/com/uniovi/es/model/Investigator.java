@@ -7,12 +7,19 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
 public class Investigator implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
+	
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
 	private String name;
 	private String surname;
@@ -33,9 +40,6 @@ public class Investigator implements Serializable {
 	
 	private Date registrationDate;
 	private String address;
-	
-	@Column(unique = true) 
-	private String id;
 	
 	@OneToMany(mappedBy = "investigator")
 	private Set<Petition> petitions = new HashSet<Petition>();
@@ -122,7 +126,7 @@ public class Investigator implements Serializable {
 		this.address = address;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 

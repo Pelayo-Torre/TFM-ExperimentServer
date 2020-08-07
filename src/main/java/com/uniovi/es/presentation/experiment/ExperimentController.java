@@ -1,6 +1,7 @@
 package com.uniovi.es.presentation.experiment;
 
 import com.uniovi.es.business.dto.ExperimentDTO;
+import com.uniovi.es.exceptions.ExperimentException;
 
 public interface ExperimentController {
 	
@@ -28,24 +29,35 @@ public interface ExperimentController {
 	 * como parámetro. 
 	 * El ESTADO del experimento deberá cambiar a ABIERTO
 	 * @param id, identificador del experimento que se desea abrir
+	 * @throws ExperimentException 
 	 */
-	public void openExperiment(String id);
+	public void openExperiment(String id) throws ExperimentException;
 	
 	/**
 	 * Recibe una petición para cambiarle el estado del experimento que se pasa
 	 * como parámetro. 
 	 * El ESTADO del experimento deberá cambiar a CERRADO
 	 * @param id, identificador del experimento que se desea abrir
+	 * @throws ExperimentException 
 	 */
-	public void closeExperiment(String id);
+	public void closeExperiment(String id) throws ExperimentException;
 	
 	/**
 	 * Recibe una petición para cambiarle el estado del experimento que se pasa
 	 * como parámetro. 
 	 * El ESTADO del experimento deberá cambiar a BORRADO
 	 * @param id, identificador del experimento que se desea abrir
+	 * @throws ExperimentException 
 	 */
-	public void deleteExperiment(String id);
+	public void deleteExperiment(String id) throws ExperimentException;
 	
+	/**
+	 * Recibe una petición para cambiarle el estado del experimento que se pasa
+	 * como parámetro. 
+	 * El ESTADO del experimento deberá cambiar a ABIERTO
+	 * @param id, identificador del experimento que se desea abrir
+	 * @throws ExperimentException 
+	 */
+	public void reOpenExperiment(String id) throws ExperimentException;
 
 }

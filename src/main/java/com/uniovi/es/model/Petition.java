@@ -8,6 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -15,9 +18,10 @@ public class Petition implements Serializable {
 		
 	private static final long serialVersionUID = 1L;
 	
-	@Column(unique = true) 
-	private String id;
-		
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
 	@Enumerated(EnumType.STRING)
 	private StatusPetition status;
 	
@@ -37,16 +41,11 @@ public class Petition implements Serializable {
 	
 	Petition() {}
 	
-	public Petition(String id, Investigator investigator, Experiment experiment) {
-		this.id = id;
+	public Petition(Investigator investigator, Experiment experiment) {
 		this.status = StatusPetition.PENDING;
 		this.creator = false;
 		this.manager = false;
 		Associations.InvestigatorPetitionExperiment.link(investigator, this, experiment);
-	}
-	
-	public Petition(Investigator investigator, Experiment experiment) {
-		this(UUID.randomUUID().toString(), investigator, experiment);
 	}
 
 	public StatusPetition getStatus() {
@@ -81,7 +80,7 @@ public class Petition implements Serializable {
 		this.desciption = desciption;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 

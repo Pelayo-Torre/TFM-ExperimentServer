@@ -9,15 +9,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
 public class Experiment implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-
-	@Column(unique = true) 
-	private String id;
+	
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
 	private String title;
 	private String description;
@@ -31,13 +35,7 @@ public class Experiment implements Serializable {
 	@OneToMany(mappedBy = "experiment")
 	private Set<User> users = new HashSet<User>();
 	
-	public Experiment(String id){
-		this.id = id;
-	}
-	
-	public Experiment() {
-		this(UUID.randomUUID().toString());
-	}
+	public Experiment() {}
 	
 	public String getTitle() {
 		return title;
@@ -79,7 +77,7 @@ public class Experiment implements Serializable {
 		this.users = users;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 	
