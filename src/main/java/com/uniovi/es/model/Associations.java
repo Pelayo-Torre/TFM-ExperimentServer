@@ -1,0 +1,39 @@
+package com.uniovi.es.model;
+
+public class Associations {
+	
+	public static class InvestigatorPetitionExperiment{
+		
+		public static void link(Investigator investigator, Petition petition, Experiment experiment) {
+			petition.setInvestigator(investigator);
+			petition.setExperiment(experiment);
+			
+			investigator.getPetitions().add(petition);
+			experiment.getPetitions().add(petition);
+		}
+		
+		public static void unlink(Investigator investigator, Petition petition, Experiment experiment) {
+			investigator.getPetitions().remove(petition);
+			experiment.getPetitions().remove(petition);
+			
+			petition.setInvestigator(null);
+			petition.setExperiment(null);
+		}
+		
+	}
+	
+	public static class UserExperiment{
+		
+		public static void link(User user, Experiment experiment) {
+			user.setExperiment(experiment);
+			experiment.getUsers().add(user);
+		}
+		
+		public static void unlink(User user, Experiment experiment) {
+			experiment.getUsers().remove(user);
+			user.setExperiment(null);
+		}
+		
+	}
+
+}
