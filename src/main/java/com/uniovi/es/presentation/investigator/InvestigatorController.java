@@ -1,6 +1,9 @@
 package com.uniovi.es.presentation.investigator;
 
 
+import java.util.List;
+
+import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 
 
@@ -24,5 +27,13 @@ public interface InvestigatorController {
 	 * @param dto, los datos nuevos del investigador 
 	 */
 	public void updateInvestigator(InvestigatorDTO dto);
+
+	
+	/**
+	 * Recibe una petición para realizar la consulta de la lista de experimentos de un investigador
+	 * @param idInvestigator, el identificador del investigador
+	 * @return lista de experimentos asociados
+	 */
+	public List<ExperimentDTO> getExperimentsByInvestigator(Long idInvestigator);
 	
 }

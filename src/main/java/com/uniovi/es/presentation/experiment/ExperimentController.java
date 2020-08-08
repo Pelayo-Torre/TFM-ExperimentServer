@@ -1,5 +1,6 @@
 package com.uniovi.es.presentation.experiment;
 
+
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.exceptions.ExperimentException;
 
@@ -16,13 +17,14 @@ public interface ExperimentController {
 	 * @param id, paramétro de entrada
 	 * @return los datos del experimento
 	 */
-	public ExperimentDTO getExperiment(String id);
+	public ExperimentDTO getExperiment(Long id);
 	
 	/**
 	 * Recibe una petición para realizar la edición de los datos de un experimento
 	 * @param dto, los nuevos datos del experimento
+	 * @throws ExperimentException 
 	 */
-	public void editExperiment(ExperimentDTO dto);
+	public void editExperiment(ExperimentDTO dto) throws ExperimentException;
 	
 	/**
 	 * Recibe una petición para cambiarle el estado del experimento que se pasa
@@ -31,7 +33,7 @@ public interface ExperimentController {
 	 * @param id, identificador del experimento que se desea abrir
 	 * @throws ExperimentException 
 	 */
-	public void openExperiment(String id) throws ExperimentException;
+	public void openExperiment(Long id) throws ExperimentException;
 	
 	/**
 	 * Recibe una petición para cambiarle el estado del experimento que se pasa
@@ -40,7 +42,7 @@ public interface ExperimentController {
 	 * @param id, identificador del experimento que se desea abrir
 	 * @throws ExperimentException 
 	 */
-	public void closeExperiment(String id) throws ExperimentException;
+	public void closeExperiment(Long id) throws ExperimentException;
 	
 	/**
 	 * Recibe una petición para cambiarle el estado del experimento que se pasa
@@ -49,7 +51,7 @@ public interface ExperimentController {
 	 * @param id, identificador del experimento que se desea abrir
 	 * @throws ExperimentException 
 	 */
-	public void deleteExperiment(String id) throws ExperimentException;
+	public void deleteExperiment(Long id) throws ExperimentException;
 	
 	/**
 	 * Recibe una petición para cambiarle el estado del experimento que se pasa
@@ -58,6 +60,6 @@ public interface ExperimentController {
 	 * @param id, identificador del experimento que se desea abrir
 	 * @throws ExperimentException 
 	 */
-	public void reOpenExperiment(String id) throws ExperimentException;
+	public void reOpenExperiment(Long id) throws ExperimentException;
 
 }

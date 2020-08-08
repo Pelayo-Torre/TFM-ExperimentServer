@@ -2,21 +2,26 @@ package com.uniovi.es.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "TUser")
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	@Column(unique = true) 
-	private String id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
 	@Column(unique = true)
 	private String sessionID;
@@ -45,11 +50,6 @@ public class User implements Serializable {
 	User() {}
 	
 	public User(String sessionID, Experiment experiment) {
-		this(UUID.randomUUID().toString(), sessionID, experiment);
-	}
-	
-	public User(String id, String sessionID, Experiment experiment) {
-		this.id = id;
 		this.sessionID = sessionID;
 		Associations.UserExperiment.link(this, experiment);
 	}
@@ -142,7 +142,7 @@ public class User implements Serializable {
 		this.remoteHost = remoteHost;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
