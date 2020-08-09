@@ -33,7 +33,9 @@ public class Experiment implements Serializable {
 	@OneToMany(mappedBy = "experiment")
 	private Set<User> users = new HashSet<User>();
 	
-	public Experiment() {}
+	public Experiment() {
+		this.status = StatusExperiment.CREATED;
+	}
 	
 	public String getTitle() {
 		return title;

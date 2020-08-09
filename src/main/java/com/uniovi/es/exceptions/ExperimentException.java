@@ -6,16 +6,16 @@ public class ExperimentException extends Exception{
 	
 	public ExperimentException() {}
 	
-	public ExperimentException(String code) {
-		super(code);
+	public ExperimentException(String message) {
+		super(message);
 	}
 
 	public ExperimentException(Throwable cause) {
 		super(cause);
 	}
 
-	public ExperimentException(String code, Throwable cause) {
-		super(code, cause);
+	public ExperimentException(String message, Throwable cause) {
+		super(message, cause);
 	}
 
 	

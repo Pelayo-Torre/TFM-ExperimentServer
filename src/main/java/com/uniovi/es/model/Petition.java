@@ -42,6 +42,7 @@ public class Petition implements Serializable {
 		this.status = StatusPetition.PENDING;
 		this.creator = false;
 		this.manager = false;
+		this.shippingDate = new Date();
 		Associations.InvestigatorPetitionExperiment.link(investigator, this, experiment);
 	}
 
@@ -111,6 +112,10 @@ public class Petition implements Serializable {
 
 	public void setCreator(Boolean creator) {
 		this.creator = creator;
+	}
+	
+	public void accept() {
+		this.status = StatusPetition.ACCEPTED;
 	}
 		
 	

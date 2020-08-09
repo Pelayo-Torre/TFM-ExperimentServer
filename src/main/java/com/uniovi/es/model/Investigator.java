@@ -27,12 +27,12 @@ public class Investigator implements Serializable {
 	@Column(unique = true) 
 	private String mail;
 	
-	@Column(unique = true) 
+	//@Column(unique = true) 
 	private String username;
 	
 	private String password;
 	
-	@Column(unique = true) 
+	//@Column(unique = true) 
 	private String dni;
 	
 	private String phone;
@@ -44,7 +44,7 @@ public class Investigator implements Serializable {
 	@OneToMany(mappedBy = "investigator")
 	private Set<Petition> petitions = new HashSet<Petition>();
 	
-	Investigator() {}
+	public Investigator() {}
 
 	public String getName() {
 		return name;

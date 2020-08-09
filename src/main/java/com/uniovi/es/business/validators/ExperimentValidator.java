@@ -2,11 +2,13 @@ package com.uniovi.es.business.validators;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.model.StatusExperiment;
 
+@Component
 public class ExperimentValidator {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ExperimentValidator.class);
@@ -33,6 +35,13 @@ public class ExperimentValidator {
 			throw new ExperimentException("108");
 		}
 		
+	}
+	
+	public void validateRegister(ExperimentDTO dto) throws ExperimentException {
+		if(!dto.status.equals(StatusExperiment.CREATED.name())) {
+			logger.error("[ERROR - 109] -- El estado de un experimento cuando se registra debe ser CREADO");
+			throw new ExperimentException("109");
+		}
 	}
 
 }

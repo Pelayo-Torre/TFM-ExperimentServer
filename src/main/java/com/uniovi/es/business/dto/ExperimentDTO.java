@@ -7,12 +7,15 @@ public class ExperimentDTO {
 	public String description;
 	public String status;
 	
-	
+	public Long idInvestigator; //ID del investigador creador
+
 	@Override
 	public String toString() {
 		return "ExperimentDTO [id=" + id + ", title=" + title + ", description=" + description + ", status=" + status
-				+ "]";
+				+ ", idInvestigator=" + idInvestigator + "]";
 	}
+	
+	
 	
 	
 

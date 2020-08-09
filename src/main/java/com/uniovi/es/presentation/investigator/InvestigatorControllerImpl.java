@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.investigator.InvestigatorService;
+import com.uniovi.es.exceptions.InvestigatorException;
 
 
 @RestController
@@ -27,24 +28,29 @@ public class InvestigatorControllerImpl implements InvestigatorController{
 
 	@Override
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public void registerInvestigator(@RequestBody InvestigatorDTO dto) {
+	public void registerInvestigator(@RequestBody InvestigatorDTO dto) throws InvestigatorException {
 		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- register investigator");
+		
 		investigatorService.registerInvestigator(dto);
+		
 		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- register investigator");
 	}
 
 	@Override
 	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-	public InvestigatorDTO getInvestigator(@PathVariable Long id) {
+	public InvestigatorDTO getInvestigator(@PathVariable Long id) throws InvestigatorException {
 		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- register investigator");
-		return investigatorService.getInvestigator(id);
+		
+		return investigatorService.getDetail(id);
 	}
 
 	@Override
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public void updateInvestigator(@RequestBody InvestigatorDTO dto) {
+	public void updateInvestigator(@RequestBody InvestigatorDTO dto) throws InvestigatorException {
 		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- update investigator");
+		
 		investigatorService.updateInvestigator(dto);
+		
 		logger.info("[INAL] INVESTIGATOR CONTROLLER -- update investigator");
 	}
 	
