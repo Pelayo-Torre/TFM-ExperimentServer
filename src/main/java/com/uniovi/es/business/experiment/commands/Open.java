@@ -7,7 +7,7 @@ import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.StatusExperiment;
 
-public class Open implements Command{
+public class Open implements ExperimentCommand{
 	
 	private static final Logger logger = LoggerFactory.getLogger(Open.class);
 

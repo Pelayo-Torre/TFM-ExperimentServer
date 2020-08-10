@@ -7,7 +7,7 @@ import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.StatusExperiment;
 
-public class Delete implements Command{
+public class Delete implements ExperimentCommand{
 	
 	private static final Logger logger = LoggerFactory.getLogger(Delete.class);
 

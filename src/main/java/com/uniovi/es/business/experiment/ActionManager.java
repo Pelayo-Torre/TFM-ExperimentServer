@@ -1,6 +1,6 @@
 package com.uniovi.es.business.experiment;
 
-import com.uniovi.es.business.experiment.commands.Command;
+import com.uniovi.es.business.experiment.commands.ExperimentCommand;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.model.Experiment;
 
@@ -12,7 +12,7 @@ public class ActionManager {
 		this.experiment = experiment;
 	}
 	
-	public void execute(Command command) throws ExperimentException {
+	public void execute(ExperimentCommand command) throws ExperimentException {
 		command.execute(experiment);
 	}
 	

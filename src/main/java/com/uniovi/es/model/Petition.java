@@ -25,7 +25,7 @@ public class Petition implements Serializable {
 	private Date answerDate;
 	private Date shippingDate;
 	
-	private String desciption;
+	private String description;
 	
 	private Boolean manager;
 	private Boolean creator;
@@ -50,10 +50,6 @@ public class Petition implements Serializable {
 		return status;
 	}
 
-	public void setStatus(StatusPetition status) {
-		this.status = status;
-	}
-
 	public Date getAnswerDate() {
 		return answerDate;
 	}
@@ -70,12 +66,12 @@ public class Petition implements Serializable {
 		this.shippingDate = shippingDate;
 	}
 
-	public String getDesciption() {
-		return desciption;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDesciption(String desciption) {
-		this.desciption = desciption;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Long getId() {
@@ -116,6 +112,14 @@ public class Petition implements Serializable {
 	
 	public void accept() {
 		this.status = StatusPetition.ACCEPTED;
+	}
+	
+	public void reject() {
+		this.status = StatusPetition.REJECTED;
+	}
+	
+	public void cancel() {
+		this.status = StatusPetition.CANCELLED;
 	}
 		
 	
