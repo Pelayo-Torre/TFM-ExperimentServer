@@ -12,6 +12,7 @@ import com.uniovi.es.business.dto.assembler.DtoAssembler;
 import com.uniovi.es.business.petition.commands.Accept;
 import com.uniovi.es.business.petition.commands.Cancel;
 import com.uniovi.es.business.petition.commands.Reject;
+import com.uniovi.es.business.validators.PetitionValidator;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.PetitionException;
@@ -38,6 +39,9 @@ public class PetitionServiceImpl implements PetitionService{
 	
 	@Autowired
 	private ExperimentDAO experimentDAO;
+	
+	@Autowired
+	private PetitionValidator petitionValidator;
 
 	@Override
 	public void register(PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException {
@@ -50,6 +54,9 @@ public class PetitionServiceImpl implements PetitionService{
 		logger.info("\t \t Obteniendo el experimento a partir del ID: " + dto.idExperiment);
 		Optional<Experiment> optional2 = experimentDAO.findById(dto.idExperiment);
 		Experiment experiment = getExperiment(optional2);
+		
+		logger.info("\t \t Comprobando que el investigador no tenga ya una petición PENDIENTE o ACEPTADA sobre el experimento");
+		petitionValidator.validatePetitionExistence(dto.idInvestigator, dto.idExperiment);
 		
 		Petition petition = new Petition(investigator, experiment);
 		DtoAssembler.fillData(petition, dto);

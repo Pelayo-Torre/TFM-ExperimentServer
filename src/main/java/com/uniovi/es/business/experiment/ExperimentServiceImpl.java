@@ -1,6 +1,8 @@
 package com.uniovi.es.business.experiment;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uniovi.es.business.dto.ExperimentDTO;
+import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
 import com.uniovi.es.business.experiment.commands.Close;
 import com.uniovi.es.business.experiment.commands.Delete;
@@ -20,6 +23,7 @@ import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Petition;
+import com.uniovi.es.model.StatusPetition;
 import com.uniovi.es.persistence.ExperimentDAO;
 import com.uniovi.es.persistence.InvestigatorDAO;
 import com.uniovi.es.persistence.PetitionDAO;
@@ -64,11 +68,13 @@ public class ExperimentServiceImpl implements ExperimentService{
 		petition.setManager(true);
 		petition.accept();
 		
-		logger.info("\t \t Registrando la petitición en base de datos");
-		petitionDAO.save(petition);
-		
 		logger.info("\t \t Registrando el experimento en base de datos");
 		experimentDAO.save(experiment);
+		
+		investigatorDAO.save(investigator);
+		
+		logger.info("\t \t Registrando la petitición en base de datos");
+		petitionDAO.save(petition);
 		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- register experiment");
 	}
@@ -196,6 +202,27 @@ public class ExperimentServiceImpl implements ExperimentService{
 		logger.info("[FINAL] EXPERIMENT SERVICE -- delete experiment");
 	}
 	
+	@Override
+	public List<InvestigatorDTO> getInvestigatorsOfExperiment(Long id) throws ExperimentException {
+		logger.info("[INICIO] EXPERIMENT SERVICE -- getInvestigatorsOfExperiment");
+		
+		List<Petition> list = petitionDAO.findByIdExperiment(id, StatusPetition.ACCEPTED);
+		
+		logger.info("[FINAL] EXPERIMENT SERVICE -- getInvestigatorsOfExperiment");
+		return DtoAssembler.toListInvestigatorsOfPetitions(list);
+	}
+	
+	@Override
+	public List<ExperimentDTO> getExperiments() {
+		logger.info("[INICIO] EXPERIMENT SERVICE -- all Experiments");
+		
+		List<Experiment> list = new ArrayList<Experiment>();
+		experimentDAO.findAll().forEach(list::add);;
+				
+		logger.info("[INICIO] EXPERIMENT SERVICE -- all Experiments");
+		return DtoAssembler.toList(list);
+	}
+	
 	/**
 	 * Devuelve el experimento a partir del optional que se pasa como parámetro
 	 * @param optional, parámetro de entrada
@@ -231,5 +258,6 @@ public class ExperimentServiceImpl implements ExperimentService{
 		}
 		return investigator;
 	}
+
 
 }

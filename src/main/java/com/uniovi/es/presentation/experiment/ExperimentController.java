@@ -1,7 +1,10 @@
 package com.uniovi.es.presentation.experiment;
 
 
+import java.util.List;
+
 import com.uniovi.es.business.dto.ExperimentDTO;
+import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.utils.Identifier;
@@ -66,5 +69,19 @@ public interface ExperimentController {
 	 * @throws ExperimentException 
 	 */
 	public void reOpenExperiment(Identifier id) throws ExperimentException;
+	
+	/**
+	 * Recibe una petición para obtener la lista de investigadores asociados a un experimento
+	 * @param id, identificador del experimento del que se quiere obtener los investigadores
+	 * @return lista de investigadores asociados al experimento
+	 * @throws ExperimentException, en caso de que el identificador no exista en base de datos
+	 */
+	public List<InvestigatorDTO> getInvestigatorsOfExperiment(Long id) throws ExperimentException; 
+	
+	/**
+	 * Recibe una petición para obtener la lista de experimentos del sistema
+	 * @return la lista de experimentos
+	 */
+	public List<ExperimentDTO> getListExperiments();
 
 }

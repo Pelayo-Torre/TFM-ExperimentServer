@@ -1,6 +1,8 @@
 package com.uniovi.es.presentation.experiment;
 
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uniovi.es.business.dto.ExperimentDTO;
+import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.experiment.ExperimentService;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.InvestigatorException;
@@ -101,6 +104,28 @@ public class ExperimentControllerImpl implements ExperimentController {
 		
 		logger.info("[FINAL] EXPERIMENT CONTROLLER -- update experiment");
 		
+	}
+
+	@Override
+	@RequestMapping(value = "/investigators/{id}", method = RequestMethod.GET)
+	public List<InvestigatorDTO> getInvestigatorsOfExperiment(@PathVariable Long id) throws ExperimentException {
+		logger.info("[INICIO] EXPERIMENT CONTROLLER -- investigators of experiment");
+		logger.info("\t \t PARÁMETROS DE ENTRADA: " + id);
+		
+		List<InvestigatorDTO> list = experimentService.getInvestigatorsOfExperiment(id);
+		
+		logger.info("[FINAL] EXPERIMENT CONTROLLER -- investigators of experiment");
+		return list;
+	}
+
+	@Override
+	public List<ExperimentDTO> getListExperiments() {
+		logger.info("[INICIO] EXPERIMENT CONTROLLER -- all experiments");
+		
+		List<ExperimentDTO> list = experimentService.getExperiments();
+		
+		logger.info("[FINAL] EXPERIMENT CONTROLLER -- all experiments");
+		return list;
 	}
 
 	

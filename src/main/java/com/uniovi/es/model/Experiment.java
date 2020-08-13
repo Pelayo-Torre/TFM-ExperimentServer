@@ -33,6 +33,9 @@ public class Experiment implements Serializable {
 	@OneToMany(mappedBy = "experiment")
 	private Set<User> users = new HashSet<User>();
 	
+	@OneToMany(mappedBy = "experiment")
+	private Set<Note> notes = new HashSet<Note>();
+	
 	public Experiment() {
 		this.status = StatusExperiment.CREATED;
 	}
@@ -80,7 +83,15 @@ public class Experiment implements Serializable {
 	public Long getId() {
 		return id;
 	}
-	
+		
+	public Set<Note> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(Set<Note> notes) {
+		this.notes = notes;
+	}
+
 	/**
 	 * Abre el experimento cambiéndole el estado a ABIERTO
 	 */

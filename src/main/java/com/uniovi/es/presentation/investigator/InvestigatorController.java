@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
+import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.exceptions.InvestigatorException;
 
 
@@ -20,7 +21,7 @@ public interface InvestigatorController {
 	 * Punto de entrada para obtener los datos de un investigador a partir de su identificador
 	 * @param id, identificador del investigador
 	 * @return data, los datos del investigador
-	 * @throws InvestigatorException 
+	 * @throws InvestigatorException, en caso de que el investigador no exista en base de datos
 	 */
 	public InvestigatorDTO getInvestigator(Long id) throws InvestigatorException;
 
@@ -32,10 +33,25 @@ public interface InvestigatorController {
 
 	
 	/**
-	 * Recibe una petición para realizar la consulta de la lista de experimentos de un investigador
+	 * Recibe una petición para realizar la consulta de la lista de experimentos de un investigador que tiene aceptados
 	 * @param idInvestigator, el identificador del investigador
-	 * @return lista de experimentos asociados
+	 * @return lista de experimentos asociados en estado ACEPTADO
+	 * @throws InvestigatorException  en caso de que el investigador no exista en base de datos
 	 */
-	public List<ExperimentDTO> getExperimentsByInvestigator(Long idInvestigator);
+	public List<ExperimentDTO> getExperimentsAcceptedByIdInvestigator(Long idInvestigator) throws InvestigatorException;
+	
+	/**
+	 * Recibe una petición para realizar la consulta de la lista de petiticones pendientes de responder de un investigador
+	 * @param idInvestigator, el identificador del investigador
+	 * @return lista de peticiones asociados en estado PENDIENTE
+	 * @throws InvestigatorException  en caso de que el investigador no exista en base de datos
+	 */
+	public List<PetitionDTO> getPetitionsPendingByIdInvestigator(Long idInvestigator) throws InvestigatorException;
+	
+	/**
+	 * Recibe una petiticón para devolver la lista de investigadores registrados en el sistema
+	 * @return la lista de investigadores
+	 */
+	public List<InvestigatorDTO> getListInvestigators();
 	
 }

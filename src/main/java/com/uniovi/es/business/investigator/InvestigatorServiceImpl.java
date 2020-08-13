@@ -1,5 +1,7 @@
 package com.uniovi.es.business.investigator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -7,11 +9,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
+import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
 import com.uniovi.es.business.validators.InvestigatorValidator;
 import com.uniovi.es.exceptions.InvestigatorException;
+import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
+import com.uniovi.es.model.Petition;
+import com.uniovi.es.model.StatusPetition;
 import com.uniovi.es.persistence.InvestigatorDAO;
 
 @Service
@@ -27,7 +34,7 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 
 	@Override
 	public void registerInvestigator(InvestigatorDTO dto) throws InvestigatorException {
-		logger.debug("[INICIO -- INVESTIGATOR-SERVICE -- REGISTER INVESTIGATOR] ");
+		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- register INVESTIGATOR] ");
 		
 		investigatorValidator.validate(dto);
 		investigatorValidator.validateExistenceOfMail(dto.email);
@@ -38,24 +45,24 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		logger.info("\t \t Registrando el investigador en base de datos");
 		investigatorDAO.save(investigator);
 		
-		logger.debug("[FINAL -- INVESTIGATOR-SERVICE -- REGISTER INVESTIGATOR] ");
+		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- register INVESTIGATOR] ");
 	}
 
 	@Override
 	public InvestigatorDTO getDetail(Long id) throws InvestigatorException{
-		logger.debug("[INICIO -- INVESTIGATOR-SERVICE -- DETAIL INVESTIGATOR] ");
+		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- detail INVESTIGATOR] ");
 		
 		logger.info("\t \t Obteniendo el investigador a partir del ID: " + id);
 		Optional<Investigator> optional = investigatorDAO.findById(id);
 		Investigator investigator = getInvestigator(optional);
 		
-		logger.debug("[FINAL -- INVESTIGATOR-SERVICE -- DETAIL INVESTIGATOR] ");
+		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- detail INVESTIGATOR] ");
 		return DtoAssembler.toDTO(investigator);
 	}
 
 	@Override
 	public void updateInvestigator(InvestigatorDTO dto) throws InvestigatorException {
-		logger.debug("[INICIO -- INVESTIGATOR-SERVICE -- UPDATE INVESTIGATOR] ");
+		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- update INVESTIGATOR] ");
 		
 		logger.info("\t \t Obteniendo el investigador a partir del ID: " + dto.id);
 		Optional<Investigator> optional = investigatorDAO.findById(dto.id);
@@ -68,7 +75,40 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		logger.info("\t \t Registrando el investigador en base de datos");
 		investigatorDAO.save(investigator);
 		
-		logger.debug("[FINAL -- INVESTIGATOR-SERVICE -- UPDATE INVESTIGATOR] ");
+		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- update INVESTIGATOR] ");
+	}
+	
+	@Override
+	public List<ExperimentDTO> getExperimentsAcceptedByIdInvestigator(Long idInvestigator) throws InvestigatorException {
+		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- getExperimentsAcceptedByIdInvestigator INVESTIGATOR] ");
+		
+		logger.info("\t \t Obteniendo los experimentos del investigador: " + idInvestigator);
+		List<Experiment> experiments = investigatorDAO.findExperimentsByIdInvestigator(idInvestigator, StatusPetition.ACCEPTED);
+		
+		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- getExperimentsAcceptedByIdInvestigator INVESTIGATOR] ");
+		return DtoAssembler.toList(experiments);
+	}
+	
+	@Override
+	public List<PetitionDTO> getPetitionsPendingByIdInvestigator(Long idInvestigator) throws InvestigatorException {
+		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- getPetitionsPendingByIdInvestigator INVESTIGATOR] ");
+		
+		logger.info("\t \t Obteniendo las peticiones del investigador: " + idInvestigator);
+		List<Petition> petitions = investigatorDAO.findPetitionsByIdInvestigator(idInvestigator, StatusPetition.PENDING);
+		
+		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- getPetitionsPendingByIdInvestigator INVESTIGATOR] ");
+		return DtoAssembler.toListPetitions(petitions);
+	}
+
+	@Override
+	public List<InvestigatorDTO> getListInvestigators() {
+		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- all investigators] ");
+
+		List<Investigator> list = new ArrayList<Investigator>();
+		investigatorDAO.findAll().forEach(list::add);;
+		
+		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- all investigators] ");
+		return DtoAssembler.toListInvestigators(list);
 	}
 
 	/**
@@ -88,5 +128,9 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		}
 		return investigator;
 	}
+
+	
+
+	
 	
 }

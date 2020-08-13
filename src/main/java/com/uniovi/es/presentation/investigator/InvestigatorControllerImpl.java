@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
+import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.business.investigator.InvestigatorService;
 import com.uniovi.es.exceptions.InvestigatorException;
 
@@ -39,9 +40,12 @@ public class InvestigatorControllerImpl implements InvestigatorController{
 	@Override
 	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
 	public InvestigatorDTO getInvestigator(@PathVariable Long id) throws InvestigatorException {
-		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- register investigator");
+		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- detail investigator");
 		
-		return investigatorService.getDetail(id);
+		InvestigatorDTO dto =  investigatorService.getDetail(id);
+		
+		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- detail investigator");
+		return dto;
 	}
 
 	@Override
@@ -51,14 +55,39 @@ public class InvestigatorControllerImpl implements InvestigatorController{
 		
 		investigatorService.updateInvestigator(dto);
 		
-		logger.info("[INAL] INVESTIGATOR CONTROLLER -- update investigator");
+		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- update investigator");
 	}
 	
 	@Override
-	@RequestMapping(value = "/experiments/{idInvestigator}", method = RequestMethod.GET)
-	public List<ExperimentDTO> getExperimentsByInvestigator(@PathVariable Long idInvestigator) {
-		// TODO Auto-generated method stub
-		return null;
+	@RequestMapping(value = "/experiments/accepted{idInvestigator}", method = RequestMethod.GET)
+	public List<ExperimentDTO> getExperimentsAcceptedByIdInvestigator(@PathVariable Long idInvestigator) throws InvestigatorException {
+		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- experiments accepted investigator");
+		
+		List<ExperimentDTO> list = investigatorService.getExperimentsAcceptedByIdInvestigator(idInvestigator);
+		
+		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- experiments accepted investigator");
+		return list;
+	}
+
+	@Override
+	@RequestMapping(value = "/petitions/pending/{idInvestigator}", method = RequestMethod.GET)
+	public List<PetitionDTO> getPetitionsPendingByIdInvestigator(Long idInvestigator) throws InvestigatorException {
+		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- petitions pending investigator");
+		
+		List<PetitionDTO> list = investigatorService.getPetitionsPendingByIdInvestigator(idInvestigator);
+		
+		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- petitions pending investigator");
+		return list;
+	}
+
+	@Override
+	public List<InvestigatorDTO> getListInvestigators() {
+		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- all investigators");
+
+		List<InvestigatorDTO> list = investigatorService.getListInvestigators();
+		
+		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- all investigators");
+		return list;
 	}
 	
 }

@@ -35,5 +35,19 @@ public class Associations {
 		}
 		
 	}
+	
+	public static class NoteExperiment{
+		
+		public static void link(Note note, Experiment experiment) {
+			note.setExperiment(experiment);
+			experiment.getNotes().add(note);
+		}
+		
+		public static void unlink(Note note, Experiment experiment) {
+			experiment.getNotes().remove(note);
+			note.setExperiment(null);
+		}
+		
+	}
 
 }

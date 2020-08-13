@@ -9,6 +9,9 @@ public class InvestigatorDTO {
 	public String phone;
 	public String username;
 	
+	public Boolean creator;
+	public Boolean manager;
+	
 	@Override
 	public String toString() {
 		return "InvestigatorDTO [id=" + id + ", name=" + name + ", surname=" + surname + ", email=" + email + ", phone="
