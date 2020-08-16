@@ -5,6 +5,10 @@ public class Identifier {
 	private Long id;
 	
 	public Identifier() {}
+	
+	public Identifier(Long id) {
+		this.id = id;
+	}
 
 	public Long getId() {
 		return id;

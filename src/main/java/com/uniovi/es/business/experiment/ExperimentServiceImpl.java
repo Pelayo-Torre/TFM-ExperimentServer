@@ -52,12 +52,11 @@ public class ExperimentServiceImpl implements ExperimentService{
 	public void register(ExperimentDTO dto) throws ExperimentException, InvestigatorException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- register experiment");
 		
-		experimentValidator.validate(dto);
-		experimentValidator.validateRegister(dto);
-		
 		logger.info("\t \t Obteniendo el investigador a partir del ID: " + dto.idInvestigator);
 		Optional<Investigator> optional = investigatorDAO.findById(dto.idInvestigator);
 		Investigator investigator = getInvestigator(optional);
+		
+		experimentValidator.validate(dto);
 		
 		Experiment experiment = new Experiment();
 		DtoAssembler.fillData(experiment, dto);

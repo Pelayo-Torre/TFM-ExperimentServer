@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.exceptions.ExperimentException;
-import com.uniovi.es.model.StatusExperiment;
 
 @Component
 public class ExperimentValidator {
@@ -25,23 +24,7 @@ public class ExperimentValidator {
 			throw new ExperimentException("106");
 		}
 		
-		if(dto.status == null) {
-			logger.error("[ERROR - 107] -- El estado del experimento es un campo obligatorio");
-			throw new ExperimentException("107");
-		}
-		
-		if(StatusExperiment.valueOf(dto.status) == null) {
-			logger.error("[ERROR - 108] -- El estado del experimento especificado no se corresponde con los existentes");
-			throw new ExperimentException("108");
-		}
-		
 	}
-	
-	public void validateRegister(ExperimentDTO dto) throws ExperimentException {
-		if(!dto.status.equals(StatusExperiment.CREATED.name())) {
-			logger.error("[ERROR - 109] -- El estado de un experimento cuando se registra debe ser CREADO");
-			throw new ExperimentException("109");
-		}
-	}
+
 
 }

@@ -14,6 +14,8 @@ public interface InvestigatorService {
 	public void registerInvestigator(InvestigatorDTO dto) throws InvestigatorException;
 
 	public InvestigatorDTO getDetail(Long id) throws InvestigatorException;
+	
+	public InvestigatorDTO getInvestigatorByMail(String mail) throws InvestigatorException;
 
 	public void updateInvestigator(InvestigatorDTO dto) throws InvestigatorException;
 

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.uniovi.es.business.dto.NoteDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
@@ -19,6 +20,7 @@ import com.uniovi.es.persistence.BinnacleDAO;
 import com.uniovi.es.persistence.ExperimentDAO;
 import com.uniovi.es.utils.Identifier;
 
+@Service
 public class BinnacleServiceImpl implements BinnacleService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(BinnacleServiceImpl.class);
