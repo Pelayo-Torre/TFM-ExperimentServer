@@ -2,10 +2,7 @@ package service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
@@ -63,7 +60,9 @@ class PetitionTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Pelayo";
 		dto.surname = "Garcia Torre";
+		dto.username = "pelgarTor";
 		dto.email = "pelayo@gmail.com";
+		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		investigatorService.registerInvestigator(dto);
@@ -72,7 +71,9 @@ class PetitionTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Juan";
 		dto.surname = "Torre";
+		dto.username = "juanele27";
 		dto.email = "juan@gmail.com";
+		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		investigatorService.registerInvestigator(dto);
@@ -281,7 +282,9 @@ class PetitionTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Gonzalo";
 		dto.surname = "Torre";
+		dto.username = "gongartor";
 		dto.email = "gonzalo@gmail.com";
+		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		investigatorService.registerInvestigator(dto);

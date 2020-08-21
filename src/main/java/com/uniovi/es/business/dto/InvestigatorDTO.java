@@ -8,6 +8,7 @@ public class InvestigatorDTO {
 	public String email;
 	public String phone;
 	public String username;
+	public String password;
 	
 	public Boolean creator;
 	public Boolean manager;

@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import com.uniovi.es.exceptions.InvestigatorException;
 
 @RestController
 @RequestMapping("/investigator")
+@CrossOrigin(origins = "http://localhost:4200")
 public class InvestigatorControllerImpl implements InvestigatorController{
 	
 	private static final Logger logger = LoggerFactory.getLogger(InvestigatorControllerImpl.class);
@@ -81,6 +83,7 @@ public class InvestigatorControllerImpl implements InvestigatorController{
 	}
 
 	@Override
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public List<InvestigatorDTO> getListInvestigators() {
 		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- all investigators");
 
@@ -88,6 +91,28 @@ public class InvestigatorControllerImpl implements InvestigatorController{
 		
 		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- all investigators");
 		return list;
+	}
+	
+	@Override
+	@RequestMapping(value = "/mail/{mail}", method = RequestMethod.GET)
+	public InvestigatorDTO getInvestigatorByMail(@PathVariable String mail) throws InvestigatorException {
+		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- investigator by mail");
+
+		InvestigatorDTO dto = investigatorService.getInvestigatorByMail(mail);
+		
+		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- investigator by mail");
+		return dto;
+	}
+
+	@Override
+	@RequestMapping(value = "/username/{username}", method = RequestMethod.GET)
+	public InvestigatorDTO getInvestigatorByUsername(@PathVariable String username) throws InvestigatorException {
+		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- investigator by username");
+
+		InvestigatorDTO dto = investigatorService.getInvestigatorByUsername(username);
+		
+		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- investigator by username");
+		return dto;
 	}
 	
 }

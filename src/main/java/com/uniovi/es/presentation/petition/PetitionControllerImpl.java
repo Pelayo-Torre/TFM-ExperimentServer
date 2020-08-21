@@ -3,6 +3,7 @@ package com.uniovi.es.presentation.petition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import com.uniovi.es.utils.Identifier;
 
 @RestController
 @RequestMapping("/petition")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PetitionControllerImpl implements PetitionController{
 	
 	private static final Logger logger = LoggerFactory.getLogger(PetitionControllerImpl.class);

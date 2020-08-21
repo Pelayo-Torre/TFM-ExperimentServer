@@ -61,17 +61,20 @@ class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Pelayo";
 		dto.surname = "Garcia Torre";
+		dto.username = "pgarciat";
 		dto.email = "pelayo@gmail.com";
+		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		investigatorService.registerInvestigator(dto);
 		
 		//COMPROBAMOS QUE SE HA ALMACENADO CORRECTAMENTE
-		InvestigatorDTO investigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com");
+		InvestigatorDTO investigator = investigatorService.getInvestigatorByMail("PELAYO@gmail.com");
 		
 		assertNotNull(investigator);
 		assertEquals("Pelayo", investigator.name);
 		assertEquals("Garcia Torre", investigator.surname);
+		assertEquals("pgarciat", investigator.username);
 		assertEquals("pelayo@gmail.com", investigator.email);
 	}
 	
@@ -85,8 +88,10 @@ class InvestigatorTest {
 		//REGISTRAMOS EL INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = null;
+		dto.username = "pgarcitorre";
 		dto.surname = "Garcia Torre";
 		dto.email = "pelayo@gmail.com";
+		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
@@ -109,7 +114,9 @@ class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Pelayo";
 		dto.surname = "";
+		dto.username = "pgarcitorre";
 		dto.email = "pelayo@gmail.com";
+		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
@@ -132,7 +139,9 @@ class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Pelayo";
 		dto.surname = "Garcia Torre";
+		dto.username = "pgarcitorre";
 		dto.email = null;
+		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
@@ -155,7 +164,9 @@ class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Pelayo";
 		dto.surname = "Gonzalez";
+		dto.username = "pgarcitorre45";
 		dto.email = "pel@gmail.com";
+		dto.password = "123456789";
 		
 		investigatorService.registerInvestigator(dto);
 		
@@ -163,7 +174,9 @@ class InvestigatorTest {
 		InvestigatorDTO dto2 = new InvestigatorDTO();
 		dto2.name = "Pelayo";
 		dto2.surname = "Gonzalez";
-		dto2.email = "pel@gmail.com";
+		dto2.username = "pgartorre45";
+		dto2.email = "PEL@GMAIL.COM";
+		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
@@ -177,10 +190,70 @@ class InvestigatorTest {
 	
 	@Test
 	/**
+	 * Registro de un investigador con error 205 (Username obligatorio)
+	 * @throws InvestigatorException, username obligatorio
+	 */
+	public void test15CreateInvestigatorERROR205() throws InvestigatorException {
+		
+		//REGISTRAMOS EL INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Pelayo";
+		dto.surname = "Garcia Torre";
+		dto.username = null;
+		dto.email = "pelayo@hotmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		try {
+			investigatorService.registerInvestigator(dto);
+			Assert.fail(
+					"Debe lanzarse excepción de username obligatorio.");
+		} catch (InvestigatorException e) {
+			Assert.assertEquals("205", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Registro de un investigador con error 206 (username ya registrado)
+	 * @throws InvestigatorException, username ya registrado
+	 */
+	public void test16CreateInvestigatorERROR206() throws InvestigatorException {
+		
+		//REGISTRAMOS EL INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Pelayo";
+		dto.surname = "Gonzalez";
+		dto.username = "pgarciTorre";
+		dto.email = "pelTore@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//REGISTRAMOS UN NUEVO INVESTIGADOR CON MISMO EMAIL
+		InvestigatorDTO dto2 = new InvestigatorDTO();
+		dto2.name = "Pelayo";
+		dto2.surname = "Álvarez";
+		dto2.username = "pgarciTORRe";
+		dto2.email = "pelgar@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		try {
+			investigatorService.registerInvestigator(dto2);
+			Assert.fail(
+					"Debe lanzarse excepción de username ya registrado.");
+		} catch (InvestigatorException e) {
+			Assert.assertEquals("206", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
 	 * Se prueba el detalle de un investigador que se encuentra registrado
 	 * @throws InvestigatorException
 	 */
-	public void test15getDetail() throws InvestigatorException{
+	public void test17getDetail() throws InvestigatorException{
 		
 		InvestigatorDTO investigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com");
 		
@@ -190,6 +263,7 @@ class InvestigatorTest {
 		assertNotNull(investigator);
 		assertEquals("Pelayo", investigator.name);
 		assertEquals("Garcia Torre", investigator.surname);
+		assertEquals("pgarciat", investigator.username);
 		assertEquals("pelayo@gmail.com", investigator.email);
 	}
 	
@@ -198,7 +272,7 @@ class InvestigatorTest {
 	 * Se prueba el detalle de un investigador que no se encuentra registrado
 	 * @throws InvestigatorException ya que el investigador no se encuentra registrado
 	 */
-	public void test16getDetailERROR200() throws InvestigatorException{
+	public void test18getDetailERROR200() throws InvestigatorException{
 		
 		//SE OBTIENE UN INVESTIGADOR CUYO IDENTIFICADOR NO SE ENCUENTRA REGISTRADO
 		try {
@@ -214,13 +288,15 @@ class InvestigatorTest {
 	 * Se prueba la edición de los datos de un investigador de manera correcta
 	 * @throws InvestigatorException
 	 */
-	public void test17updateInvestigator() throws InvestigatorException {
+	public void test19updateInvestigator() throws InvestigatorException {
 		
 		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Juan";
 		dto.surname = "Torre";
+		dto.username = "juanele";
 		dto.email = "juan@gmail.com";
+		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		investigatorService.registerInvestigator(dto);
@@ -229,6 +305,7 @@ class InvestigatorTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Juan Antonio";
 		dto.surname = "Llaneza";
+		dto.username = "juanele27";
 		dto.email = "juanantonio@gmail.com";
 		dto.id = 3L;
 		
@@ -240,6 +317,7 @@ class InvestigatorTest {
 		assertNotNull(dto);
 		assertEquals("Juan Antonio", dto.name);
 		assertEquals("Llaneza", dto.surname);
+		assertEquals("juanele27", dto.username);
 		assertEquals("juanantonio@gmail.com", dto.email);
 	}
 	
@@ -248,11 +326,12 @@ class InvestigatorTest {
 	 * Edición de un investigador con error 201 (El nombre es obligatorio)
 	 * @throws InvestigatorException, nombre obligatorio
 	 */
-	public void test18UpdateInvestigatorERROR201() throws InvestigatorException {
+	public void test20UpdateInvestigatorERROR201() throws InvestigatorException {
 		
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = null;
 		dto.surname = "Llaneza";
+		dto.username = "juanele";
 		dto.email = "juanantonio@gmail.com";
 		dto.id = 3L;
 		
@@ -271,11 +350,12 @@ class InvestigatorTest {
 	 * Edición de un investigador con error 202 (Los apellidos son obligatorios)
 	 * @throws InvestigatorException, apellidos obligatorios
 	 */
-	public void test19UpdateInvestigatorERROR202() throws InvestigatorException {
+	public void test21UpdateInvestigatorERROR202() throws InvestigatorException {
 		
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Juan";
 		dto.surname = "";
+		dto.username = "juanele";
 		dto.email = "juanantonio@gmail.com";
 		dto.id = 3L;
 		
@@ -294,11 +374,12 @@ class InvestigatorTest {
 	 * Edición de un investigador con error 203 (Email obligatorio)
 	 * @throws InvestigatorException, email obligatorio
 	 */
-	public void test20UpdateInvestigatorERROR203() throws InvestigatorException {
+	public void test22UpdateInvestigatorERROR203() throws InvestigatorException {
 		
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Juan";
 		dto.surname = "Llaneza";
+		dto.username = "juanele";
 		dto.email = "";
 		dto.id = 3L;
 		
@@ -317,12 +398,13 @@ class InvestigatorTest {
 	 * Edición de un investigador con error 204 (Email ya registrado)
 	 * @throws InvestigatorException, email ya registrado
 	 */
-	public void test21UpdateInvestigatorERROR204() throws InvestigatorException {
+	public void test23UpdateInvestigatorERROR204() throws InvestigatorException {
 		
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Juan";
 		dto.surname = "Llaneza";
-		dto.email = "pelayo@gmail.com";
+		dto.username = "juanele";
+		dto.email = "pelAYo@gmail.com";
 		dto.id = 3L;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -337,14 +419,63 @@ class InvestigatorTest {
 	
 	@Test
 	/**
-	 * Edición de un investigador con error 200 (No existe en base de datos)
-	 * @throws InvestigatorException, investigador no registrado
+	 * Edición de un investigador con error 205 (username obligatorio)
+	 * @throws InvestigatorException, username obligatorio
 	 */
-	public void test22UpdateInvestigatorERROR200() throws InvestigatorException {
+	public void test24UpdateInvestigatorERROR205() throws InvestigatorException {
 		
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Juan";
 		dto.surname = "Llaneza";
+		dto.username = "";
+		dto.email = "juanllan@gmail.com";
+		dto.id = 3L;
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		try {
+			investigatorService.updateInvestigator(dto);
+			Assert.fail(
+					"Debe lanzarse excepción de username obligatorio.");
+		} catch (InvestigatorException e) {
+			Assert.assertEquals("205", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Edición de un investigador con error 206 (username ya registrado)
+	 * @throws InvestigatorException, username ya registrado
+	 */
+	public void test25UpdateInvestigatorERROR206() throws InvestigatorException {
+		
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Juan";
+		dto.surname = "Llaneza";
+		dto.username = "JUANELE27";
+		dto.email = "juaneleo@gmail.com";
+		dto.id = 1L;
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		try {
+			investigatorService.updateInvestigator(dto);
+			Assert.fail(
+					"Debe lanzarse excepción de username ya registrado.");
+		} catch (InvestigatorException e) {
+			Assert.assertEquals("206", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Edición de un investigador con error 200 (No existe en base de datos)
+	 * @throws InvestigatorException, investigador no registrado
+	 */
+	public void test26UpdateInvestigatorERROR200() throws InvestigatorException {
+		
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Juan";
+		dto.surname = "Llaneza";
+		dto.username = "juanele";
 		dto.email = "pelayo@gmail.com";
 		dto.id = ID_NOT_EXIST;
 		
@@ -365,13 +496,15 @@ class InvestigatorTest {
 	 * @throws ExperimentException
 	 * @throws PetitionException
 	 */
-	public void test23getPetitionsPending() throws InvestigatorException, ExperimentException, PetitionException {
+	public void test27getPetitionsPending() throws InvestigatorException, ExperimentException, PetitionException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Carlos";
 		dto.surname = "Garcia";
+		dto.username = "carlos007";
 		dto.email = "carlos@gmail.com";
+		dto.password = "123456789";
 		
 		investigatorService.registerInvestigator(dto);
 		
@@ -409,7 +542,7 @@ class InvestigatorTest {
 	 * @throws PetitionException
 	 * @throws InvestigatorException
 	 */
-	public void test24getPetitionsAccepted() throws PetitionException, InvestigatorException {
+	public void test28getPetitionsAccepted() throws PetitionException, InvestigatorException {
 		
 		//SE ACEPTA LA PETICIÓN ANTERIOR
 		Identifier identifier = new Identifier();
@@ -430,16 +563,91 @@ class InvestigatorTest {
 	
 	@Test
 	/**
+	 * Se prueba a registrar un investigador sin contraseña
+	 * @throws InvestigatorException la contraseña es un campo obligatoria
+	 */
+	public void test29CreateInvestigatorError207() throws InvestigatorException{
+		
+		//REGISTRAMOS UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Carlos";
+		dto.surname = "Garcia";
+		dto.username = "carlos067807";
+		dto.email = "car567los@gmail.com";
+		dto.password = null;
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		try {
+			investigatorService.registerInvestigator(dto);
+			Assert.fail(
+					"Debe lanzarse excepción de contraseña obligatoria.");
+		} catch (InvestigatorException e) {
+			Assert.assertEquals("207", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a registrar un investigador con longitud de contraseña errónea
+	 * @throws InvestigatorException la longitud de la contraseña es errónea
+	 */
+	public void test30CreateInvestigatorError208() throws InvestigatorException{
+		
+		//REGISTRAMOS UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Carlos";
+		dto.surname = "Garcia";
+		dto.username = "carlos067807";
+		dto.email = "car567los@gmail.com";
+		dto.password = "123";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		try {
+			investigatorService.registerInvestigator(dto);
+			Assert.fail(
+					"Debe lanzarse excepción de contraseña no cumple longitud mínima.");
+		} catch (InvestigatorException e) {
+			Assert.assertEquals("208", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a registrar un investigador con correo erróneo
+	 * @throws InvestigatorException el formato del correo electrónico es erróneo
+	 */
+	public void test31CreateInvestigatorError209() throws InvestigatorException{
+		
+		//REGISTRAMOS UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Carlos";
+		dto.surname = "Garcia";
+		dto.username = "carlos067807";
+		dto.email = "car567losgmailcom";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		try {
+			investigatorService.registerInvestigator(dto);
+			Assert.fail(
+					"Debe lanzarse excepción de correo con formato erróneo.");
+		} catch (InvestigatorException e) {
+			Assert.assertEquals("209", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
 	 * Se comprueba que devuelve todos los investigadores de la aplicación
 	 * @throws InvestigatorException
 	 */
-	public void test25getAllInvestigators() throws InvestigatorException{
+	public void test32getAllInvestigators() throws InvestigatorException{
 		
 		//Se comprueba el número de investigadores existentes
 		List<InvestigatorDTO> investigators = investigatorService.getListInvestigators();
 		
 		assertNotNull(investigators);
-		assertEquals(4, investigators.size());
+		assertEquals(5, investigators.size());
 	}
 	
 }

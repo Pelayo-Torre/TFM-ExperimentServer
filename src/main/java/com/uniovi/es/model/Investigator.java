@@ -27,24 +27,23 @@ public class Investigator implements Serializable {
 	@Column(unique = true) 
 	private String mail;
 	
-	//@Column(unique = true) 
+	@Column(unique = true) 
 	private String username;
 	
 	private String password;
 	
-	//@Column(unique = true) 
-	private String dni;
-	
-	private String phone;
-	private Integer age;
-	
 	private Date registrationDate;
-	private String address;
 	
 	@OneToMany(mappedBy = "investigator")
 	private Set<Petition> petitions = new HashSet<Petition>();
 	
-	public Investigator() {}
+	public Investigator(String mail, String username) {
+		this.mail = mail;
+		this.username = username;
+		this.registrationDate = new Date();
+	}
+	
+	Investigator() {}
 
 	public String getName() {
 		return name;
@@ -86,44 +85,12 @@ public class Investigator implements Serializable {
 		this.password = password;
 	}
 
-	public String getDni() {
-		return dni;
-	}
-
-	public void setDni(String dni) {
-		this.dni = dni;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public Integer getAge() {
-		return age;
-	}
-
-	public void setAge(Integer age) {
-		this.age = age;
-	}
-
 	public Date getRegistrationDate() {
 		return registrationDate;
 	}
 
 	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
 	}
 
 	public Long getId() {

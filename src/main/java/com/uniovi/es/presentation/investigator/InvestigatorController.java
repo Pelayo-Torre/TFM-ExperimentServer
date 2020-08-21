@@ -53,5 +53,21 @@ public interface InvestigatorController {
 	 * @return la lista de investigadores
 	 */
 	public List<InvestigatorDTO> getListInvestigators();
+
+	/**
+	 * Recibe una petición para devolver el investigador a partir de su mail
+	 * @param mail , parámetro de entrada por el que se filtra
+	 * @return Investigador encontrado
+	 * @throws InvestigatorException si el parámetro de entrada el nulo
+	 */
+	public InvestigatorDTO getInvestigatorByMail(String mail) throws InvestigatorException ;
+	
+	/**
+	 * Recibe una petición para devolver el investigador a partir de su nombre de usuario
+	 * @param username , parámetro de entrada por el que se filtra
+	 * @return Investigador encontrado
+	 * @throws InvestigatorException  si el parámetro de entrada es nulo
+	 */
+	public InvestigatorDTO getInvestigatorByUsername(String username) throws InvestigatorException ;
 	
 }

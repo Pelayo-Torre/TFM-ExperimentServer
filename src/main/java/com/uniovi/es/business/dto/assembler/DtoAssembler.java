@@ -48,6 +48,7 @@ public class DtoAssembler {
 		dto.name = investigator.getName();
 		dto.surname = investigator.getSurname();
 		dto.email = investigator.getMail();
+		dto.username = investigator.getUsername();
 				
 		return dto;
 	}
@@ -80,6 +81,8 @@ public class DtoAssembler {
 		investigator.setName(dto.name);
 		investigator.setSurname(dto.surname);
 		investigator.setMail(dto.email);
+		investigator.setUsername(dto.username);
+		investigator.setPassword(dto.password);
 	}
 	
 	public static PetitionDTO toDTO(Petition petition) {
@@ -118,6 +121,7 @@ public class DtoAssembler {
 		dto.id = note.getId();
 		dto.title = note.getTitle();
 		dto.description = note.getDescrition();
+		dto.creationDate = note.getCreationDate();
 		
 		return dto;
 	}

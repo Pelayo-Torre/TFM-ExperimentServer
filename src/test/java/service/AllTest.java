@@ -10,7 +10,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	
 	InvestigatorTest.class,
 	ExperimentTest.class,
-	PetitionTest.class
+	PetitionTest.class,
+	BinnacleTest.class
 	
 })
 

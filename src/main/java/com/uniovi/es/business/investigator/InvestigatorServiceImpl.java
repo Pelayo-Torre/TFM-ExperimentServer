@@ -38,8 +38,10 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		
 		investigatorValidator.validate(dto);
 		investigatorValidator.validateExistenceOfMail(dto.email);
+		investigatorValidator.validateExistenceOfUsername(dto.username);
+		investigatorValidator.validatePassword(dto.password);
 		
-		Investigator investigator = new Investigator();
+		Investigator investigator = new Investigator(dto.email, dto.username);
 		DtoAssembler.fillData(investigator, dto);
 		
 		logger.info("\t \t Registrando el investigador en base de datos");
@@ -71,11 +73,20 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		investigatorValidator.validate(dto);
 		
 		logger.info("\t \t Validando existencia del mail: " + dto.email);
-		if(!investigator.getMail().equals(dto.email)) {
-			Investigator i = investigatorDAO.findByMail(dto.email);
+		if(!investigator.getMail().toLowerCase().equals(dto.email.toLowerCase())) {
+			Investigator i = investigatorDAO.findByMail(dto.email.toLowerCase());
 			if(i != null) {
 				logger.error("[ERROR - 204] -- El email del investigador ya se encuentra registrado en la aplicación");
 				throw new InvestigatorException("204");
+			}
+		}
+		
+		logger.info("\t \t Validando existencia del username: " + dto.username);
+		if(!investigator.getUsername().toLowerCase().equals(dto.username.toLowerCase())) {
+			Investigator i = investigatorDAO.findByUsername(dto.username.toLowerCase());
+			if(i != null) {
+				logger.error("[ERROR - 206] -- El nombre de usuario del investigador ya se encuentra registrado en la aplicación");
+				throw new InvestigatorException("206");
 			}
 		}
 
@@ -121,12 +132,38 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 	}
 	
 	@Override
-	public InvestigatorDTO getInvestigatorByMail(String mail) throws InvestigatorException {
+	public InvestigatorDTO getInvestigatorByMail(String mail) throws InvestigatorException  {
 		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- investigator by mail ");
 		
-		Investigator investigator = investigatorDAO.findByMail(mail);
+		if(mail == null) {
+			logger.error("[ERROR - 203] -- El mail es un campo obligatorio");
+			throw new InvestigatorException("203");
+		}
+		
+		Investigator investigator = investigatorDAO.findByMail(mail.toLowerCase());
 		
 		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- investigator by mail ");
+		
+		if(investigator == null)
+			return null;
+		return DtoAssembler.toDTO(investigator);
+	}
+	
+	@Override
+	public InvestigatorDTO getInvestigatorByUsername(String username) throws InvestigatorException {
+		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- investigator by username ");
+		
+		if(username == null) {
+			logger.error("[ERROR - 205] -- El nombre de usuario es un campo obligatorio");
+			throw new InvestigatorException("205");
+		}
+		
+		Investigator investigator = investigatorDAO.findByUsername(username.toLowerCase());
+		
+		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- investigator by username ");
+		
+		if(investigator == null)
+			return null;
 		return DtoAssembler.toDTO(investigator);
 	}
 

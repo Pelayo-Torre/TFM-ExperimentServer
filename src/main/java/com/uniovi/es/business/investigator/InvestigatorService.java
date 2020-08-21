@@ -15,7 +15,7 @@ public interface InvestigatorService {
 
 	public InvestigatorDTO getDetail(Long id) throws InvestigatorException;
 	
-	public InvestigatorDTO getInvestigatorByMail(String mail) throws InvestigatorException;
+	public InvestigatorDTO getInvestigatorByMail(String mail) throws InvestigatorException ;
 
 	public void updateInvestigator(InvestigatorDTO dto) throws InvestigatorException;
 
@@ -24,5 +24,7 @@ public interface InvestigatorService {
 	public List<PetitionDTO> getPetitionsPendingByIdInvestigator(Long idInvestigator) throws InvestigatorException;
 
 	public List<InvestigatorDTO> getListInvestigators();
+
+	public InvestigatorDTO getInvestigatorByUsername(String username) throws InvestigatorException;
 
 }

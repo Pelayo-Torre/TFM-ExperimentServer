@@ -1,6 +1,7 @@
 package com.uniovi.es.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,9 +24,12 @@ public class Note implements Serializable {
 	private String title;
 	private String descrition;
 	
+	private Date creationDate;
+	
 	Note() {}
 	
 	public Note(Experiment experiment) {
+		this.creationDate = new Date();
 		Associations.NoteExperiment.link(this, experiment);
 	}
 
@@ -56,5 +60,13 @@ public class Note implements Serializable {
 	public void setExperiment(Experiment experiment) {
 		this.experiment = experiment;
 	}
-	
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+		
 }
