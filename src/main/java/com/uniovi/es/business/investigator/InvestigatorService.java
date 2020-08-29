@@ -27,4 +27,6 @@ public interface InvestigatorService {
 
 	public InvestigatorDTO getInvestigatorByUsername(String username) throws InvestigatorException;
 
+	public InvestigatorDTO getInvestigatorInSession();
+
 }

@@ -61,7 +61,7 @@ class PetitionTest {
 		dto.name = "Pelayo";
 		dto.surname = "Garcia Torre";
 		dto.username = "pelgarTor";
-		dto.email = "pelayo@gmail.com";
+		dto.mail = "pelayo@gmail.com";
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -72,7 +72,7 @@ class PetitionTest {
 		dto.name = "Juan";
 		dto.surname = "Torre";
 		dto.username = "juanele27";
-		dto.email = "juan@gmail.com";
+		dto.mail = "juan@gmail.com";
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -283,7 +283,7 @@ class PetitionTest {
 		dto.name = "Gonzalo";
 		dto.surname = "Torre";
 		dto.username = "gongartor";
-		dto.email = "gonzalo@gmail.com";
+		dto.mail = "gonzalo@gmail.com";
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS

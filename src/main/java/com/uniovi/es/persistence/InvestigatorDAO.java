@@ -18,7 +18,7 @@ public interface InvestigatorDAO extends CrudRepository <Investigator, Long> {
 	@Query("SELECT i FROM Investigator i WHERE LOWER(i.username) = ?1")
 	public Investigator findByUsername(String username);
 	
-	@Query("SELECT e FROM Experiment e, Petition p WHERE p.investigator.id = ?1 AND p.experiment.id = e.id AND p.status = ?2")
+	@Query("SELECT e FROM Experiment e, Petition p WHERE p.investigator.id = ?1 AND p.experiment.id = e.id AND p.status = ?2 ORDER BY e.creationDate DESC")
 	public List<Experiment> findExperimentsByIdInvestigator(Long idInvestigator, StatusPetition status);
 
 	@Query("SELECT p FROM Petition p WHERE p.investigator.id = ?1 AND p.status = ?2")

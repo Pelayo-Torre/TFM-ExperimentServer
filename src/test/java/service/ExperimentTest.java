@@ -56,7 +56,7 @@ class ExperimentTest {
 		dto.name = "Carlos";
 		dto.surname = "Garcia";
 		dto.username = "carlos23";
-		dto.email = "carlos@gmail.com";
+		dto.mail = "carlos@gmail.com";
 		dto.password = "123456789";
 		
 		investigatorService.registerInvestigator(dto);
@@ -269,7 +269,7 @@ class ExperimentTest {
 		assertEquals("Carlos", investigators.get(0).name);
 		assertEquals("Garcia", investigators.get(0).surname);
 		assertEquals("carlos23", investigators.get(0).username);
-		assertEquals("carlos@gmail.com", investigators.get(0).email);
+		assertEquals("carlos@gmail.com", investigators.get(0).mail);
 	}
 	
 	@Test

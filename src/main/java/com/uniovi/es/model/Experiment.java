@@ -1,6 +1,7 @@
 package com.uniovi.es.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,8 +37,11 @@ public class Experiment implements Serializable {
 	@OneToMany(mappedBy = "experiment")
 	private Set<Note> notes = new HashSet<Note>();
 	
+	private Date creationDate;
+	
 	public Experiment() {
 		this.status = StatusExperiment.CREATED;
+		this.creationDate = new Date();
 	}
 	
 	public String getTitle() {
@@ -90,6 +94,14 @@ public class Experiment implements Serializable {
 
 	public void setNotes(Set<Note> notes) {
 		this.notes = notes;
+	}
+	
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	/**

@@ -7,8 +7,10 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.uniovi.es.business.authentication.UserInSession;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.PetitionDTO;
@@ -18,6 +20,7 @@ import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Petition;
+import com.uniovi.es.model.Role;
 import com.uniovi.es.model.StatusPetition;
 import com.uniovi.es.persistence.InvestigatorDAO;
 
@@ -31,18 +34,27 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 	
 	@Autowired
 	private InvestigatorValidator investigatorValidator;
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Autowired
+	private UserInSession userInSession;
 
 	@Override
 	public void registerInvestigator(InvestigatorDTO dto) throws InvestigatorException {
 		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- register INVESTIGATOR ");
 		
 		investigatorValidator.validate(dto);
-		investigatorValidator.validateExistenceOfMail(dto.email);
+		investigatorValidator.validateExistenceOfMail(dto.mail);
 		investigatorValidator.validateExistenceOfUsername(dto.username);
 		investigatorValidator.validatePassword(dto.password);
 		
-		Investigator investigator = new Investigator(dto.email, dto.username);
+		Investigator investigator = new Investigator(dto.mail, dto.username);
 		DtoAssembler.fillData(investigator, dto);
+		
+		investigator.setPassword(bCryptPasswordEncoder.encode(investigator.getPassword()));
+		investigator.setRole(Role.INVESTIGATOR_EVALUATION);
 		
 		logger.info("\t \t Registrando el investigador en base de datos");
 		investigatorDAO.save(investigator);
@@ -72,9 +84,9 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		
 		investigatorValidator.validate(dto);
 		
-		logger.info("\t \t Validando existencia del mail: " + dto.email);
-		if(!investigator.getMail().toLowerCase().equals(dto.email.toLowerCase())) {
-			Investigator i = investigatorDAO.findByMail(dto.email.toLowerCase());
+		logger.info("\t \t Validando existencia del mail: " + dto.mail);
+		if(!investigator.getMail().toLowerCase().equals(dto.mail.toLowerCase())) {
+			Investigator i = investigatorDAO.findByMail(dto.mail.toLowerCase());
 			if(i != null) {
 				logger.error("[ERROR - 204] -- El email del investigador ya se encuentra registrado en la aplicación");
 				throw new InvestigatorException("204");
@@ -166,7 +178,16 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 			return null;
 		return DtoAssembler.toDTO(investigator);
 	}
-
+	
+	@Override
+	public InvestigatorDTO getInvestigatorInSession() {
+		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- investigator in session ");
+		
+		Investigator investigator = userInSession.getInvestigator();
+		
+		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- investigator in session ");
+		return DtoAssembler.toDTO(investigator);
+	}
 
 	/**
 	 * Devuelve el investigador a partir del optional que se pasa como parámetro

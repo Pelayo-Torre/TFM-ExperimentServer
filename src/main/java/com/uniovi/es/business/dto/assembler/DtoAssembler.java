@@ -21,6 +21,7 @@ public class DtoAssembler {
 		dto.title = experiment.getTitle();
 		dto.description = experiment.getDescription();
 		dto.status = experiment.getStatus().name();
+		dto.creationDate = experiment.getCreationDate();
 		
 		return dto;
 	}
@@ -47,7 +48,7 @@ public class DtoAssembler {
 		dto.id = investigator.getId();
 		dto.name = investigator.getName();
 		dto.surname = investigator.getSurname();
-		dto.email = investigator.getMail();
+		dto.mail = investigator.getMail();
 		dto.username = investigator.getUsername();
 				
 		return dto;
@@ -80,7 +81,7 @@ public class DtoAssembler {
 		
 		investigator.setName(dto.name);
 		investigator.setSurname(dto.surname);
-		investigator.setMail(dto.email);
+		investigator.setMail(dto.mail);
 		investigator.setUsername(dto.username);
 		investigator.setPassword(dto.password);
 	}

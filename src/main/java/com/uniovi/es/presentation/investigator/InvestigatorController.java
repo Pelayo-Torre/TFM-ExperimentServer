@@ -69,5 +69,12 @@ public interface InvestigatorController {
 	 * @throws InvestigatorException  si el parámetro de entrada es nulo
 	 */
 	public InvestigatorDTO getInvestigatorByUsername(String username) throws InvestigatorException ;
+
+	/**
+	 * Devuelve al investigador que se encuentra autenticado en sesión
+	 * @return el investigador en sesión
+	 * @throws InvestigatorException
+	 */
+	public InvestigatorDTO validateNameOfAccount() throws InvestigatorException;
 	
 }

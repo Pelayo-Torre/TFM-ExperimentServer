@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,6 +38,9 @@ public class Investigator implements Serializable {
 	
 	@OneToMany(mappedBy = "investigator")
 	private Set<Petition> petitions = new HashSet<Petition>();
+	
+	@Enumerated(EnumType.STRING)
+	private Role role;
 	
 	public Investigator(String mail, String username) {
 		this.mail = mail;
@@ -105,6 +110,12 @@ public class Investigator implements Serializable {
 		this.petitions = petitions;
 	}
 
-	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
 	
 }

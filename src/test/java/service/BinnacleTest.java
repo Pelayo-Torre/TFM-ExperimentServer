@@ -62,7 +62,7 @@ class BinnacleTest {
 		dto.name = "Carlos";
 		dto.surname = "Garcia";
 		dto.username = "carlos23";
-		dto.email = "carlos@gmail.com";
+		dto.mail = "carlos@gmail.com";
 		dto.password = "123456789";
 		
 		investigatorService.registerInvestigator(dto);

@@ -62,7 +62,7 @@ class InvestigatorTest {
 		dto.name = "Pelayo";
 		dto.surname = "Garcia Torre";
 		dto.username = "pgarciat";
-		dto.email = "pelayo@gmail.com";
+		dto.mail = "pelayo@gmail.com";
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -75,7 +75,7 @@ class InvestigatorTest {
 		assertEquals("Pelayo", investigator.name);
 		assertEquals("Garcia Torre", investigator.surname);
 		assertEquals("pgarciat", investigator.username);
-		assertEquals("pelayo@gmail.com", investigator.email);
+		assertEquals("pelayo@gmail.com", investigator.mail);
 	}
 	
 	@Test
@@ -90,7 +90,7 @@ class InvestigatorTest {
 		dto.name = null;
 		dto.username = "pgarcitorre";
 		dto.surname = "Garcia Torre";
-		dto.email = "pelayo@gmail.com";
+		dto.mail = "pelayo@gmail.com";
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -115,7 +115,7 @@ class InvestigatorTest {
 		dto.name = "Pelayo";
 		dto.surname = "";
 		dto.username = "pgarcitorre";
-		dto.email = "pelayo@gmail.com";
+		dto.mail = "pelayo@gmail.com";
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -140,7 +140,7 @@ class InvestigatorTest {
 		dto.name = "Pelayo";
 		dto.surname = "Garcia Torre";
 		dto.username = "pgarcitorre";
-		dto.email = null;
+		dto.mail = null;
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -165,7 +165,7 @@ class InvestigatorTest {
 		dto.name = "Pelayo";
 		dto.surname = "Gonzalez";
 		dto.username = "pgarcitorre45";
-		dto.email = "pel@gmail.com";
+		dto.mail = "pel@gmail.com";
 		dto.password = "123456789";
 		
 		investigatorService.registerInvestigator(dto);
@@ -175,7 +175,7 @@ class InvestigatorTest {
 		dto2.name = "Pelayo";
 		dto2.surname = "Gonzalez";
 		dto2.username = "pgartorre45";
-		dto2.email = "PEL@GMAIL.COM";
+		dto2.mail = "PEL@GMAIL.COM";
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -200,7 +200,7 @@ class InvestigatorTest {
 		dto.name = "Pelayo";
 		dto.surname = "Garcia Torre";
 		dto.username = null;
-		dto.email = "pelayo@hotmail.com";
+		dto.mail = "pelayo@hotmail.com";
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -225,7 +225,7 @@ class InvestigatorTest {
 		dto.name = "Pelayo";
 		dto.surname = "Gonzalez";
 		dto.username = "pgarciTorre";
-		dto.email = "pelTore@gmail.com";
+		dto.mail = "pelTore@gmail.com";
 		dto.password = "123456789";
 		
 		investigatorService.registerInvestigator(dto);
@@ -235,7 +235,7 @@ class InvestigatorTest {
 		dto2.name = "Pelayo";
 		dto2.surname = "Álvarez";
 		dto2.username = "pgarciTORRe";
-		dto2.email = "pelgar@gmail.com";
+		dto2.mail = "pelgar@gmail.com";
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -264,7 +264,7 @@ class InvestigatorTest {
 		assertEquals("Pelayo", investigator.name);
 		assertEquals("Garcia Torre", investigator.surname);
 		assertEquals("pgarciat", investigator.username);
-		assertEquals("pelayo@gmail.com", investigator.email);
+		assertEquals("pelayo@gmail.com", investigator.mail);
 	}
 	
 	@Test
@@ -295,7 +295,7 @@ class InvestigatorTest {
 		dto.name = "Juan";
 		dto.surname = "Torre";
 		dto.username = "juanele";
-		dto.email = "juan@gmail.com";
+		dto.mail = "juan@gmail.com";
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -306,7 +306,7 @@ class InvestigatorTest {
 		dto.name = "Juan Antonio";
 		dto.surname = "Llaneza";
 		dto.username = "juanele27";
-		dto.email = "juanantonio@gmail.com";
+		dto.mail = "juanantonio@gmail.com";
 		dto.id = 3L;
 		
 		investigatorService.updateInvestigator(dto);
@@ -318,7 +318,7 @@ class InvestigatorTest {
 		assertEquals("Juan Antonio", dto.name);
 		assertEquals("Llaneza", dto.surname);
 		assertEquals("juanele27", dto.username);
-		assertEquals("juanantonio@gmail.com", dto.email);
+		assertEquals("juanantonio@gmail.com", dto.mail);
 	}
 	
 	@Test
@@ -332,7 +332,7 @@ class InvestigatorTest {
 		dto.name = null;
 		dto.surname = "Llaneza";
 		dto.username = "juanele";
-		dto.email = "juanantonio@gmail.com";
+		dto.mail = "juanantonio@gmail.com";
 		dto.id = 3L;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -356,7 +356,7 @@ class InvestigatorTest {
 		dto.name = "Juan";
 		dto.surname = "";
 		dto.username = "juanele";
-		dto.email = "juanantonio@gmail.com";
+		dto.mail = "juanantonio@gmail.com";
 		dto.id = 3L;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -380,7 +380,7 @@ class InvestigatorTest {
 		dto.name = "Juan";
 		dto.surname = "Llaneza";
 		dto.username = "juanele";
-		dto.email = "";
+		dto.mail = "";
 		dto.id = 3L;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -404,7 +404,7 @@ class InvestigatorTest {
 		dto.name = "Juan";
 		dto.surname = "Llaneza";
 		dto.username = "juanele";
-		dto.email = "pelAYo@gmail.com";
+		dto.mail = "pelAYo@gmail.com";
 		dto.id = 3L;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -428,7 +428,7 @@ class InvestigatorTest {
 		dto.name = "Juan";
 		dto.surname = "Llaneza";
 		dto.username = "";
-		dto.email = "juanllan@gmail.com";
+		dto.mail = "juanllan@gmail.com";
 		dto.id = 3L;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -452,7 +452,7 @@ class InvestigatorTest {
 		dto.name = "Juan";
 		dto.surname = "Llaneza";
 		dto.username = "JUANELE27";
-		dto.email = "juaneleo@gmail.com";
+		dto.mail = "juaneleo@gmail.com";
 		dto.id = 1L;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -476,7 +476,7 @@ class InvestigatorTest {
 		dto.name = "Juan";
 		dto.surname = "Llaneza";
 		dto.username = "juanele";
-		dto.email = "pelayo@gmail.com";
+		dto.mail = "pelayo@gmail.com";
 		dto.id = ID_NOT_EXIST;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -503,7 +503,7 @@ class InvestigatorTest {
 		dto.name = "Carlos";
 		dto.surname = "Garcia";
 		dto.username = "carlos007";
-		dto.email = "carlos@gmail.com";
+		dto.mail = "carlos@gmail.com";
 		dto.password = "123456789";
 		
 		investigatorService.registerInvestigator(dto);
@@ -573,7 +573,7 @@ class InvestigatorTest {
 		dto.name = "Carlos";
 		dto.surname = "Garcia";
 		dto.username = "carlos067807";
-		dto.email = "car567los@gmail.com";
+		dto.mail = "car567los@gmail.com";
 		dto.password = null;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -598,7 +598,7 @@ class InvestigatorTest {
 		dto.name = "Carlos";
 		dto.surname = "Garcia";
 		dto.username = "carlos067807";
-		dto.email = "car567los@gmail.com";
+		dto.mail = "car567los@gmail.com";
 		dto.password = "123";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
@@ -623,7 +623,7 @@ class InvestigatorTest {
 		dto.name = "Carlos";
 		dto.surname = "Garcia";
 		dto.username = "carlos067807";
-		dto.email = "car567losgmailcom";
+		dto.mail = "car567losgmailcom";
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS

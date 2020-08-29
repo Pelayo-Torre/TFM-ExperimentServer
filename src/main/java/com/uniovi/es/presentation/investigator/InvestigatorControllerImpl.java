@@ -61,7 +61,7 @@ public class InvestigatorControllerImpl implements InvestigatorController{
 	}
 	
 	@Override
-	@RequestMapping(value = "/experiments/accepted{idInvestigator}", method = RequestMethod.GET)
+	@RequestMapping(value = "/experiments/accepted/{idInvestigator}", method = RequestMethod.GET)
 	public List<ExperimentDTO> getExperimentsAcceptedByIdInvestigator(@PathVariable Long idInvestigator) throws InvestigatorException {
 		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- experiments accepted investigator");
 		
@@ -112,6 +112,18 @@ public class InvestigatorControllerImpl implements InvestigatorController{
 		InvestigatorDTO dto = investigatorService.getInvestigatorByUsername(username);
 		
 		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- investigator by username");
+		return dto;
+	}
+	
+	@Override
+	@RequestMapping(value = "/in/session", method = RequestMethod.GET)
+	public InvestigatorDTO validateNameOfAccount() throws InvestigatorException {
+		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- investigator in session");
+		
+		InvestigatorDTO dto = investigatorService.getInvestigatorInSession();
+		
+		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- investigator in session");
+		
 		return dto;
 	}
 	

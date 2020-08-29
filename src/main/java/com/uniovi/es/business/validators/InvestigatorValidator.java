@@ -41,7 +41,7 @@ public class InvestigatorValidator {
 			throw new InvestigatorException("202");
 		}
 		
-		if(dto.email == null || dto.email.equals("")) {
+		if(dto.mail == null || dto.mail.equals("")) {
 			logger.error("[ERROR - 203] -- El email del investigador es un campo obligatorio");
 			throw new InvestigatorException("203");
 		}
@@ -52,7 +52,7 @@ public class InvestigatorValidator {
 		}
 		
 		Pattern pattern = Pattern.compile(PATTERN_EMAIL);
-		Matcher matcher = pattern.matcher(dto.email);
+		Matcher matcher = pattern.matcher(dto.mail);
 		
 		if (!matcher.matches()) {
 			logger.error("[ERROR - 209] -- El formato del correo electrónico es incorrecto");
