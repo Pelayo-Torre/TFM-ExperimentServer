@@ -2,7 +2,10 @@ package service;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.List;
+
+import javax.annotation.PostConstruct;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
@@ -27,7 +30,11 @@ import com.uniovi.es.business.petition.PetitionService;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.PetitionException;
-import com.uniovi.es.model.StatusPetition;
+import com.uniovi.es.model.types.Device;
+import com.uniovi.es.model.types.Gender;
+import com.uniovi.es.model.types.Laterality;
+import com.uniovi.es.model.types.StatusPetition;
+import com.uniovi.es.persistence.DeviceDAO;
 import com.uniovi.es.utils.Identifier;
 
 
@@ -48,7 +55,19 @@ class InvestigatorTest {
 	@Autowired 
 	private PetitionService petitionService;
 	
+	@Autowired
+	private DeviceDAO deviceDAO;
+	
 	private static final Long ID_NOT_EXIST = 4345245786396523496L;
+	
+	@PostConstruct
+	public void init() {
+		Device d = new Device("MOUSE");
+		Device d1 = new Device("TOUCHPAD");
+		
+		deviceDAO.save(d);
+		deviceDAO.save(d1);
+	}
 
 	@Test
 	/**
@@ -515,6 +534,11 @@ class InvestigatorTest {
 		experientDTO.title = "Experimento de prueba";
 		experientDTO.description = "Esto es para hacer una prueba";
 		experientDTO.idInvestigator = dto.id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
 		
 		experimentService.register(experientDTO);
 		

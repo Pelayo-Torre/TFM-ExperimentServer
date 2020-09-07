@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uniovi.es.business.dto.DeviceDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.experiment.ExperimentService;
@@ -121,6 +122,7 @@ public class ExperimentControllerImpl implements ExperimentController {
 	}
 
 	@Override
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public List<ExperimentDTO> getListExperiments() {
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- all experiments");
 		
@@ -130,8 +132,15 @@ public class ExperimentControllerImpl implements ExperimentController {
 		return list;
 	}
 
-	
+	@Override
+	@RequestMapping(value = "/all/devices", method = RequestMethod.GET)
+	public List<DeviceDTO> getListDevices() {
+		logger.info("[INICIO] EXPERIMENT CONTROLLER -- all devices");
+		
+		List<DeviceDTO> list = experimentService.getAllDevices();
+		
+		logger.info("[FINAL] EXPERIMENT CONTROLLER -- all devices");
+		return list;
+	}
 
-	
-	
 }

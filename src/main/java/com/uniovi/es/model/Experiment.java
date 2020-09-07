@@ -13,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.uniovi.es.model.types.DemographicData;
+import com.uniovi.es.model.types.StatusExperiment;
+
 @Entity
 public class Experiment implements Serializable {
 	
@@ -36,6 +39,8 @@ public class Experiment implements Serializable {
 	
 	@OneToMany(mappedBy = "experiment")
 	private Set<Note> notes = new HashSet<Note>();
+	
+	private DemographicData demographicData;
 	
 	private Date creationDate;
 	
@@ -102,6 +107,14 @@ public class Experiment implements Serializable {
 
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
+	}
+	
+	public DemographicData getDemographicData() {
+		return demographicData;
+	}
+
+	public void setDemographicData(DemographicData demographicData) {
+		this.demographicData = demographicData;
 	}
 
 	/**

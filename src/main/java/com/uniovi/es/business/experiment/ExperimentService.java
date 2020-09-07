@@ -2,6 +2,7 @@ package com.uniovi.es.business.experiment;
 
 import java.util.List;
 
+import com.uniovi.es.business.dto.DeviceDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.exceptions.ExperimentException;
@@ -27,5 +28,7 @@ public interface ExperimentService {
 	public List<InvestigatorDTO> getInvestigatorsOfExperiment(Long id)  throws ExperimentException;
 
 	public List<ExperimentDTO> getExperiments();
+	
+	public List<DeviceDTO> getAllDevices();
 
 }

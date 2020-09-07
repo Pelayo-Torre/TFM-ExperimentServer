@@ -1,4 +1,4 @@
-package com.uniovi.es.model;
+package com.uniovi.es.model.types;
 
 public enum Gender {
 

@@ -5,11 +5,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uniovi.es.business.dto.DeviceDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
@@ -23,7 +26,12 @@ import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Petition;
-import com.uniovi.es.model.StatusPetition;
+import com.uniovi.es.model.types.DemographicData;
+import com.uniovi.es.model.types.Device;
+import com.uniovi.es.model.types.Gender;
+import com.uniovi.es.model.types.Laterality;
+import com.uniovi.es.model.types.StatusPetition;
+import com.uniovi.es.persistence.DeviceDAO;
 import com.uniovi.es.persistence.ExperimentDAO;
 import com.uniovi.es.persistence.InvestigatorDAO;
 import com.uniovi.es.persistence.PetitionDAO;
@@ -48,6 +56,18 @@ public class ExperimentServiceImpl implements ExperimentService{
 	@Autowired
 	private InvestigatorDAO investigatorDAO;
 	
+	@Autowired
+	private DeviceDAO deviceDAO;
+	
+	//@PostConstruct
+	public void init() {
+		Device d = new Device("MOUSE");
+		Device d1 = new Device("TOUCHPAD");
+		
+		deviceDAO.save(d);
+		deviceDAO.save(d1);
+	}
+		
 	@Override
 	public void register(ExperimentDTO dto) throws ExperimentException, InvestigatorException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- register experiment");
@@ -57,10 +77,18 @@ public class ExperimentServiceImpl implements ExperimentService{
 		Investigator investigator = getInvestigator(optional);
 		
 		experimentValidator.validate(dto);
+		experimentValidator.validateDemographicData(dto);
 		
 		Experiment experiment = new Experiment();
 		DtoAssembler.fillData(experiment, dto);
 		
+		//Creación de los datos demográficos
+		DemographicData demographicData = new DemographicData(dto.birthDate, Laterality.valueOf(dto.laterality), 
+				Gender.valueOf(dto.gender), dto.idDevice);
+		
+		experiment.setDemographicData(demographicData);
+		
+		//Creación de la petición
 		Petition petition = new Petition(investigator, experiment);
 		petition.setAnswerDate(new Date());
 		petition.setCreator(true);
@@ -103,9 +131,12 @@ public class ExperimentServiceImpl implements ExperimentService{
 		Optional<Experiment> optional = experimentDAO.findById(id);
 		Experiment experiment = getExperiment(optional);
 		
+		logger.info("\t \t Obteniendo los datos del creador del experimento con ID: " + id);
+		Investigator investigator = investigatorDAO.findCreatorOfExperiment(id);
+		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- detail experiment");
 		
-		return DtoAssembler.toDTO(experiment);
+		return DtoAssembler.toDTO(experiment, investigator);
 	}
 	
 	@Override
@@ -216,10 +247,21 @@ public class ExperimentServiceImpl implements ExperimentService{
 		logger.info("[INICIO] EXPERIMENT SERVICE -- all Experiments");
 		
 		List<Experiment> list = new ArrayList<Experiment>();
-		experimentDAO.findAll().forEach(list::add);;
+		experimentDAO.findAll().forEach(list::add);
 				
-		logger.info("[INICIO] EXPERIMENT SERVICE -- all Experiments");
+		logger.info("[FINAL] EXPERIMENT SERVICE -- all Experiments");
 		return DtoAssembler.toList(list);
+	}
+	
+	@Override
+	public List<DeviceDTO> getAllDevices() {
+		logger.info("[INICIO] EXPERIMENT SERVICE -- all Devices");
+		
+		List<Device> list = new ArrayList<Device>();
+		deviceDAO.findAll().forEach(list::add);
+		
+		logger.info("[FINAL] EXPERIMENT SERVICE -- all Devices");
+		return DtoAssembler.toListDevices(list);
 	}
 	
 	/**
@@ -257,6 +299,5 @@ public class ExperimentServiceImpl implements ExperimentService{
 		}
 		return investigator;
 	}
-
 
 }

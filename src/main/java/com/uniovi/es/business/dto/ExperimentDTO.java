@@ -10,7 +10,19 @@ public class ExperimentDTO {
 	public String status;
 	public Date creationDate;
 	
+	//Datos demográficos
+	public String laterality;
+	public String gender;
+	public Date birthDate;
+	public Long idDevice;
+	
 	public Long idInvestigator; //ID del investigador creador
+	
+	//Datos del investigador creador del experimento
+	public String nameInvestigator;
+	public String surnameInvestigator;
+	public String usernameInvestigator;
+	public String mailInvestigator;
 
 	@Override
 	public String toString() {

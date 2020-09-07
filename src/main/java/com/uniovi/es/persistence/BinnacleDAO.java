@@ -9,7 +9,7 @@ import com.uniovi.es.model.Note;
 
 public interface BinnacleDAO extends CrudRepository <Note, Long> {
 
-	@Query("SELECT n FROM Note n WHERE n.experiment.id = ?1")
+	@Query("SELECT n FROM Note n WHERE n.experiment.id = ?1 ORDER BY n.creationDate DESC")
 	List<Note> findNotesByExperiment(Long idExperiment);
 
 }

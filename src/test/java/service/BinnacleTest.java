@@ -2,7 +2,10 @@ package service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Date;
 import java.util.List;
+
+import javax.annotation.PostConstruct;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -27,6 +30,10 @@ import com.uniovi.es.business.investigator.InvestigatorService;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.NoteException;
+import com.uniovi.es.model.types.Device;
+import com.uniovi.es.model.types.Gender;
+import com.uniovi.es.model.types.Laterality;
+import com.uniovi.es.persistence.DeviceDAO;
 import com.uniovi.es.utils.Identifier;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -46,7 +53,19 @@ class BinnacleTest {
 	@Autowired
 	private ExperimentService experimentService;
 	
+	@Autowired
+	private DeviceDAO deviceDAO;
+	
 	private static final Long ID_NOT_EXIST = 4345245786396523496L;
+	
+	@PostConstruct
+	public void init() {
+		Device d = new Device("MOUSE");
+		Device d1 = new Device("TOUCHPAD");
+		
+		deviceDAO.save(d);
+		deviceDAO.save(d1);
+	}
 
 	@Test
 	/**
@@ -72,6 +91,11 @@ class BinnacleTest {
 		experientDTO.title = "Experimento en Langreo";
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("carlos@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
 		
 		experimentService.register(experientDTO);
 		

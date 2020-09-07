@@ -5,13 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name = "TUser")
@@ -25,18 +24,7 @@ public class User implements Serializable {
 	
 	@Column(unique = true)
 	private String sessionID;
-	
-	private Integer age;
-	
-	@Enumerated(EnumType.STRING)
-	private Gender gender;
-
-	@Enumerated(EnumType.STRING)
-	private Laterality laterality;
-	
-	@Enumerated(EnumType.STRING)
-	private Device device;
-	
+		
 	private String ip;
 	private Date timeStamp;
 	private String locale;
@@ -60,38 +48,6 @@ public class User implements Serializable {
 
 	public void setSessionID(String sessionID) {
 		this.sessionID = sessionID;
-	}
-
-	public Integer getAge() {
-		return age;
-	}
-
-	public void setAge(Integer age) {
-		this.age = age;
-	}
-
-	public Gender getGender() {
-		return gender;
-	}
-
-	public void setGender(Gender gender) {
-		this.gender = gender;
-	}
-
-	public Laterality getLaterality() {
-		return laterality;
-	}
-
-	public void setLaterality(Laterality laterality) {
-		this.laterality = laterality;
-	}
-
-	public Device getDevice() {
-		return device;
-	}
-
-	public void setDevice(Device device) {
-		this.device = device;
 	}
 
 	public String getIp() {

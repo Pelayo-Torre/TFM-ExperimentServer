@@ -20,8 +20,9 @@ import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Petition;
-import com.uniovi.es.model.Role;
-import com.uniovi.es.model.StatusPetition;
+import com.uniovi.es.model.types.StatusExperiment;
+import com.uniovi.es.model.types.Role;
+import com.uniovi.es.model.types.StatusPetition;
 import com.uniovi.es.persistence.InvestigatorDAO;
 
 @Service
@@ -115,7 +116,8 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- getExperimentsAcceptedByIdInvestigator INVESTIGATOR ");
 		
 		logger.info("\t \t Obteniendo los experimentos del investigador: " + idInvestigator);
-		List<Experiment> experiments = investigatorDAO.findExperimentsByIdInvestigator(idInvestigator, StatusPetition.ACCEPTED);
+		List<Experiment> experiments = investigatorDAO.findExperimentsByIdInvestigator(idInvestigator, 
+				StatusPetition.ACCEPTED, StatusExperiment.DELETED);
 		
 		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- getExperimentsAcceptedByIdInvestigator INVESTIGATOR ");
 		return DtoAssembler.toList(experiments);

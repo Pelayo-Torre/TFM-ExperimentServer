@@ -74,7 +74,7 @@ public class AuthenticationService {
 	 * @return el usuario o null si no existe
 	 */
 	public Investigator getUserByUsername(String username) {
-		return investigatorDAO.findByUsername(username);
+		return investigatorDAO.findByUsername(username.toLowerCase());
 	}
 	
 }

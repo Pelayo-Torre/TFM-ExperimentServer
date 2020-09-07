@@ -3,6 +3,7 @@ package com.uniovi.es.business.dto.assembler;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.uniovi.es.business.dto.DeviceDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.NoteDTO;
@@ -11,17 +12,34 @@ import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Note;
 import com.uniovi.es.model.Petition;
+import com.uniovi.es.model.types.Device;
 
 public class DtoAssembler {
 	
-	public static ExperimentDTO toDTO(Experiment experiment) {
+	public static ExperimentDTO toDTO(Experiment experiment, Investigator investigator) {
 		ExperimentDTO dto = new ExperimentDTO();
 		
-		dto.id = experiment.getId();
-		dto.title = experiment.getTitle();
-		dto.description = experiment.getDescription();
-		dto.status = experiment.getStatus().name();
-		dto.creationDate = experiment.getCreationDate();
+		if(experiment != null) {
+			dto.id = experiment.getId();
+			dto.title = experiment.getTitle();
+			dto.description = experiment.getDescription();
+			dto.status = experiment.getStatus().name();
+			dto.creationDate = experiment.getCreationDate();
+			
+			//Demographic data
+			dto.birthDate = experiment.getDemographicData().getBirthdate();
+			dto.gender = experiment.getDemographicData().getGender().name();
+			dto.idDevice = experiment.getDemographicData().getIdDevice();
+			dto.laterality = experiment.getDemographicData().getLaterality().name();
+		}
+				
+		if(investigator != null) {
+			dto.nameInvestigator = investigator.getName();
+			dto.surnameInvestigator = investigator.getSurname();
+			dto.mailInvestigator = investigator.getMail();
+			dto.usernameInvestigator = investigator.getUsername();
+			dto.idInvestigator = investigator.getId();
+		}
 		
 		return dto;
 	}
@@ -30,7 +48,7 @@ public class DtoAssembler {
 		List<ExperimentDTO> list = new ArrayList<ExperimentDTO>();
 		
 		for(Experiment experiment: experiments) {
-			list.add(toDTO(experiment));
+			list.add(toDTO(experiment, null));
 		}
 		
 		return list;
@@ -50,6 +68,7 @@ public class DtoAssembler {
 		dto.surname = investigator.getSurname();
 		dto.mail = investigator.getMail();
 		dto.username = investigator.getUsername();
+		dto.role = investigator.getRole().name();
 				
 		return dto;
 	}
@@ -141,6 +160,25 @@ public class DtoAssembler {
 		
 		note.setTitle(dto.title);
 		note.setDescrition(dto.description);
+	}
+	
+	public static DeviceDTO toDTO(Device device) {
+		DeviceDTO dto = new DeviceDTO();
+		
+		dto.id = device.getId();
+		dto.name = device.getName();
+		
+		return dto;
+	}
+	
+	public static List<DeviceDTO> toListDevices(List<Device> devices){
+		List<DeviceDTO> devicesDTO = new ArrayList<DeviceDTO>();
+		
+		for(Device device : devices) {
+			devicesDTO.add(toDTO(device));
+		}
+		
+		return devicesDTO;
 	}
 
 }

@@ -7,6 +7,4 @@ import com.uniovi.es.model.Experiment;
 
 public interface ExperimentDAO extends CrudRepository <Experiment, Long> {
 
-	
-	
 }

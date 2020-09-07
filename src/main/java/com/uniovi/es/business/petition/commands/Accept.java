@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.exceptions.PetitionException;
 import com.uniovi.es.model.Petition;
-import com.uniovi.es.model.StatusPetition;
+import com.uniovi.es.model.types.StatusPetition;
 
 public class Accept implements PetitionCommand{
 	

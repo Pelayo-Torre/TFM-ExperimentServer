@@ -26,7 +26,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throws UsernameNotFoundException {
 		Investigator investigator = null;	
 		
-		investigator = investigatorDAO.findByUsername(login);
+		if(login != null) {
+			investigator = investigatorDAO.findByUsername(login.toLowerCase());
+		}
 		
 //		if(investigator == null) {
 //			investigator = usersRepository.findByUuid(login);

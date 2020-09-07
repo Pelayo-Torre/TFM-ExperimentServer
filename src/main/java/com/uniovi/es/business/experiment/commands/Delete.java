@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.model.Experiment;
-import com.uniovi.es.model.StatusExperiment;
+import com.uniovi.es.model.types.StatusExperiment;
 
 public class Delete implements ExperimentCommand{
 	

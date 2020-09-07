@@ -3,6 +3,7 @@ package com.uniovi.es.presentation.experiment;
 
 import java.util.List;
 
+import com.uniovi.es.business.dto.DeviceDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.exceptions.ExperimentException;
@@ -83,5 +84,11 @@ public interface ExperimentController {
 	 * @return la lista de experimentos
 	 */
 	public List<ExperimentDTO> getListExperiments();
+	
+	/**
+	 * Devuelve la lista de dispositivos existentes en la aplicación
+	 * @return lista de dispositivos existentes en base de datos
+	 */
+	public List<DeviceDTO> getListDevices();
 
 }

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.uniovi.es.model.Petition;
-import com.uniovi.es.model.StatusPetition;
+import com.uniovi.es.model.types.StatusPetition;
 
 public interface PetitionDAO extends CrudRepository <Petition, Long> {
 

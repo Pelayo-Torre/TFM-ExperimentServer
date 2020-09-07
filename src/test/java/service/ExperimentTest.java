@@ -2,7 +2,10 @@ package service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Date;
 import java.util.List;
+
+import javax.annotation.PostConstruct;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -24,7 +27,11 @@ import com.uniovi.es.business.experiment.ExperimentService;
 import com.uniovi.es.business.investigator.InvestigatorService;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.InvestigatorException;
-import com.uniovi.es.model.StatusExperiment;
+import com.uniovi.es.model.types.Device;
+import com.uniovi.es.model.types.Gender;
+import com.uniovi.es.model.types.Laterality;
+import com.uniovi.es.model.types.StatusExperiment;
+import com.uniovi.es.persistence.DeviceDAO;
 import com.uniovi.es.utils.Identifier;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,6 +49,18 @@ class ExperimentTest {
 	private ExperimentService experimentService;
 	
 	private static final Long ID_NOT_EXIST = 4345245786396523496L;
+	
+	@Autowired
+	private DeviceDAO deviceDAO;
+	
+	@PostConstruct
+	public void init() {
+		Device d = new Device("MOUSE");
+		Device d1 = new Device("TOUCHPAD");
+		
+		deviceDAO.save(d);
+		deviceDAO.save(d1);
+	}
 	
 	@Test
 	/**
@@ -67,6 +86,12 @@ class ExperimentTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("carlos@gmail.com").id;
 		
+		Date hoy = new Date();
+		experientDTO.birthDate = hoy;
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 2L;
+		
 		experimentService.register(experientDTO);
 		
 		//COMPROBAMOS QUE SE REGISTRÓ CORRECTAMENTE
@@ -75,6 +100,10 @@ class ExperimentTest {
 		assertNotNull(exp);
 		assertEquals("Experimento en Langreo", exp.title);
 		assertEquals("Prueba en ordenadores con niños de 12 a 16 años", exp.description);
+		assertEquals(hoy, exp.birthDate);
+		assertEquals(Gender.MALE.name(), exp.gender);
+		assertEquals(Laterality.LEFT_HANDED.name(), exp.laterality);
+		assertEquals(2L, exp.idDevice);
 	}
 	
 	@Test
@@ -89,6 +118,11 @@ class ExperimentTest {
 		experientDTO.title = null;
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("carlos@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
 		
 		try {
 			experimentService.register(experientDTO);
@@ -111,6 +145,11 @@ class ExperimentTest {
 		experientDTO.description = "";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("carlos@gmail.com").id;
 		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+		
 		try {
 			experimentService.register(experientDTO);
 			Assert.fail("La descripción es obligatoria");
@@ -131,6 +170,11 @@ class ExperimentTest {
 		experientDTO.title = "Experimento en Langreo";
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = ID_NOT_EXIST;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
 		
 		try {
 			experimentService.register(experientDTO);
@@ -161,6 +205,9 @@ class ExperimentTest {
 		assertNotNull(experientDTO);
 		assertEquals("Experimento en SAMA", experientDTO.title);
 		assertEquals("Prueba en ordenadores con adultos de 25 a 35 años", experientDTO.description);
+		assertEquals(Gender.MALE.name(), experientDTO.gender);
+		assertEquals(Laterality.LEFT_HANDED.name(), experientDTO.laterality);
+		assertEquals(2L, experientDTO.idDevice);
 	}
 	
 	@Test
@@ -168,7 +215,7 @@ class ExperimentTest {
 	 * Se prueba la edición de un experimento de manera incorrecta (título sin especificar)
 	 * @throws ExperimentException el título es un campo obligatorio
 	 */
-	public void test15RegisterExperimentERROR105() throws ExperimentException{
+	public void test15UpdateExperimentERROR105() throws ExperimentException{
 		
 		//EDITAMOS UN EXPERIMENTO
 		ExperimentDTO experientDTO = new ExperimentDTO();
@@ -189,7 +236,7 @@ class ExperimentTest {
 	 * Se prueba la edición de un experimento de manera incorrecta (descripción sin especificar)
 	 * @throws ExperimentException la descripción es un campo obligatorio
 	 */
-	public void test16RegisterExperimentERROR106() throws ExperimentException{
+	public void test16UpdateExperimentERROR106() throws ExperimentException{
 		
 		//EDITAMOS UN EXPERIMENTO
 		ExperimentDTO experientDTO = new ExperimentDTO();
@@ -238,6 +285,7 @@ class ExperimentTest {
 		assertNotNull(dto);
 		assertEquals("Experimento en SAMA", dto.title);
 		assertEquals("Prueba en ordenadores con adultos de 25 a 35 años", dto.description);
+		
 	}
 	
 	@Test
@@ -310,6 +358,11 @@ class ExperimentTest {
 		experimentDTO.title = "Experimento de prueba de estados";
 		experimentDTO.description = "Prueba a pasar el experimento a estado OPEN";
 		experimentDTO.idInvestigator = investigatorService.getInvestigatorByMail("carlos@gmail.com").id;
+		
+		experimentDTO.birthDate = new Date();
+		experimentDTO.gender = Gender.MALE.name();
+		experimentDTO.laterality = Laterality.LEFT_HANDED.name();
+		experimentDTO.idDevice = 1L;
 		
 		experimentService.register(experimentDTO);
 		
@@ -446,4 +499,132 @@ class ExperimentTest {
 		assertEquals(StatusExperiment.DELETED.name(), experimentDTO.status);
 	}
 	
+	@Test
+	/**
+	 * Se registra un experimento sin el género como campo obligatorio sin rellenar
+	 * @throws InvestigatorException 
+	 */
+	public void test30RegisterExperimentERROR110() throws InvestigatorException {
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento de personas entre 30 y 40 años";
+		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("carlos@gmail.com").id;
+		
+		Date hoy = new Date();
+		experientDTO.birthDate = hoy;
+		experientDTO.gender = null;
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 2L;
+		
+		try {
+			experimentService.register(experientDTO);
+			Assert.fail("El género de los usuarios de un experimento es un campo obligatorio");
+		} catch (ExperimentException e) {
+			Assert.assertEquals("110", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se registra un experimento sin la fecha de nacimento como campo obligatorio sin rellenar
+	 * @throws InvestigatorException 
+	 */
+	public void test31RegisterExperimentERROR111() throws InvestigatorException {
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento de personas entre 30 y 40 años";
+		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("carlos@gmail.com").id;
+		
+		experientDTO.birthDate = null;
+		experientDTO.gender = Gender.FEMALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 2L;
+		
+		try {
+			experimentService.register(experientDTO);
+			Assert.fail("La edad de los usuarios de un experimento es un campo obligatorio");
+		} catch (ExperimentException e) {
+			Assert.assertEquals("111", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se registra un experimento con la lateralidad informada incorrectamente
+	 * @throws InvestigatorException 
+	 */
+	public void test32RegisterExperimentERROR112() throws InvestigatorException {
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento de personas entre 30 y 40 años";
+		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("carlos@gmail.com").id;
+		
+		Date hoy = new Date();
+		experientDTO.birthDate = hoy;
+		experientDTO.gender = Gender.FEMALE.name();
+		experientDTO.laterality = "IZQUIERDA";
+		experientDTO.idDevice = 2L;
+		
+		try {
+			experimentService.register(experientDTO);
+			Assert.fail("La lateralidad de los usuarios de un experimento es un campo obligatorio");
+		} catch (ExperimentException e) {
+			Assert.assertEquals("112", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se registra un experimento sin un dispositivo sin especificar como campo obligatorio
+	 * @throws InvestigatorException 
+	 */
+	public void test33RegisterExperimentERROR113() throws InvestigatorException {
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento de personas entre 30 y 40 años";
+		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("carlos@gmail.com").id;
+		
+		Date hoy = new Date();
+		experientDTO.birthDate = hoy;
+		experientDTO.gender = Gender.FEMALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();;
+		experientDTO.idDevice = null;
+		
+		try {
+			experimentService.register(experientDTO);
+			Assert.fail("El dispositivo sobre el que se realizará un experimento es un campo obligatorio");
+		} catch (ExperimentException e) {
+			Assert.assertEquals("113", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se registra un experimento con un dispositivo registrado en el sistema
+	 * @throws InvestigatorException 
+	 */
+	public void test34RegisterExperimentERROR114() throws InvestigatorException {
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento de personas entre 30 y 40 años";
+		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("carlos@gmail.com").id;
+		
+		Date hoy = new Date();
+		experientDTO.birthDate = hoy;
+		experientDTO.gender = Gender.FEMALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();;
+		experientDTO.idDevice = ID_NOT_EXIST;
+		
+		try {
+			experimentService.register(experientDTO);
+			Assert.fail("El dispositivo especificado no se encuentra registrado en el sistema");
+		} catch (ExperimentException e) {
+			Assert.assertEquals("114", e.getMessage());
+		}
+	}
 }

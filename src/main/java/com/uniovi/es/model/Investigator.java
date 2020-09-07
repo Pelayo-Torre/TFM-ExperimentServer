@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.uniovi.es.model.types.Role;
+
 @Entity
 public class Investigator implements Serializable {
 	
