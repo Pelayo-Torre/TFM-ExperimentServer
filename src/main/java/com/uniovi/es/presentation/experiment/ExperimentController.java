@@ -91,4 +91,13 @@ public interface ExperimentController {
 	 */
 	public List<DeviceDTO> getListDevices();
 
+	/**
+	 * Devuelve la lista de investigadores que no se encuentran asociados a un experimento
+	 * y que no tienen solicitud pendiente de contestar
+	 * @param id identificador del experimento
+	 * @return lista de investigadores no asociados
+	 * @throws ExperimentException en caso de que el experimento no exista en el sistema
+	 */
+	public List<InvestigatorDTO> getInvestigatorsNotAssociatedAnExperiment(Long id) throws ExperimentException;
+
 }

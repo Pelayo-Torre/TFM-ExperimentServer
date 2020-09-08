@@ -120,6 +120,18 @@ public class ExperimentControllerImpl implements ExperimentController {
 		logger.info("[FINAL] EXPERIMENT CONTROLLER -- investigators of experiment");
 		return list;
 	}
+	
+	@Override
+	@RequestMapping(value = "/investigators/not/associated/{id}", method = RequestMethod.GET)
+	public List<InvestigatorDTO> getInvestigatorsNotAssociatedAnExperiment(@PathVariable Long id) throws ExperimentException {
+		logger.info("[INICIO] EXPERIMENT CONTROLLER -- investigators not associated with an experiment");
+		logger.info("\t \t PARÁMETROS DE ENTRADA: " + id);
+		
+		List<InvestigatorDTO> list = experimentService.getInvestigatorsNotAssociatedAnExperiment(id);
+		
+		logger.info("[FINAL] EXPERIMENT CONTROLLER -- investigators not associated with an experiment");
+		return list;
+	}
 
 	@Override
 	@RequestMapping(value = "/list", method = RequestMethod.GET)

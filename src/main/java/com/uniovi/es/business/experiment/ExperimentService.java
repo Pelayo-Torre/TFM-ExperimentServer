@@ -31,4 +31,6 @@ public interface ExperimentService {
 	
 	public List<DeviceDTO> getAllDevices();
 
+	public List<InvestigatorDTO> getInvestigatorsNotAssociatedAnExperiment(Long id) throws ExperimentException;
+
 }

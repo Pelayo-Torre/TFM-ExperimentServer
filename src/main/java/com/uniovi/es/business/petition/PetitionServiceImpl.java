@@ -58,7 +58,7 @@ public class PetitionServiceImpl implements PetitionService{
 		logger.info("\t \t Comprobando que el investigador no tenga ya una petición PENDIENTE o ACEPTADA sobre el experimento");
 		petitionValidator.validatePetitionExistence(dto.idInvestigator, dto.idExperiment);
 		
-		Petition petition = new Petition(investigator, experiment);
+		Petition petition = new Petition(investigator, experiment, dto.manager);
 		DtoAssembler.fillData(petition, dto);
 				
 		logger.info("\t \t Registrando la petitición en base de datos");

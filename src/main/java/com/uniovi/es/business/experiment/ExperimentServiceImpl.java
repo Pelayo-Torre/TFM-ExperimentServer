@@ -264,6 +264,16 @@ public class ExperimentServiceImpl implements ExperimentService{
 		return DtoAssembler.toListDevices(list);
 	}
 	
+	@Override
+	public List<InvestigatorDTO> getInvestigatorsNotAssociatedAnExperiment(Long id) throws ExperimentException {
+		logger.info("[INICIO] EXPERIMENT SERVICE -- investigators not associated an experiment");
+		
+		List<Investigator> list = experimentDAO.findInvestigatorsNotAssociatedAnExperiment(id, StatusPetition.REJECTED, StatusPetition.CANCELLED);
+		
+		logger.info("[FINAL] EXPERIMENT SERVICE -- investigators not associated an experiment");
+		return DtoAssembler.toListInvestigators(list);
+	}
+	
 	/**
 	 * Devuelve el experimento a partir del optional que se pasa como parámetro
 	 * @param optional, parámetro de entrada

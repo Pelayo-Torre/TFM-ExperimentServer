@@ -47,6 +47,14 @@ public class Petition implements Serializable {
 		this.shippingDate = new Date();
 		Associations.InvestigatorPetitionExperiment.link(investigator, this, experiment);
 	}
+	
+	public Petition(Investigator investigator, Experiment experiment, boolean manager) {
+		this.status = StatusPetition.PENDING;
+		this.creator = false;
+		this.manager = manager;
+		this.shippingDate = new Date();
+		Associations.InvestigatorPetitionExperiment.link(investigator, this, experiment);
+	}
 
 	public StatusPetition getStatus() {
 		return status;
