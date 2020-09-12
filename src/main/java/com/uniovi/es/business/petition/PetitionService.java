@@ -1,5 +1,7 @@
 package com.uniovi.es.business.petition;
 
+import java.util.List;
+
 import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.InvestigatorException;
@@ -17,5 +19,9 @@ public interface PetitionService {
 	public void cancel(Identifier id) throws PetitionException;
 	
 	public PetitionDTO getDetail(Long id) throws PetitionException;
+
+	public List<PetitionDTO> getPetitionsReceived();
+
+	public List<PetitionDTO> getPetitionsSent();
 
 }

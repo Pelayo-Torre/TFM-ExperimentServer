@@ -16,4 +16,10 @@ public interface PetitionDAO extends CrudRepository <Petition, Long> {
 	@Query("SELECT p FROM Petition p WHERE p.investigator.id = ?1 AND p.experiment.id = ?2 AND (p.status = 'PENDING' OR p.status = 'ACCEPTED')")
 	public Petition findPetitionByIdInvestigatorAndIdExperiment(Long idInvestigator, Long idExperiment);
 
+	@Query("SELECT p FROM Petition p WHERE p.investigator.id = ?1 AND p.creator = false ORDER BY p.shippingDate DESC")
+	public List<Petition> findPetitionsReceived(Long id);
+	
+	@Query("SELECT p FROM Petition p WHERE p.idInvestigatorSend = ?1 ORDER BY p.shippingDate DESC")
+	public List<Petition> findPetitionsSent(Long id);
+
 }

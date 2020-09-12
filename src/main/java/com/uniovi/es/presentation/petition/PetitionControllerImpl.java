@@ -1,5 +1,7 @@
 package com.uniovi.es.presentation.petition;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +71,7 @@ public class PetitionControllerImpl implements PetitionController{
 
 	@Override
 	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-	public PetitionDTO getDetail(@PathVariable Long id) throws PetitionException {
+	public PetitionDTO getDetail(@PathVariable Long id) throws PetitionException, InvestigatorException {
 		logger.info("[INICIO] PETITION CONTROLLER -- detail petition");
 		
 		PetitionDTO dto = petitionService.getDetail(id);
@@ -78,5 +80,26 @@ public class PetitionControllerImpl implements PetitionController{
 		return dto;
 	}
 
+	@Override
+	@RequestMapping(value = "/received", method = RequestMethod.GET)
+	public List<PetitionDTO> getPetitionReceived() {
+		logger.info("[INICIO] PETITION CONTROLLER -- list petitions received");
+		
+		List<PetitionDTO> list = petitionService.getPetitionsReceived();
+		
+		logger.info("[FINAL] PETITION CONTROLLER -- list petitions received");
+		return list;
+	}
+	
+	@Override
+	@RequestMapping(value = "/sent", method = RequestMethod.GET)
+	public List<PetitionDTO> getPetitionSent() {
+		logger.info("[INICIO] PETITION CONTROLLER -- list petitions sent");
+		
+		List<PetitionDTO> list = petitionService.getPetitionsSent();
+		
+		logger.info("[FINAL] PETITION CONTROLLER -- list petitions sent");
+		return list;
+	}
 
 }

@@ -32,6 +32,9 @@ public class Petition implements Serializable {
 	private Boolean manager;
 	private Boolean creator;
 	
+	//Identificador del investigador que envía la petición
+	private Long idInvestigatorSend;
+	
 	@ManyToOne
 	private Investigator investigator;
 	
@@ -48,10 +51,15 @@ public class Petition implements Serializable {
 		Associations.InvestigatorPetitionExperiment.link(investigator, this, experiment);
 	}
 	
-	public Petition(Investigator investigator, Experiment experiment, boolean manager) {
+	public Petition(Investigator investigator, Experiment experiment, Boolean manager) {
 		this.status = StatusPetition.PENDING;
 		this.creator = false;
-		this.manager = manager;
+		if(manager == null) {
+			this.manager = false;
+		}
+		else {
+			this.manager = manager;
+		}
 		this.shippingDate = new Date();
 		Associations.InvestigatorPetitionExperiment.link(investigator, this, experiment);
 	}
@@ -131,6 +139,13 @@ public class Petition implements Serializable {
 	public void cancel() {
 		this.status = StatusPetition.CANCELLED;
 	}
-		
-	
+
+	public Long getIdInvestigatorSend() {
+		return idInvestigatorSend;
+	}
+
+	public void setIdInvestigatorSend(Long idInvestigatorSend) {
+		this.idInvestigatorSend = idInvestigatorSend;
+	}
+			
 }

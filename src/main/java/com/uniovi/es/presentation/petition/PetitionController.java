@@ -1,5 +1,7 @@
 package com.uniovi.es.presentation.petition;
 
+import java.util.List;
+
 import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.InvestigatorException;
@@ -43,7 +45,20 @@ public interface PetitionController {
 	 * @param id, identificador de la petición
 	 * @return la petición con sus datos
 	 * @throws PetitionException, en caso de que la petición pasada por parámetro no exista en base de datos
+	 * @throws InvestigatorException 
 	 */
-	public PetitionDTO getDetail(Long id) throws PetitionException;
+	public PetitionDTO getDetail(Long id) throws PetitionException, InvestigatorException;
+
+	/**
+	 * Punto de entrada para obtener la lista de peticiones recibidas del usuario en sesión
+	 * @return lista de peticiones recibidas
+	 */
+	public List<PetitionDTO> getPetitionReceived();
+
+	/**
+	 * Punto de entrada para obtener la lista de peticiones enviadas por el usuario que se encuentra en sesión
+	 * @return lista de peticiones enviadas
+	 */
+	public List<PetitionDTO> getPetitionSent();
 
 }

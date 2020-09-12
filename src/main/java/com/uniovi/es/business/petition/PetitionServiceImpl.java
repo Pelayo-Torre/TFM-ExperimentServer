@@ -1,5 +1,6 @@
 package com.uniovi.es.business.petition;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -7,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uniovi.es.business.authentication.UserInSession;
 import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
 import com.uniovi.es.business.petition.commands.Accept;
@@ -42,12 +44,15 @@ public class PetitionServiceImpl implements PetitionService{
 	
 	@Autowired
 	private PetitionValidator petitionValidator;
+	
+	@Autowired
+	private UserInSession userInSession;
 
 	@Override
 	public void register(PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- register petition");
 		
-		logger.info("\t \t Obteniendo el investigador a partir del ID: " + dto.idInvestigator);
+		logger.info("\t \t Obteniendo el investigador receptor a partir del ID: " + dto.idInvestigator);
 		Optional<Investigator> optional = investigatorDAO.findById(dto.idInvestigator);
 		Investigator investigator = getInvestigator(optional);
 		
@@ -60,6 +65,8 @@ public class PetitionServiceImpl implements PetitionService{
 		
 		Petition petition = new Petition(investigator, experiment, dto.manager);
 		DtoAssembler.fillData(petition, dto);
+		
+		petition.setIdInvestigatorSend(userInSession.getInvestigator().getId());
 				
 		logger.info("\t \t Registrando la petitición en base de datos");
 		petitionDAO.save(petition);
@@ -143,6 +150,26 @@ public class PetitionServiceImpl implements PetitionService{
 		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- detail petition");
 		return DtoAssembler.toDTO(petition);
+	}
+	
+	@Override
+	public List<PetitionDTO> getPetitionsReceived(){
+		logger.info("[INICIO] EXPERIMENT SERVICE -- list petitions received");
+		
+		List<Petition> list = petitionDAO.findPetitionsReceived(userInSession.getInvestigator().getId());
+		
+		logger.info("[FINAL] EXPERIMENT SERVICE -- list petitions received");
+		return DtoAssembler.toListPetitions(list);
+	}
+	
+	@Override
+	public List<PetitionDTO> getPetitionsSent(){
+		logger.info("[INICIO] EXPERIMENT SERVICE -- list petitions sent");
+		
+		List<Petition> list = petitionDAO.findPetitionsSent(userInSession.getInvestigator().getId());
+		
+		logger.info("[FINAL] EXPERIMENT SERVICE -- list petitions sent");
+		return DtoAssembler.toListPetitions(list);
 	}
 	
 	/**

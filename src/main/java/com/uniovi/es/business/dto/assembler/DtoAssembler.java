@@ -116,6 +116,16 @@ public class DtoAssembler {
 		dto.manager = petition.getManager();
 		dto.creator = petition.getCreator();
 		
+		dto.idExperiment = petition.getExperiment().getId();
+		dto.title = petition.getExperiment().getTitle();
+		dto.description = petition.getExperiment().getDescription();
+		dto.statusExperiment = petition.getExperiment().getStatus().name();
+		
+		dto.name = petition.getInvestigator().getName();
+		dto.surname = petition.getInvestigator().getSurname();
+		dto.mail = petition.getInvestigator().getMail();
+		dto.username = petition.getInvestigator().getUsername();		
+		
 		return dto;
 	}
 	
