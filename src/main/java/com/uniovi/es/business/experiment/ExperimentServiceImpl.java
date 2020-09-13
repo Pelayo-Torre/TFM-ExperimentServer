@@ -268,7 +268,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 	public List<InvestigatorDTO> getInvestigatorsNotAssociatedAnExperiment(Long id) throws ExperimentException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- investigators not associated an experiment");
 		
-		List<Investigator> list = experimentDAO.findInvestigatorsNotAssociatedAnExperiment(id, StatusPetition.REJECTED, StatusPetition.CANCELLED);
+		List<Investigator> list = experimentDAO.findInvestigatorsNotAssociatedAnExperiment(id);
 		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- investigators not associated an experiment");
 		return DtoAssembler.toListInvestigators(list);

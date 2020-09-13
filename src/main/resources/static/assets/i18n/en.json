@@ -1,0 +1,255 @@
+{
+    "menu":{
+        "experiments" : {
+            "title" : "Experiments",
+            "create": "Create new",
+            "list": "List"
+        },
+        "investigators" : "Investigators",
+        "petitions": {
+            "title": "Petitions",
+            "received" : "Received",
+            "sent": "Sent"
+        },
+        "languaje": {
+            "title": "Languaje",
+            "spanish": "Spanish",
+            "english": "English"
+        },
+        "out" : "Sign off",
+        "login" : "Login",
+        "register": "Register"
+    },
+    "login" : {
+        "title" : "Login",
+        "username" : "Username",
+        "password" : "Password",
+        "login" : "Login",
+        "validations" : {
+            "username": "Username is required",
+            "password" : "Password is required",
+            "wrongCredentials" : "Wrong credentials entered"
+        },
+        "loginErr" : "An error has occurred. Please try again."
+    },
+    "investigator" : {
+        "register" : {
+            "title" : "Create an account",
+            "firstname": "Nombre",
+            "surnames" : "Surnames",
+            "username": "Username",
+            "mail": "Mail",
+            "password": "Password",
+            "repeatPassword": "Repeat password",
+            "register": "Register",
+            "validations": {
+                "name": "The name is required",
+                "surname": "Last names are required",
+                "username": "Username is required",
+                "usernameAlreadyExist" : "The username entered is already registered",
+                "mail": "Mail is required",
+                "mailAlreadyExist": "The mail entered is already registered",
+                "mailFormat": "The mail format is wrong",
+                "password": "Password is required",
+                "samesPasswords": "The passwords must be the same",
+                "passwordLength": "Password must be at least 8 characters long"
+            },
+            "usernameErr": "Username verification failed. Please, try again",
+            "mailErr": "Mail verification failed. Please, try again",
+            "registerErr": "An error has occurred in the registry. Please, try again",
+            "registerSuccess": "Registration was successful. Login."
+        }
+    },
+    "experiment" : {
+        "register" : {
+            "title" : "Create an experiment",
+            "titleExperiment" : "Title",
+            "description" : "Description",
+            "birthdate": "Birthdate",
+            "gender" : "Gender",
+            "male": "Male",
+            "female": "Female",
+            "laterality": "Laterality",
+            "left" : "Left hand",
+            "right": "Right hand",
+            "device" : "Device",
+            "device1" : "Mouse",
+            "device2": "Touch Pad",
+            "device3" : "Touch screen",
+            "register" : "Register",
+            "validations" : {
+                "title": "Title is required",
+                "description": "Description is required",
+                "birthdate": "Birthdate is required"
+            },
+            "registerErr": "An error has occurred in the registry. Please, try again",
+            "registerSuccess": "The experiment has been created successfully"
+        },
+        "list": {
+            "title" : "Experiment list",
+            "header.titleExperiment" : "Title",
+            "header.description" : "Description",
+            "header.creationDate" : "Creation date",
+            "header.state" : "State",
+            "header.actions" : "Actions",
+            "inputTitle" : "Write a title",
+            "inputDescription" : "Write a description",
+            "inputDate" : "Write a date",
+            "inputState" : "Select a state",
+            "newExperiment" : "New Experiment",
+            "states" : {
+                "open" : "OPEN",
+                "closed": "CLOSED",
+                "created": "CREATED",
+                "OPEN" : "OPEN",
+                "CLOSED": "CLOSED",
+                "CREATED": "CREATED"
+            },
+            "empty" : "No experiments found",
+            "edit": "Edit"
+        },
+        "binnacle" : {
+            "title" : "Binnacle",
+            "newNote" : "New note",
+            "update" : "Update",
+            "delete" : "Delete",
+            "empty": "No notes found",
+            "registerNote" : {
+                "title" :"Create a note",
+                "titleNote": "Title",
+                "descriptionNote" : "Description",
+                "register" : "Register",
+                "validations": {
+                    "title": "Title is required",
+                    "description": "Description is required"
+                },
+                "registerErr": "Error registering note. Please try again",
+                "registerSuccess": "The note has been created successfully"
+            },
+            "updateNote" : {
+                "title" :"Update data",
+                "titleNote": "Title",
+                "descriptionNote" : "Description",
+                "update" : "Update",
+                "validations": {
+                    "title": "Title is required",
+                    "description": "Description is required"
+                },
+                "updateErr": "Error updating note. Please try again",
+                "updateSuccess": "The note has been updated successfully"
+            },
+            "deleteNote": {
+                "title": "Confirmation",
+                "description" : "Do you want to delete the selected note?",
+                "yes": "Yes",
+                "no": "No",
+                "deleteErr": "Error deleting note. Please try again",
+                "deleteSuccess": "The note has been deleted successfully"
+            }
+        },
+        "edit" : {
+            "title" : "Title",
+            "description" : "Description",
+            "birthdate": "Birthdate",
+            "gender" : "Gender",
+            "male": "Male",
+            "female": "Female",
+            "laterality": "Laterality",
+            "left" : "Left hand",
+            "right": "Right hand",
+            "device" : "Device",
+            "device1" : "Mouse",
+            "device2": "Touch Pad",
+            "device3" : "Touch screen",
+            "validations": {
+                "title": "Title is required",
+                "description": "Description is required"
+            },
+            "status" : "Status",
+            "creator" : "Creator",
+            "creationDate" : "Creation date",
+            "update" : "Update",
+            "accept" : "Accept",
+            "cancel" : "Cancel",
+            "updateErr": "Error updating experiment. Please try again",
+            "updateSuccess": "The experiment has been updated successfully",
+            "loadDataErr": "Error loading experiment data. Please try again"
+        },
+        "detail" : "Experiment detail",
+        "open": "The experiment has been opened successfully",
+        "close" :"The experiment has been closed successfully",
+        "reopen" : "The experiment has been reopened successfully",
+        "delete": "The experiment has been deleted successfully",
+        "openErr": "Error opening experiment. Please, try again",
+        "closeErr": "Error closing experiment. Please, try again",
+        "reopenErr": "Error reopening experiment. Please, try again",
+        "deleteErr": "Error deleting experiment. Please, try again",
+        "OPEN": "OPEN",
+        "CLOSE": "CLOSE",
+        "REOPEN": "RE-OPEN",
+        "DELETE": "DELETE",
+        "actions" : "Actions",
+        "investigatorsAssociated": {
+            "name": "Name",
+            "mail": "Mail",
+            "username": "User",
+            "rol" : "Role",
+            "gestor": "Manager",
+            "title" : "Associate investigators",
+            "newAssociation" : "New association",
+            "associationSuccess" : "The association has been successfully registered",
+            "associationErr" : "Error registering association. Please try again",
+            "filterName": "Write a name",
+            "filterMail": "Write a mail",
+            "filterUsername": "Write a username",
+            "confirmAssociation": "Confirm association",
+            "selectGestor": "Indicate if the researcher will be a manager by checking the following box:",
+            "register": "Register",
+            "cancel": "Cancel",
+            "notInvestigators": "No investigators found"
+        }
+    },
+    "petition": {
+        "sent": {
+            "title": "Petitions sent",
+            "username": "Investigator",
+            "titleExperiment": "Title",
+            "descriptionExperiment": "Description",
+            "shippingDate": "Petition date",
+            "statePetition": "Petition state",
+            "rol": "Role",
+            "actions": "Actions",
+            "inputUsername": "Write a name",
+            "inputTitle" : "Write a title",
+            "inputDescription" : "Write a description",
+            "inputDate" : "Write a date",
+            "inputState" : "Select a state",
+            "manager": "Manager",
+            "states" : {
+                "CANCELLED": "CANCELLED",
+                "PENDING" : "PENDING",
+                "ACCEPTED": "ACCEPTED",
+                "REJECTED": "REJECTED"
+            },
+            "empty" : "No petitions found",
+            "confirmation": "Confirmation",
+            "cancelPetition": "Do you want to cancel the petition?",
+            "yes": "Yes",
+            "no": "No",
+            "cancelSuccess": "Petition has been cancelled successfully",
+            "cancelErr": "Error al cancelar la petición. Please try again",
+            "cancelButton": "Cancel"
+        },
+        "received": {
+            "title": "Petitions received",
+            "acceptSuccess": "Petition has been accepted successfully",
+            "acceptErr": "Error accepting petition. Please try again",
+            "rejectSuccess": "Petition has been rejected successfully",
+            "rejectErr": "Error rejecting petition. Please try again",
+            "acceptPetition": "Do you want to accept the petition?",
+            "rejectPetition" : "Do you want to reject the petition?",
+            "acceptButton": "Accept",
+            "rejectButton": "Reject"
+        }
+    }
+}
