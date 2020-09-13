@@ -25,12 +25,12 @@ public class ExperimentValidator {
 	
 	public void validate(ExperimentDTO dto) throws ExperimentException {
 		
-		if(dto.title == null || dto.title.isBlank() || dto.title.isEmpty()) {
+		if(dto.title == null || dto.title.isEmpty()) {
 			logger.error("[ERROR - 105] -- El título del experimento es un campo obligatorio");
 			throw new ExperimentException("105");
 		}
 		
-		if(dto.description == null || dto.description.isBlank() || dto.description.isEmpty()) {
+		if(dto.description == null || dto.description.isEmpty()) {
 			logger.error("[ERROR - 106] -- La descripción del experimento es un campo obligatorio");
 			throw new ExperimentException("106");
 		}
