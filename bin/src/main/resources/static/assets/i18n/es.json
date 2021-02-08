@@ -1,0 +1,256 @@
+{
+    "menu":{
+        "experiments" : {
+            "title" : "Experimentos",
+            "create": "Crear nuevo",
+            "list": "Lista"
+        },
+        "investigators" : "Investigadores",
+        "petitions": {
+            "title": "Peticiones",
+            "received" : "Recibidas",
+            "sent": "Enviadas"
+        },
+        "languaje": {
+            "title": "Idioma",
+            "spanish": "Español",
+            "english": "Inglés"
+        },
+        "out" : "Salir",
+        "login" : "Iniciar Sesión",
+        "register": "Registro"
+    },
+    "login" : {
+        "title" : "Inicio de sesión",
+        "username" : "Nombre de usuario",
+        "password" : "Contraseña",
+        "login" : "Iniciar sesión",
+        "validations" : {
+            "username": "El nombre de usuario es obligatorio",
+            "password" : "La contraseña es obligatoria",
+            "wrongCredentials" : "Credenciales introducidos incorrectos"
+        },
+        "loginErr" : "Se ha producido un error. Por favor, inténtelo de nuevo."
+    },
+    "investigator" : {
+        "register" : {
+            "title" : "Crear una cuenta",
+            "firstname": "Nombre",
+            "surnames" : "Apellidos",
+            "username": "Nombre de usuario",
+            "mail": "Correo electrónico",
+            "password": "Contraseña",
+            "repeatPassword": "Repetir contraseña",
+            "register": "Registrarse",
+            "validations": {
+                "name": "El nombre es obligatorio",
+                "surname": "Los apellidos son obligatorios",
+                "username": "El nombre de usuario es obligatorio",
+                "usernameAlreadyExist" : "El nombre de usuario introducido ya se encuentra registrado",
+                "mail": "El correo electrónico es obligatorio",
+                "mailAlreadyExist": "El correo electrónico introducido ya se encuentra registrado",
+                "mailFormat": "El formato del correo electrónico es incorrecto",
+                "password": "La contraseña es obligatoria",
+                "samesPasswords": "Las contraseñas deben ser iguales",
+                "passwordLength": "La contraseña debe tener al menos 8 caracteres"
+            },
+            "usernameErr": "Se ha producido un error en la comprobación del nombre de usuario. Por favor, inténtelo de nuevo",
+            "mailErr": "Se ha producido un error en la comprobación del correo electrónico del usuario. Por favor, inténtelo de nuevo",
+            "registerErr": "Se ha producido un error registrando al investigador. Por favor, inténtelo de nuevo",
+            "registerSuccess": "El registro se ha realizado correctamente. Inicie sesión."
+        }
+    },
+    "experiment" : {
+        "register" : {
+            "title" : "Crear un experimento",
+            "titleExperiment" : "Título",
+            "description" : "Descripción",
+            "birthdate": "Fecha de nacimiento",
+            "gender" : "Género",
+            "male": "Masculino",
+            "female": "Femenino",
+            "laterality": "Lateralidad",
+            "left" : "Izquierda",
+            "right": "Derecha",
+            "device" : "Dispositivo",
+            "device1" : "Ratón",
+            "device2": "Panel táctil",
+            "device3": "Pantalla táctil",
+            "register" : "Registrar",
+            "validations" : {
+                "title": "El título es obligatorio",
+                "description": "La descripción es obligatoria",
+                "birthdate": "La fecha de nacimiento es obligatoria"
+            },
+            "registerErr": "Se ha producido un error registrando el experimento. Por favor, inténtelo de nuevo",
+            "registerSuccess": "El experimento ha sido creado correctamente"
+
+        },
+        "list": {
+            "title" : "Lista de experimentos",
+            "header.titleExperiment" : "Título",
+            "header.description" : "Descripción",
+            "header.creationDate" : "Fecha de creación",
+            "header.state" : "Estado",
+            "header.actions" : "Acciones",
+            "newExperiment" : "Nuevo experimento",
+            "inputTitle" : "Escribe un título",
+            "inputDescription" : "Escribe una descripción",
+            "inputDate" : "Escribe una fecha",
+            "inputState" : "Seleccione un estado",
+            "states" : {
+                "open" : "ABIERTO",
+                "closed": "CERRADO",
+                "created": "CREADO",
+                "OPEN" : "ABIERTO",
+                "CLOSED": "CERRADO",
+                "CREATED": "CREADO"
+            },
+            "empty" : "No se han encontrado experimentos",
+            "edit": "Editar"
+        },
+        "binnacle" : {
+            "title" : "Bitácora",
+            "newNote" : "Nueva nota",
+            "update" : "Editar",
+            "delete" : "Eliminar",
+            "empty" : "No se han encontrado notas",
+            "registerNote" : {
+                "title" :"Crear una nota",
+                "titleNote": "Título",
+                "descriptionNote" : "Descripción",
+                "register" : "Registrar",
+                "validations": {
+                    "title": "El título es obligatorio",
+                    "description": "La descripción es obligatoria"
+                },
+                "registerErr": "Error al registrar la nota. Por favor, inténtelo de nuevo",
+                "registerSuccess": "La nota ha sido creada correctamente"
+            },
+            "updateNote" : {
+                "title" :"Actualizar datos",
+                "titleNote": "Título",
+                "descriptionNote" : "Descripción",
+                "update" : "Actualizar",
+                "validations": {
+                    "title": "El título es obligatorio",
+                    "description": "La descripción es obligatoria"
+                },
+                "updateErr": "Error al actualizar la nota. Por favor, inténtelo de nuevo",
+                "updateSuccess": "La nota ha sido actualizada correctamente"
+            },
+            "deleteNote": {
+                "title": "Confirmación",
+                "description" : "¿Desea eliminar la nota seleccionada?",
+                "yes": "Si",
+                "no": "No",
+                "deleteErr": "Error al eliminar la nota. Por favor, inténtelo de nuevo",
+                "deleteSuccess": "La nota ha sido eliminada correctamente"
+            }
+        },
+        "edit" : {
+            "title" : "Título",
+            "description" : "Descripción",
+            "birthdate": "Fecha de nacimiento",
+            "gender" : "Género",
+            "male": "Masculino",
+            "female": "Femenino",
+            "laterality": "Lateralidad",
+            "left" : "Izquierda",
+            "right": "Derecha",
+            "device" : "Dispositivo",
+            "device1" : "Ratón",
+            "device2": "Panel táctil",
+            "device3": "Pantalla táctil",
+            "validations": {
+                "title": "El título es obligatorio",
+                "description": "La descripción es obligatoria"
+            },
+            "status" : "Estado",
+            "creator" : "Creador",
+            "creationDate" : "Fecha de creación",
+            "update" : "Editar",
+            "accept" : "Aceptar",
+            "cancel" : "Cancelar",
+            "updateErr": "Error al actualizar el experimento. Por favor, inténtelo de nuevo",
+            "updateSuccess": "El experimento ha sido actualizado correctamente",
+            "loadDataErr": "Error al cargar los datos del experimento. Por favor, inténtelo de nuevo"
+        },
+        "detail" : "Detalle del experimento",
+        "open": "El experimento fue abierto correctamente",
+        "close" :"El experimento fue cerrado correctamente",
+        "reopen" : "El experimento fue re-abierto correctamente",
+        "delete": "El experimento fue eliminado correctamente",
+        "openErr": "Error producido al abrir el experimento. Por favor, inténtelo de nuevo",
+        "closeErr": "Error al cerrar el experimento. Por favor, inténtelo de nuevo",
+        "reopenErr": "Error al re-abrir el experimento. Por favor inténtelo de nuevo",
+        "deleteErr": "Error al eliminar el experimento. Por favor, inténtelo de nuevo",
+        "OPEN": "ABRIR",
+        "CLOSE": "CERRAR",
+        "REOPEN": "RE-ABRIR",
+        "DELETE": "ELIMINAR",
+        "actions" : "Acciones",
+        "investigatorsAssociated": {
+            "title" : "Investigadores asociados",
+            "newAssociation" : "Nueva asociación",
+            "name": "Nombre",
+            "mail": "Email",
+            "username": "Usuario",
+            "rol" : "Rol",
+            "gestor": "Gestor",
+            "associationSuccess" : "La petición ha sido registrada correctamente",
+            "associationErr" : "Error al registrar la petición",
+            "filterName": "Escribe un nombre",
+            "filterMail": "Escribe un email",
+            "filterUsername": "Escribe un nombre de usuario",
+            "confirmAssociation": "Confirmar asociación",
+            "selectGestor": "Indique si el investigador será gestor marcando la siguiente casilla:",
+            "register": "Registrar",
+            "cancel": "Cancelar",
+            "notInvestigators": "No se han encontrado investigadores"
+        }
+    },
+    "petition": {
+        "sent": {
+            "title": "Peticiones enviadas",
+            "username": "Investigador",
+            "titleExperiment": "Título",
+            "descriptionExperiment": "Descripción",
+            "shippingDate": "Fecha petición",
+            "statePetition": "Estado petición",
+            "rol": "Rol",
+            "actions": "Acciones",
+            "inputUsername": "Escribe un nombre",
+            "inputTitle" : "Escribe un título",
+            "inputDescription" : "Escribe una descripción",
+            "inputDate" : "Escribe una fecha",
+            "inputState" : "Seleccione un estado",
+            "manager": "Gestor",
+            "states" : {
+                "CANCELLED": "CANCELADA",
+                "PENDING" : "PENDIENTE",
+                "ACCEPTED": "ACEPTADA",
+                "REJECTED": "RECHAZADA"
+            },
+            "empty" : "No se han encontrado peticiones",
+            "confirmation": "Confirmación",
+            "cancelPetition": "¿Desea cancelar la petición?",
+            "yes": "Sí",
+            "no": "No",
+            "cancelSuccess": "La petición fue cancelada correctamente",
+            "cancelErr": "Error al cancelar la petición. Por favor, inténtelo de nuevo",
+            "cancelButton": "Cancelar"
+        },
+        "received": {
+            "title": "Peticiones recibidas",
+            "acceptSuccess": "La petición fue aceptada correctamente",
+            "acceptErr": "Error al aceptar la petición. Por favor, inténtelo de nuevo",
+            "rejectSuccess": "La petición fue rechazada correctamente",
+            "rejectErr": "Error al rechazar la petición. Por favor, inténtelo de nuevo",
+            "acceptPetition": "¿Desea aceptar la petición?",
+            "rejectPetition" : "¿Desea rechazar la petición?",
+            "acceptButton": "Aceptar",
+            "rejectButton": "Rechazar"
+        }
+    }
+}
