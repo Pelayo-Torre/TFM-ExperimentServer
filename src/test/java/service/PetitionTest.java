@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
@@ -161,6 +162,7 @@ class PetitionTest {
 		
 		try {
 			petitionService.register(petitionDTO);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (ExperimentException e) {
 			assertEquals("100", e.getMessage());
 		}
@@ -182,6 +184,7 @@ class PetitionTest {
 		
 		try {
 			petitionService.register(petitionDTO);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("200", e.getMessage());
 		}
@@ -198,11 +201,12 @@ class PetitionTest {
 		//CREAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = 1L;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("juan@gmail.com").id;;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("juan@gmail.com").id;
 		petitionDTO.manager = true;
 		
 		try {
 			petitionService.register(petitionDTO);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (PetitionException e) {
 			assertEquals("304", e.getMessage());
 		}
@@ -232,32 +236,19 @@ class PetitionTest {
 		
 		try {
 			petitionService.getDetail(ID_NOT_EXIST);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (PetitionException e) {
 			assertEquals("300", e.getMessage());
 		}
 	}
 	
-	@Test
-	/**
-	 * Se prueba a cancelar una petición en estado PENDING
-	 * @throws PetitionException No se puede Cancelar una petición en estado PENDING
-	 */
-	public void test16CancelPetitionERROR303() throws PetitionException{
-		
-		try {
-			Identifier identifier = new Identifier(2L);
-			petitionService.cancel(identifier);
-		} catch (PetitionException e) {
-			assertEquals("303", e.getMessage());
-		}
-	}
 
 	@Test
 	/**
 	 * Se prueba aceptar una petición que se encuentra en estado PENDING
 	 * @throws PetitionException
 	 */
-	public void test17AcceptPetition() throws PetitionException {
+	public void test16AcceptPetition() throws PetitionException {
 		
 		PetitionDTO dto = petitionService.getDetail(2L);
 		assertEquals(StatusPetition.PENDING.name(), dto.statusPetition);
@@ -269,7 +260,7 @@ class PetitionTest {
 		dto = petitionService.getDetail(2L);
 		assertEquals(StatusPetition.ACCEPTED.name(), dto.statusPetition);
 	}
-	
+		
 	@Test
 	/**
 	 * Se prueba a rechazar una petición que se encuentra en estado ACCEPTED
@@ -280,6 +271,7 @@ class PetitionTest {
 		try {
 			Identifier identifier = new Identifier(2L);
 			petitionService.reject(identifier);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (PetitionException e) {
 			assertEquals("302", e.getMessage());
 		}
