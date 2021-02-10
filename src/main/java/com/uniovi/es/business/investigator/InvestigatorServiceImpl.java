@@ -79,6 +79,12 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 	public void updateInvestigator(InvestigatorDTO dto) throws InvestigatorException {
 		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- update INVESTIGATOR ");
 		
+		Investigator investigatorInSession = userInSession.getInvestigator();
+		if(investigatorInSession == null || investigatorInSession.getId() != dto.id) {
+			logger.error("[ERROR - 210] -- Un investigador solo puede modificar sus propios datos");
+			throw new InvestigatorException("210");
+		}
+		
 		logger.info("\t \t Obteniendo el investigador a partir del ID: " + dto.id);
 		Optional<Investigator> optional = investigatorDAO.findById(dto.id);
 		Investigator investigator = getInvestigator(optional);
@@ -115,6 +121,12 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 	public List<ExperimentDTO> getExperimentsAcceptedByIdInvestigator(Long idInvestigator) throws InvestigatorException {
 		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- getExperimentsAcceptedByIdInvestigator INVESTIGATOR ");
 		
+		Investigator investigatorInSession = userInSession.getInvestigator();
+		if(investigatorInSession == null || investigatorInSession.getId() != idInvestigator) {
+			logger.error("[ERROR - 210] -- Un investigador solo puede ver los experimentos que él ha aceptado");
+			throw new InvestigatorException("211");
+		}
+		
 		logger.info("\t \t Obteniendo los experimentos del investigador: " + idInvestigator);
 		List<Experiment> experiments = investigatorDAO.findExperimentsByIdInvestigator(idInvestigator, 
 				StatusPetition.ACCEPTED, StatusExperiment.DELETED);
@@ -126,6 +138,12 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 	@Override
 	public List<PetitionDTO> getPetitionsPendingByIdInvestigator(Long idInvestigator) throws InvestigatorException {
 		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- getPetitionsPendingByIdInvestigator INVESTIGATOR ");
+		
+		Investigator investigatorInSession = userInSession.getInvestigator();
+		if(investigatorInSession == null || investigatorInSession.getId() != idInvestigator) {
+			logger.error("[ERROR - 212] -- Un investigador solo puede ver los experimentos que él tiene pendientes de responder");
+			throw new InvestigatorException("211");
+		}
 		
 		logger.info("\t \t Obteniendo las peticiones del investigador: " + idInvestigator);
 		List<Petition> petitions = investigatorDAO.findPetitionsByIdInvestigator(idInvestigator, StatusPetition.PENDING);

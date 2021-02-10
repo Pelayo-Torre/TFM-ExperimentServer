@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uniovi.es.business.authentication.UserInSession;
 import com.uniovi.es.business.dto.DeviceDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
@@ -57,6 +58,9 @@ public class ExperimentServiceImpl implements ExperimentService{
 	@Autowired
 	private DeviceDAO deviceDAO;
 	
+	@Autowired
+	private UserInSession userInSession;
+	
 	//@PostConstruct
 	public void init() {
 		Device d = new Device("MOUSE");
@@ -69,6 +73,13 @@ public class ExperimentServiceImpl implements ExperimentService{
 	@Override
 	public void register(ExperimentDTO dto) throws ExperimentException, InvestigatorException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- register experiment");
+		
+		//Se comprueba que el id del investigador que nos llega del cliente es el que se encuentra en sesión
+		Investigator investigatorInSession = userInSession.getInvestigator();
+		if(investigatorInSession == null || investigatorInSession.getId() != dto.idInvestigator) {
+			logger.error("[ERROR - 115] -- Los identificadores del investigador del cliente con el de sesión del servidor son distintos");
+			throw new ExperimentException("115");
+		}
 		
 		logger.info("\t \t Obteniendo el investigador a partir del ID: " + dto.idInvestigator);
 		Optional<Investigator> optional = investigatorDAO.findById(dto.idInvestigator);

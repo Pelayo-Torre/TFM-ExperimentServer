@@ -21,12 +21,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.uniovi.es.ExperimentServerApplication;
+import com.uniovi.es.business.authentication.AuthenticationService;
+import com.uniovi.es.business.dto.AuthDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.business.experiment.ExperimentService;
 import com.uniovi.es.business.investigator.InvestigatorService;
 import com.uniovi.es.business.petition.PetitionService;
+import com.uniovi.es.exceptions.AttempsException;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.PetitionException;
@@ -56,17 +59,27 @@ class InvestigatorTest {
 	private PetitionService petitionService;
 	
 	@Autowired
+	private AuthenticationService authenticateUser;
+	
+	@Autowired
 	private DeviceDAO deviceDAO;
 	
 	private static final Long ID_NOT_EXIST = 4345245786396523496L;
 	
+	private static boolean primeraVez = true;
+	
 	@PostConstruct
-	public void init() {
-		Device d = new Device("MOUSE");
-		Device d1 = new Device("TOUCHPAD");
-		
-		deviceDAO.save(d);
-		deviceDAO.save(d1);
+	public void init() throws InvestigatorException {
+		if(primeraVez) {
+					
+			Device d = new Device("MOUSE");
+			Device d1 = new Device("TOUCHPAD");
+			
+			deviceDAO.save(d);
+			deviceDAO.save(d1);
+			
+			primeraVez = false;
+		}		
 	}
 
 	@Test
@@ -115,6 +128,8 @@ class InvestigatorTest {
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.registerInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("201", e.getMessage());
 		}
@@ -138,6 +153,7 @@ class InvestigatorTest {
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.registerInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("202", e.getMessage());
 		}
@@ -161,6 +177,7 @@ class InvestigatorTest {
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.registerInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("203", e.getMessage());
 		}
@@ -194,6 +211,7 @@ class InvestigatorTest {
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.registerInvestigator(dto2);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("204", e.getMessage());
 		}
@@ -217,6 +235,7 @@ class InvestigatorTest {
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.registerInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("205", e.getMessage());
 		}
@@ -250,6 +269,7 @@ class InvestigatorTest {
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.registerInvestigator(dto2);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("206", e.getMessage());
 		}
@@ -284,6 +304,7 @@ class InvestigatorTest {
 		//SE OBTIENE UN INVESTIGADOR CUYO IDENTIFICADOR NO SE ENCUENTRA REGISTRADO
 		try {
 			investigatorService.getDetail(ID_NOT_EXIST);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("200", e.getMessage());
 		}
@@ -294,7 +315,7 @@ class InvestigatorTest {
 	 * Se prueba la edición de los datos de un investigador de manera correcta
 	 * @throws InvestigatorException
 	 */
-	public void test19updateInvestigator() throws InvestigatorException {
+	public void test19updateInvestigator() throws InvestigatorException, AttempsException {
 		
 		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -307,13 +328,19 @@ class InvestigatorTest {
 		//LO GUARDAMOS EN BASE DE DATOS
 		investigatorService.registerInvestigator(dto);
 		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "juanele";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
 		//LO EDITAMOS
 		dto = new InvestigatorDTO();
 		dto.name = "Juan Antonio";
 		dto.surname = "Llaneza";
 		dto.username = "juanele27";
 		dto.mail = "juanantonio@gmail.com";
-		dto.id = 3L;
+		dto.id = investigatorService.getInvestigatorByMail("juan@gmail.com").id;
 		
 		investigatorService.updateInvestigator(dto);
 				
@@ -332,18 +359,35 @@ class InvestigatorTest {
 	 * Edición de un investigador con error 201 (El nombre es obligatorio)
 	 * @throws InvestigatorException, nombre obligatorio
 	 */
-	public void test20UpdateInvestigatorERROR201() throws InvestigatorException {
+	public void test20UpdateInvestigatorERROR201() throws InvestigatorException, AttempsException {
 		
+		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Pedro";
+		dto.surname = "Torre";
+		dto.username = "pedri123";
+		dto.mail = "pedri@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "pedri123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
 		dto.name = null;
-		dto.surname = "Llaneza";
-		dto.username = "juanele";
-		dto.mail = "juanantonio@gmail.com";
-		dto.id = 3L;
+		dto.surname = "Torre";
+		dto.username = "pedri123";
+		dto.mail = "pedri@gmail.com";
+		dto.id = investigatorService.getInvestigatorByMail(dto.mail).id;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.updateInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("201", e.getMessage());
 		}
@@ -354,18 +398,35 @@ class InvestigatorTest {
 	 * Edición de un investigador con error 202 (Los apellidos son obligatorios)
 	 * @throws InvestigatorException, apellidos obligatorios
 	 */
-	public void test21UpdateInvestigatorERROR202() throws InvestigatorException {
+	public void test21UpdateInvestigatorERROR202() throws InvestigatorException, AttempsException {
 		
+		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
-		dto.name = "Juan";
+		dto.name = "Jaime";
+		dto.surname = "Torre";
+		dto.username = "jaime123";
+		dto.mail = "jaime@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+				
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "jaime123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+				
+		dto.name = "Jaime";
 		dto.surname = "";
-		dto.username = "juanele";
-		dto.mail = "juanantonio@gmail.com";
-		dto.id = 3L;
+		dto.username = "jaime123";
+		dto.mail = "jaime@gmail.com";
+		dto.id = investigatorService.getInvestigatorByMail(dto.mail).id;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.updateInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("202", e.getMessage());
 		}
@@ -376,18 +437,35 @@ class InvestigatorTest {
 	 * Edición de un investigador con error 203 (Email obligatorio)
 	 * @throws InvestigatorException, email obligatorio
 	 */
-	public void test22UpdateInvestigatorERROR203() throws InvestigatorException {
+	public void test22UpdateInvestigatorERROR203() throws InvestigatorException, AttempsException {
 		
+		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
-		dto.name = "Juan";
-		dto.surname = "Llaneza";
-		dto.username = "juanele";
+		dto.name = "Fonso";
+		dto.surname = "Torre";
+		dto.username = "fonso123";
+		dto.mail = "fonso@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "fonso123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+				
+		dto.name = "Fonso";
+		dto.surname = "Torre";
+		dto.username = "fonso123";
 		dto.mail = "";
-		dto.id = 3L;
+		dto.id = investigatorService.getInvestigatorByMail("fonso@gmail.com").id;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.updateInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("203", e.getMessage());
 		}
@@ -398,18 +476,47 @@ class InvestigatorTest {
 	 * Edición de un investigador con error 204 (Email ya registrado)
 	 * @throws InvestigatorException, email ya registrado
 	 */
-	public void test23UpdateInvestigatorERROR204() throws InvestigatorException {
+	public void test23UpdateInvestigatorERROR204() throws InvestigatorException, AttempsException {
 		
+		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
-		dto.name = "Juan";
-		dto.surname = "Llaneza";
-		dto.username = "juanele";
-		dto.mail = "pelAYo@gmail.com";
-		dto.id = 3L;
+		dto.name = "Garga";
+		dto.surname = "Torre";
+		dto.username = "garga123";
+		dto.mail = "garga@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		//CREAMOS otro investigador
+		dto = new InvestigatorDTO();
+		dto.name = "Celjus";
+		dto.surname = "Torre";
+		dto.username = "celjus123";
+		dto.mail = "celjus@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "garga123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+				
+		dto = new InvestigatorDTO();
+		dto.name = "Garga";
+		dto.surname = "Torre";
+		dto.username = "garga123";
+		dto.mail = "celjus@gmail.com";
+		dto.id = investigatorService.getInvestigatorByMail("garga@gmail.com").id;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.updateInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("204", e.getMessage());
 		}
@@ -420,18 +527,36 @@ class InvestigatorTest {
 	 * Edición de un investigador con error 205 (username obligatorio)
 	 * @throws InvestigatorException, username obligatorio
 	 */
-	public void test24UpdateInvestigatorERROR205() throws InvestigatorException {
+	public void test24UpdateInvestigatorERROR205() throws InvestigatorException, AttempsException {
 		
+		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
-		dto.name = "Juan";
-		dto.surname = "Llaneza";
+		dto.name = "Adan";
+		dto.surname = "Torre";
+		dto.username = "adan123";
+		dto.mail = "adan@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "adan123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		dto = new InvestigatorDTO();
+		dto.name = "Adan";
+		dto.surname = "Torre";
 		dto.username = "";
-		dto.mail = "juanllan@gmail.com";
-		dto.id = 3L;
+		dto.mail = "adan@gmail.com";
+		dto.id = investigatorService.getInvestigatorByMail(dto.mail).id;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.updateInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("205", e.getMessage());
 		}
@@ -442,18 +567,47 @@ class InvestigatorTest {
 	 * Edición de un investigador con error 206 (username ya registrado)
 	 * @throws InvestigatorException, username ya registrado
 	 */
-	public void test25UpdateInvestigatorERROR206() throws InvestigatorException {
+	public void test25UpdateInvestigatorERROR206() throws InvestigatorException, AttempsException {
 		
+		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
-		dto.name = "Juan";
-		dto.surname = "Llaneza";
-		dto.username = "JUANELE27";
-		dto.mail = "juaneleo@gmail.com";
-		dto.id = 1L;
+		dto.name = "Manel";
+		dto.surname = "Torre";
+		dto.username = "manel123";
+		dto.mail = "manel@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		//CREAMOS otro investigador
+		dto = new InvestigatorDTO();
+		dto.name = "Ivan";
+		dto.surname = "Torre";
+		dto.username = "ivanin123";
+		dto.mail = "ivanin@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "manel123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		dto = new InvestigatorDTO();
+		dto.name = "Manel";
+		dto.surname = "Torre";
+		dto.username = "ivanin123";
+		dto.mail = "manel@gmail.com";
+		dto.id = investigatorService.getInvestigatorByMail("manel@gmail.com").id;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.updateInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("206", e.getMessage());
 		}
@@ -461,27 +615,43 @@ class InvestigatorTest {
 	
 	@Test
 	/**
-	 * Edición de un investigador con error 200 (No existe en base de datos)
+	 * Edición de un investigador con error 210 (El investigador en sesión quiere actualizar los datos de otro investigador)
 	 * @throws InvestigatorException, investigador no registrado
 	 */
-	public void test26UpdateInvestigatorERROR200() throws InvestigatorException {
+	public void test26UpdateInvestigatorERROR210() throws InvestigatorException, AttempsException {
 		
+		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
-		dto.name = "Juan";
-		dto.surname = "Llaneza";
-		dto.username = "juanele";
-		dto.mail = "pelayo@gmail.com";
+		dto.name = "Sergio";
+		dto.surname = "Torre";
+		dto.username = "sergio123";
+		dto.mail = "sergio@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "sergio123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		dto = new InvestigatorDTO();
+		dto.name = "Sergio";
+		dto.surname = "Torre";
+		dto.username = "sergio123";
+		dto.mail = "sergio@gmail.com";
 		dto.id = ID_NOT_EXIST;
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.updateInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
-			assertEquals("200", e.getMessage());
+			assertEquals("210", e.getMessage());
 		}
 	}
-	
-	//IMPLEMENTAR LOGIN EN TESTS
 	
 	@Test
 	/**
@@ -490,7 +660,7 @@ class InvestigatorTest {
 	 * @throws ExperimentException
 	 * @throws PetitionException
 	 */
-	public void test27getPetitionsPending() throws InvestigatorException, ExperimentException, PetitionException {
+	public void test27getPetitionsPending() throws InvestigatorException, ExperimentException, PetitionException, AttempsException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -502,7 +672,23 @@ class InvestigatorTest {
 		
 		investigatorService.registerInvestigator(dto);
 		
+		//REGISTRAMOS UN INVESTIGADOR
+		dto = new InvestigatorDTO();
+		dto.name = "Luisa";
+		dto.surname = "Garcia";
+		dto.username = "luisa123";
+		dto.mail = "luisa@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
 		dto = investigatorService.getInvestigatorByMail("carlos@gmail.com");
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "carlos007";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
 		
 		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
 		ExperimentDTO experientDTO = new ExperimentDTO();
@@ -517,15 +703,19 @@ class InvestigatorTest {
 		
 		experimentService.register(experientDTO);
 		
+		//INICIAMOS SESIÓN
+		authDTO = new AuthDTO();
+		authDTO.username = "luisa123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
 		//CREAMOS UNA PETICIÓN PARA ESE EXPERIMENTO CON OTRO INVESTIGADOR
-		dto = investigatorService.getInvestigatorByMail("pelayo@gmail.com");
+		dto = investigatorService.getInvestigatorByMail("luisa@gmail.com");
 		
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = 1L;
 		petitionDTO.idInvestigator = dto.id;
 		petitionDTO.manager = true;
-		
-		
 		
 		petitionService.register(petitionDTO);
 		
@@ -535,23 +725,12 @@ class InvestigatorTest {
 		assertNotNull(list);
 		assertEquals(1, list.size());
 		assertEquals(StatusPetition.PENDING.name(), list.get(0).statusPetition);
-	}
-	
-	@Test
-	/**
-	 * Se prueba el número de experimentos asociados a un investigador
-	 * @throws PetitionException
-	 * @throws InvestigatorException
-	 */
-	public void test28getPetitionsAccepted() throws PetitionException, InvestigatorException {
 		
 		//SE ACEPTA LA PETICIÓN ANTERIOR
 		Identifier identifier = new Identifier();
-		identifier.setId(2L);
+		identifier.setId(list.get(0).id);
 		petitionService.accept(identifier);
-		
-		InvestigatorDTO dto = investigatorService.getInvestigatorByMail("pelayo@gmail.com");
-		
+				
 		//SE COMPRUEBA QUE EL INVESTIGADOR ANTERIOR TIENE 1 PETICIÓN ACEPTADA
 		List<ExperimentDTO> experiments = investigatorService.getExperimentsAcceptedByIdInvestigator(dto.id);
 		
@@ -580,6 +759,7 @@ class InvestigatorTest {
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.registerInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("207", e.getMessage());
 		}
@@ -603,6 +783,7 @@ class InvestigatorTest {
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.registerInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("208", e.getMessage());
 		}
@@ -626,23 +807,11 @@ class InvestigatorTest {
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.registerInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("209", e.getMessage());
 		}
 	}
-	
-	@Test
-	/**
-	 * Se comprueba que devuelve todos los investigadores de la aplicación
-	 * @throws InvestigatorException
-	 */
-	public void test32getAllInvestigators() throws InvestigatorException{
-		
-		//Se comprueba el número de investigadores existentes
-		List<InvestigatorDTO> investigators = investigatorService.getListInvestigators();
-		
-		assertNotNull(investigators);
-		assertEquals(5, investigators.size());
-	}
+
 	
 }
