@@ -21,6 +21,7 @@ import com.uniovi.es.exceptions.PetitionException;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Petition;
+import com.uniovi.es.model.types.StatusPetition;
 import com.uniovi.es.persistence.ExperimentDAO;
 import com.uniovi.es.persistence.InvestigatorDAO;
 import com.uniovi.es.persistence.PetitionDAO;
@@ -51,7 +52,7 @@ public class PetitionServiceImpl implements PetitionService{
 	@Override
 	public void register(PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- register petition");
-		
+				
 		logger.info("\t \t Obteniendo el investigador receptor a partir del ID: " + dto.idInvestigator);
 		Optional<Investigator> optional = investigatorDAO.findById(dto.idInvestigator);
 		Investigator investigator = getInvestigator(optional);
@@ -87,6 +88,12 @@ public class PetitionServiceImpl implements PetitionService{
 		Optional<Petition> optional = petitionDAO.findById(id.getId());
 		Petition petition = getPetition(optional);
 		
+		Investigator investigator = userInSession.getInvestigator();
+		if(investigator == null || investigator.getId() != petition.getInvestigator().getId()) {
+			logger.error("[ERROR -- 305] - Una petición solo puede ser aceptada o rechazada por el investigador receptor de dicha petición");
+			throw new PetitionException("305");
+		}
+		
 		actionManager.setPetition(petition);
 		actionManager.execute(new Accept());
 		
@@ -109,6 +116,12 @@ public class PetitionServiceImpl implements PetitionService{
 		Optional<Petition> optional = petitionDAO.findById(id.getId());
 		Petition petition = getPetition(optional);
 		
+		Investigator investigator = userInSession.getInvestigator();
+		if(investigator == null || investigator.getId() != petition.getInvestigator().getId()) {
+			logger.error("[ERROR -- 305] - Una petición solo puede ser aceptada o rechazada por el investigador receptor de dicha petición");
+			throw new PetitionException("305");
+		}
+		
 		actionManager.setPetition(petition);
 		actionManager.execute(new Reject());
 		
@@ -130,6 +143,21 @@ public class PetitionServiceImpl implements PetitionService{
 		logger.info("\t \t Obteniendo la petición a partir del ID: " + id.getId());
 		Optional<Petition> optional = petitionDAO.findById(id.getId());
 		Petition petition = getPetition(optional);
+		
+		//Si la petitición está en estado PENDING solo la pueda cancelar el emisor
+		Investigator investigator = userInSession.getInvestigator();
+		if(petition.getStatus().equals(StatusPetition.PENDING) && 
+				(investigator == null || investigator.getId() != petition.getIdInvestigatorSend())) {
+			logger.error("[ERROR -- 305] - Una petición solo puede ser cancelada por el investigador emisor de dicha petición si está en estado PENDING");
+			throw new PetitionException("305");
+		}
+		//Si la petición está en estado ACEPTADA solo la pueden cancelar el emisor y el receptor
+		else if(petition.getStatus().equals(StatusPetition.ACCEPTED) && 
+				(investigator == null || 
+				(investigator.getId() != petition.getIdInvestigatorSend() && investigator.getId() != petition.getInvestigator().getId()))) {
+			logger.error("[ERROR -- 306] - Una petición solo puede ser cancelada por el investigador emisor de dicha petición si está en estado PENDING");
+			throw new PetitionException("306");
+		}
 		
 		actionManager.setPetition(petition);
 		actionManager.execute(new Cancel());

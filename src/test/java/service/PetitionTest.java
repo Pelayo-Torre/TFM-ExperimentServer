@@ -3,6 +3,7 @@ package service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -127,10 +128,11 @@ class PetitionTest {
 		experientDTO.idDevice = 1L;
 	
 		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
 		//CREAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
-		petitionDTO.idExperiment = 1L;
+		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
 		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("juan@gmail.com").id;
 		petitionDTO.manager = true;
 		
@@ -138,7 +140,8 @@ class PetitionTest {
 		petitionService.register(petitionDTO);
 		
 		//COMPROBAMOS QUE LA PETICIÓN SE HA ALMACENADO CORRECTAMENTE
-		petitionDTO = petitionService.getDetail(2L);
+		List<PetitionDTO> petitions = petitionService.getPetitionsSent();
+		petitionDTO = petitions.get(petitions.size() -1);
 		
 		assertNotNull(petitionDTO);
 		assertEquals(false, petitionDTO.creator);
@@ -248,17 +251,63 @@ class PetitionTest {
 	 * Se prueba aceptar una petición que se encuentra en estado PENDING
 	 * @throws PetitionException
 	 */
-	public void test16AcceptPetition() throws PetitionException {
+	public void test16AcceptPetition() throws PetitionException, InvestigatorException, AttempsException, ExperimentException {
 		
-		PetitionDTO dto = petitionService.getDetail(2L);
-		assertEquals(StatusPetition.PENDING.name(), dto.statusPetition);
+		//REGISTRAMOS EL INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Joselu";
+		dto.surname = "Garcia Torre";
+		dto.username = "joselu123";
+		dto.mail = "joselu@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "joselu123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("joselu@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+	
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//CREAMOS LA PETICIÓN
+		PetitionDTO petitionDTO = new PetitionDTO();
+		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.manager = true;
+		
+		//LA GUARDAMOS EN BASE DE DATOS
+		petitionService.register(petitionDTO);
+		
+		List<PetitionDTO> petitions = petitionService.getPetitionsSent();
+		PetitionDTO petition = petitions.get(petitions.size() - 1);
+		assertEquals(StatusPetition.PENDING.name(), petition.statusPetition);
+		
+		//Nos logueamos como el usuario que va a aceptar la petición
+		authDTO = new AuthDTO();
+		authDTO.username = "pelgarTor";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
 		
 		//ACEPTAMOS LA PETICIÓN
-		Identifier identifier = new Identifier(2L);
+		Identifier identifier = new Identifier(petition.id);
 		petitionService.accept(identifier);
 		
-		dto = petitionService.getDetail(2L);
-		assertEquals(StatusPetition.ACCEPTED.name(), dto.statusPetition);
+		petition = petitionService.getDetail(petition.id);
+		assertEquals(StatusPetition.ACCEPTED.name(), petition.statusPetition);
 	}
 		
 	@Test
@@ -266,10 +315,65 @@ class PetitionTest {
 	 * Se prueba a rechazar una petición que se encuentra en estado ACCEPTED
 	 * @throws PetitionException No se puede rechazar una petición en estado ACCEPTED
 	 */
-	public void test18RejectPetitionERROR302() throws PetitionException{
+	public void test18RejectPetitionERROR302() throws PetitionException, AttempsException, InvestigatorException, ExperimentException{
+		
+		//REGISTRAMOS EL INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Gracia";
+		dto.surname = "Garcia Torre";
+		dto.username = "gracia123";
+		dto.mail = "gracia@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "gracia123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en La Felgura";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("gracia@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+	
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//CREAMOS LA PETICIÓN
+		PetitionDTO petitionDTO = new PetitionDTO();
+		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.manager = true;
+		
+		//LA GUARDAMOS EN BASE DE DATOS
+		petitionService.register(petitionDTO);
+		
+		List<PetitionDTO> petitions = petitionService.getPetitionsSent();
+		PetitionDTO petition = petitions.get(petitions.size() - 1);
+		assertEquals(StatusPetition.PENDING.name(), petition.statusPetition);
+		
+		//Nos logueamos como el usuario que va a aceptar la petición
+		authDTO = new AuthDTO();
+		authDTO.username = "pelgarTor";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//ACEPTAMOS LA PETICIÓN
+		Identifier identifier = new Identifier(petition.id);
+		petitionService.accept(identifier);
+		
+		petition = petitionService.getDetail(petition.id);
+		assertEquals(StatusPetition.ACCEPTED.name(), petition.statusPetition);
 		
 		try {
-			Identifier identifier = new Identifier(2L);
 			petitionService.reject(identifier);
 			Assert.fail("Debe lanzarse excepción.");
 		} catch (PetitionException e) {
@@ -282,17 +386,68 @@ class PetitionTest {
 	 * Se prueba a cancelar una petición que se encuentra en estado ACCEPTED
 	 * @throws PetitionException
 	 */
-	public void test19CancelPetition() throws PetitionException{
+	public void test19CancelPetition() throws PetitionException, AttempsException, InvestigatorException, ExperimentException{
 		
-		PetitionDTO dto = petitionService.getDetail(2L);
-		assertEquals(StatusPetition.ACCEPTED.name(), dto.statusPetition);
+		//REGISTRAMOS EL INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Flora";
+		dto.surname = "Garcia Torre";
+		dto.username = "flora123";
+		dto.mail = "flora@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "flora123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en La Felgura";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("flora@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+	
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//CREAMOS LA PETICIÓN
+		PetitionDTO petitionDTO = new PetitionDTO();
+		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.manager = true;
+		
+		//LA GUARDAMOS EN BASE DE DATOS
+		petitionService.register(petitionDTO);
+		
+		List<PetitionDTO> petitions = petitionService.getPetitionsSent();
+		PetitionDTO petition = petitions.get(petitions.size() - 1);
+		assertEquals(StatusPetition.PENDING.name(), petition.statusPetition);
+		
+		//Nos logueamos como el usuario que va a aceptar la petición
+		authDTO = new AuthDTO();
+		authDTO.username = "pelgarTor";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		petitionService.accept(new Identifier(petition.id));
+		
+		petition = petitionService.getDetail(petition.id);
+		assertEquals(StatusPetition.ACCEPTED.name(), petition.statusPetition);
 		
 		//CANCELAMOS LA PETICIÓN
-		Identifier identifier = new Identifier(2L);
+		Identifier identifier = new Identifier(petition.id);
 		petitionService.cancel(identifier);
 		
-		dto = petitionService.getDetail(2L);
-		assertEquals(StatusPetition.CANCELLED.name(), dto.statusPetition);
+		petition = petitionService.getDetail(petition.id);
+		assertEquals(StatusPetition.CANCELLED.name(), petition.statusPetition);
 	}
 	
 	@Test
@@ -300,36 +455,69 @@ class PetitionTest {
 	 * Se prueba a rechazar una petición
 	 * @throws PetitionException
 	 */
-	public void test20RejectPetition() throws PetitionException, InvestigatorException, ExperimentException {
+	public void test20RejectPetition() throws PetitionException, InvestigatorException, ExperimentException, AttempsException {
 		
 		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Gonzalo";
 		dto.surname = "Torre";
 		dto.username = "gongartor";
-		dto.mail = "gonzalo@gmail.com";
+		dto.mail = "gongartor@gmail.com";
 		dto.password = "123456789";
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		investigatorService.registerInvestigator(dto);
 		
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "gongartor";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en La Felgura";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("gongartor@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+	
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
-		petitionDTO.idExperiment = 1L;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("gonzalo@gmail.com").id;
+		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
 		petitionService.register(petitionDTO);
 		
-		petitionDTO = petitionService.getDetail(3L);
+		List<PetitionDTO> petitions = petitionService.getPetitionsSent();
+		
+		petitionDTO = petitions.get(petitions.size() - 1);
 		assertEquals(StatusPetition.PENDING.name(), petitionDTO.statusPetition);
 		
+		//INICIAMOS SESIÓN
+		authDTO = new AuthDTO();
+		authDTO.username = "pelgarTor";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
 		//EL INVESTIGADOR RECHAZA LA PETICIÓN
-		Identifier identifier = new Identifier(3L);
+		Identifier identifier = new Identifier(petitionDTO.id);
 		petitionService.reject(identifier);
 		
-		petitionDTO = petitionService.getDetail(3L);
+		petitionDTO = petitionService.getDetail(petitionDTO.id);
 		assertEquals(StatusPetition.REJECTED.name(), petitionDTO.statusPetition);
 	}
+	
+	//Nuevos tests
+	
+	//1) ACEPTAR / RECHAZAR UNA PETICIÓN POR UN INVESTIGADOR QUE NO SEA EL RECEPTOR
+	//2)) 306
+	//3)) 307
 }
