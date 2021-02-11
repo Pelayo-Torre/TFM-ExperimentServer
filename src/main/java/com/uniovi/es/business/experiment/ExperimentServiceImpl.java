@@ -118,6 +118,8 @@ public class ExperimentServiceImpl implements ExperimentService{
 	@Override
 	public void update(ExperimentDTO dto) throws ExperimentException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- update experiment");
+		
+		isManager(dto.id);
 
 		logger.info("\t \t Obteniendo el experimento a partir del ID: " + dto.id);
 		Optional<Experiment> optional = experimentDAO.findById(dto.id);
@@ -156,6 +158,8 @@ public class ExperimentServiceImpl implements ExperimentService{
 			logger.error("[ERROR - 100] -- El experimento especificado no se encuentra registrado en el sistema");
 			throw new ExperimentException("100");
 		}
+		
+		isManager(id.getId());
 
 		logger.info("\t \t Obteniendo el experimento a partir del ID: " + id);
 		Optional<Experiment> optional = experimentDAO.findById(id.getId());
@@ -180,6 +184,8 @@ public class ExperimentServiceImpl implements ExperimentService{
 			logger.error("[ERROR - 100] -- El experimento especificado no se encuentra registrado en el sistema");
 			throw new ExperimentException("100");
 		}
+		
+		isManager(id.getId());
 
 		logger.info("\t \t Obteniendo el experimento a partir del ID: " + id);
 		Optional<Experiment> optional = experimentDAO.findById(id.getId());
@@ -203,6 +209,8 @@ public class ExperimentServiceImpl implements ExperimentService{
 			logger.error("[ERROR - 100] -- El experimento especificado no se encuentra registrado en el sistema");
 			throw new ExperimentException("100");
 		}
+		
+		isManager(id.getId());
 
 		logger.info("\t \t Obteniendo el experimento a partir del ID: " + id);
 		Optional<Experiment> optional = experimentDAO.findById(id.getId());
@@ -227,6 +235,8 @@ public class ExperimentServiceImpl implements ExperimentService{
 			throw new ExperimentException("100");
 		}
 		
+		isManager(id.getId());
+		
 		logger.info("\t \t Obteniendo el experimento a partir del ID: " + id);
 		Optional<Experiment> optional = experimentDAO.findById(id.getId());
 		Experiment experiment = getExperiment(optional);
@@ -249,6 +259,31 @@ public class ExperimentServiceImpl implements ExperimentService{
 		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- getInvestigatorsOfExperiment");
 		return DtoAssembler.toListInvestigatorsOfPetitions(list);
+	}
+	
+	/**
+	 * Comprueba que el investigador que se encuentra en sesión tiene permisos para administrar el experimento
+	 * @param idExperiment identificador del experimento que se quiere pasar como parámetro.
+	 * @throws ExperimentException 
+	 */
+	private void isManager(Long idExperiment) throws ExperimentException {
+		
+		logger.info("Se comprueba si el investigador es gestor del experimento");
+		
+		Investigator investigator = userInSession.getInvestigator();
+		if(investigator == null) {
+			logger.error("[ERROR -- 116] - Un experimento solo puede ser gestionado por sus investigadores gestores");
+			throw new ExperimentException("116");
+		}
+		
+		//Comprobamos si el investigador es gestor del experimento
+		Petition p = petitionDAO.isManager(idExperiment, investigator.getId());
+		
+		if(p == null) {
+			logger.error("[ERROR -- 116] - Un experimento solo puede ser gestionado por sus investigadores gestores");
+			throw new ExperimentException("116");
+		}
+		
 	}
 	
 	@Override

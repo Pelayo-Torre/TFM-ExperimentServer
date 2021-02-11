@@ -282,16 +282,27 @@ class InvestigatorTest {
 	 */
 	public void test17getDetail() throws InvestigatorException{
 		
-		InvestigatorDTO investigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com");
+		//CREAMOS el investigador
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Esther";
+		dto.surname = "Torre";
+		dto.username = "esther123";
+		dto.mail = "esther@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		InvestigatorDTO investigator = investigatorService.getInvestigatorByMail("esther@gmail.com");
 		
 		//SE OBTIENE UN INVESTIGADOR CUYO IDENTIFICADOR SE ENCUENTRA REGISTRADO
 		investigator = investigatorService.getDetail(investigator.id);
 		
 		assertNotNull(investigator);
-		assertEquals("Pelayo", investigator.name);
-		assertEquals("Garcia Torre", investigator.surname);
-		assertEquals("pgarciat", investigator.username);
-		assertEquals("pelayo@gmail.com", investigator.mail);
+		assertEquals("Esther", investigator.name);
+		assertEquals("Torre", investigator.surname);
+		assertEquals("esther123", investigator.username);
+		assertEquals("esther@gmail.com", investigator.mail);
 	}
 	
 	@Test
