@@ -8,16 +8,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uniovi.es.business.authentication.UserInSession;
 import com.uniovi.es.business.dto.NoteDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
 import com.uniovi.es.business.validators.NoteValidator;
 import com.uniovi.es.exceptions.NoteException;
 import com.uniovi.es.model.Associations;
 import com.uniovi.es.model.Experiment;
+import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Note;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.persistence.BinnacleDAO;
 import com.uniovi.es.persistence.ExperimentDAO;
+import com.uniovi.es.persistence.PetitionDAO;
 import com.uniovi.es.utils.Identifier;
 
 @Service
@@ -33,6 +36,12 @@ public class BinnacleServiceImpl implements BinnacleService{
 	
 	@Autowired
 	private NoteValidator noteValidator;
+	
+	@Autowired
+	private PetitionDAO petitionDAO;
+	
+	@Autowired
+	private UserInSession userInSession;
 
 	@Override
 	public void registerNote(NoteDTO dto) throws NoteException, ExperimentException {
@@ -42,6 +51,8 @@ public class BinnacleServiceImpl implements BinnacleService{
 		Optional<Experiment> optional = experimentDAO.findById(dto.idExperiment);
 		Experiment experiment = getExperiment(optional);
 		
+		
+		isInvestigatorAssociatedExperiment(dto.idExperiment);
 		noteValidator.validate(dto);
 		
 		Note note = new Note(experiment);
@@ -61,6 +72,7 @@ public class BinnacleServiceImpl implements BinnacleService{
 		Optional<Note> optional = binnacleDAO.findById(dto.id);
 		Note note = getNote(optional);
 		
+		isInvestigatorAssociatedExperiment(note.getExperiment().getId());
 		noteValidator.validate(dto);
 		
 		DtoAssembler.fillData(note, dto);
@@ -72,9 +84,10 @@ public class BinnacleServiceImpl implements BinnacleService{
 	}
 
 	@Override
-	public List<NoteDTO> getNotesByExperiment(Long idExperiment) throws ExperimentException {
+	public List<NoteDTO> getNotesByExperiment(Long idExperiment) throws ExperimentException, NoteException {
 		logger.info("[INICIO] BINNACLE SERVICE -- notes by experiment");
 		
+		isInvestigatorAssociatedExperiment(idExperiment);
 		List<Note> notes = binnacleDAO.findNotesByExperiment(idExperiment);
 		
 		logger.info("[FINAL] BINNACLE SERVICE -- notes by experiment");
@@ -88,6 +101,8 @@ public class BinnacleServiceImpl implements BinnacleService{
 		logger.info("\t \t Obteniendo la nota a partir del ID: " + id.getId());
 		Optional<Note> optional = binnacleDAO.findById(id.getId());
 		Note note = getNote(optional);
+		
+		isInvestigatorAssociatedExperiment(note.getExperiment().getId());
 		
 		logger.info("\t \t Desasociando la nota del experimento.");
 		Associations.NoteExperiment.unlink(note, note.getExperiment());
@@ -105,8 +120,23 @@ public class BinnacleServiceImpl implements BinnacleService{
 		Optional<Note> optional = binnacleDAO.findById(id);
 		Note note = getNote(optional);
 		
+		isInvestigatorAssociatedExperiment(note.getExperiment().getId());
+		
 		logger.info("[FINAL] BINNACLE SERVICE -- detail note");
 		return DtoAssembler.toDto(note);
+	}
+	
+	/**
+	 * Validamos que el investigador tiene acceso al experimento para gestionar la bitácora
+	 * @param idExperiment
+	 * @throws NoteException
+	 */
+	private void isInvestigatorAssociatedExperiment(Long idExperiment) throws NoteException{
+		Investigator investigator = userInSession.getInvestigator();
+		if(petitionDAO.isInvestigatorAssociatedExperiment(investigator.getId(), idExperiment) == null) {
+			logger.error("[ERROR -- 403] - El investigador que quiere gestionar la bitácora no se encuentra asociado al experimento.");
+			throw new NoteException("403");
+		}
 	}
 	
 	/**

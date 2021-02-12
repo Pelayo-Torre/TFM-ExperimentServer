@@ -13,7 +13,7 @@ public interface BinnacleService {
 	
 	public void updateNote(NoteDTO dto) throws NoteException ;
 	
-	public List<NoteDTO> getNotesByExperiment(Long idExperiment) throws ExperimentException ;
+	public List<NoteDTO> getNotesByExperiment(Long idExperiment) throws ExperimentException, NoteException;
 	
 	public void deleteNote(Identifier id) throws NoteException ;
 	

@@ -30,7 +30,7 @@ public interface BinnacleController {
 	 * @return lista de notas
 	 * @throws ExperimentException en caso de que el experimento no exista
 	 */
-	public List<NoteDTO> getNotesByExperiment(Long idExperiment) throws ExperimentException;
+	public List<NoteDTO> getNotesByExperiment(Long idExperiment) throws ExperimentException, NoteException;
 	
 	/**
 	 * Recibe una petición para realizar la eliminación de una nota a partir de su identificador

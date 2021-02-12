@@ -52,7 +52,7 @@ public class BinnacleControllerImpl implements BinnacleController{
 
 	@Override
 	@RequestMapping(value = "/notes/experiment/{idExperiment}", method = RequestMethod.GET)
-	public List<NoteDTO> getNotesByExperiment(@PathVariable Long idExperiment) throws ExperimentException {
+	public List<NoteDTO> getNotesByExperiment(@PathVariable Long idExperiment) throws ExperimentException, NoteException {
 		logger.info("[INICIO] BINNACLE CONTROLLER -- notes by experiment");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + idExperiment);
 		

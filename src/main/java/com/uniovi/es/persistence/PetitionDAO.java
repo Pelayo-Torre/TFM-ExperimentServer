@@ -24,4 +24,7 @@ public interface PetitionDAO extends CrudRepository <Petition, Long> {
 
 	@Query("SELECT p FROM Petition p WHERE p.experiment.id = ?1 AND p.status = 'ACCEPTED' AND p.investigator.id = ?2 AND manager = true")
 	public Petition isManager(Long idExperiment, Long idInvestigator);
+	
+	@Query("SELECT p FROM Petition p WHERE p.investigator.id = ?1 AND p.experiment.id = ?2 AND p.status = 'ACCEPTED'")
+	public Petition isInvestigatorAssociatedExperiment(Long idInvestigator, Long idExperiment);
 }
