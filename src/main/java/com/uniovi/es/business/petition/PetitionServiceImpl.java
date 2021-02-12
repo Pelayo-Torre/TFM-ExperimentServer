@@ -148,15 +148,15 @@ public class PetitionServiceImpl implements PetitionService{
 		Investigator investigator = userInSession.getInvestigator();
 		if(petition.getStatus().equals(StatusPetition.PENDING) && 
 				(investigator == null || investigator.getId() != petition.getIdInvestigatorSend())) {
-			logger.error("[ERROR -- 305] - Una petición solo puede ser cancelada por el investigador emisor de dicha petición si está en estado PENDING");
-			throw new PetitionException("305");
+			logger.error("[ERROR -- 306] - Una petición solo puede ser cancelada por el investigador emisor de dicha petición si está en estado PENDING");
+			throw new PetitionException("306");
 		}
 		//Si la petición está en estado ACEPTADA solo la pueden cancelar el emisor y el receptor
 		else if(petition.getStatus().equals(StatusPetition.ACCEPTED) && 
 				(investigator == null || 
 				(investigator.getId() != petition.getIdInvestigatorSend() && investigator.getId() != petition.getInvestigator().getId()))) {
-			logger.error("[ERROR -- 306] - Una petición solo puede ser cancelada por el investigador emisor de dicha petición si está en estado PENDING");
-			throw new PetitionException("306");
+			logger.error("[ERROR -- 307] - Una petición solo puede ser cancelada por el investigador emisor de dicha petición si está en estado PENDING");
+			throw new PetitionException("307");
 		}
 		
 		actionManager.setPetition(petition);

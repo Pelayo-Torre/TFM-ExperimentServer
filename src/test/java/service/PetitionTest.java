@@ -46,7 +46,7 @@ import com.uniovi.es.utils.Identifier;
 @ActiveProfiles("test")
 @TestMethodOrder(Alphanumeric.class)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-class PetitionTest {
+public class PetitionTest {
 	
 	@Autowired
 	private InvestigatorService investigatorService;
@@ -516,8 +516,347 @@ class PetitionTest {
 	}
 	
 	//Nuevos tests
+	@Test
+	/**
+	 * Se prueba a rechazar una aceptar una petición como investegador que no recibe la petición.
+	 * @throws PetitionException
+	 */
+	public void test21ResponseAPetitionSecurityERROR001() throws PetitionException, InvestigatorException, ExperimentException, AttempsException {
+		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Alberto";
+		dto.surname = "Torre";
+		dto.username = "alberto123";
+		dto.mail = "alberto@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "alberto123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en La Felgura";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("alberto@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
 	
-	//1) ACEPTAR / RECHAZAR UNA PETICIÓN POR UN INVESTIGADOR QUE NO SEA EL RECEPTOR
-	//2)) 306
-	//3)) 307
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//REGISTRAMOS LA PETICIÓN
+		PetitionDTO petitionDTO = new PetitionDTO();
+		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.manager = true;
+		
+		//LA GUARDAMOS EN BASE DE DATOS
+		petitionService.register(petitionDTO);
+		
+		List<PetitionDTO> petitions = petitionService.getPetitionsSent();
+		
+		petitionDTO = petitions.get(petitions.size() - 1);
+		assertEquals(StatusPetition.PENDING.name(), petitionDTO.statusPetition);
+		
+		//La aceptamos como Alberto
+		try {
+			petitionService.accept(new Identifier(petitionDTO.id));
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (PetitionException e) {
+			assertEquals("305", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a cancelar una petición en estado PENDING por el usuario que la recibe
+	 * @throws PetitionException
+	 */
+	public void test22ResponseCancelAPetitionSecurityERROR002() throws PetitionException, InvestigatorException, ExperimentException, AttempsException {
+		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Daniela";
+		dto.surname = "Torre";
+		dto.username = "daniela123";
+		dto.mail = "daniela@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "daniela123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en La Felgura";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("daniela@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+	
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//REGISTRAMOS LA PETICIÓN
+		PetitionDTO petitionDTO = new PetitionDTO();
+		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.manager = true;
+		
+		//LA GUARDAMOS EN BASE DE DATOS
+		petitionService.register(petitionDTO);
+		
+		List<PetitionDTO> petitions = petitionService.getPetitionsSent();
+		
+		petitionDTO = petitions.get(petitions.size() - 1);
+		assertEquals(StatusPetition.PENDING.name(), petitionDTO.statusPetition);
+		
+		//INICIAMOS SESIÓN
+		authDTO = new AuthDTO();
+		authDTO.username = "pelgarTor";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//La cancelamos como Pelayo. Al estar PENDING debe saltar error de sguridad
+		try {
+			petitionService.cancel(new Identifier(petitionDTO.id));
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (PetitionException e) {
+			assertEquals("306", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a cancelar una petición en estado PENDING por el usuario que la envía
+	 * @throws PetitionException
+	 */
+	public void test23ResponseCancelAPetitionSecurity() throws PetitionException, InvestigatorException, ExperimentException, AttempsException {
+		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Paola";
+		dto.surname = "Torre";
+		dto.username = "paola123";
+		dto.mail = "paola@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "paola123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en La Felgura";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("paola@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+	
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//REGISTRAMOS LA PETICIÓN
+		PetitionDTO petitionDTO = new PetitionDTO();
+		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.manager = true;
+		
+		//LA GUARDAMOS EN BASE DE DATOS
+		petitionService.register(petitionDTO);
+		
+		List<PetitionDTO> petitions = petitionService.getPetitionsSent();
+		
+		petitionDTO = petitions.get(petitions.size() - 1);
+		assertEquals(StatusPetition.PENDING.name(), petitionDTO.statusPetition);
+		
+		//La cancelamos como Paola. Al estar PENDING no debe saltar error de seguridad
+		petitionService.cancel(new Identifier(petitionDTO.id));
+		petitions = petitionService.getPetitionsSent();
+		petitionDTO = petitions.get(petitions.size() - 1);
+		assertEquals(StatusPetition.CANCELLED.name(), petitionDTO.statusPetition);
+	}
+	
+	@Test
+	/**
+	 * Se prueba a cancelar una petición en estado ACEPTADA por el usuario que la recibe y la acepta
+	 * @throws PetitionException
+	 */
+	public void test24ResponseCancelAcceptedPetitionSecurity() throws PetitionException, InvestigatorException, ExperimentException, AttempsException {
+		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Coral";
+		dto.surname = "Torre";
+		dto.username = "coral123";
+		dto.mail = "coral@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "coral123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en La Felgura";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("coral@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+	
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//REGISTRAMOS LA PETICIÓN
+		PetitionDTO petitionDTO = new PetitionDTO();
+		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.manager = true;
+		
+		//LA GUARDAMOS EN BASE DE DATOS
+		petitionService.register(petitionDTO);
+		
+		List<PetitionDTO> petitions = petitionService.getPetitionsSent();
+		
+		petitionDTO = petitions.get(petitions.size() - 1);
+		assertEquals(StatusPetition.PENDING.name(), petitionDTO.statusPetition);
+		
+		//INICIAMOS SESIÓN
+		authDTO = new AuthDTO();
+		authDTO.username = "pelgarTor";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//La aceptamos como Pelayo. Al estar PENDING no debe saltar error de sguridad
+		petitionService.accept(new Identifier(petitionDTO.id));
+		
+		petitions = petitionService.getPetitionsReceived();
+		
+		petitionDTO = petitions.get(petitions.size() - 1);
+		assertEquals(StatusPetition.ACCEPTED.name(), petitionDTO.statusPetition);
+		
+		//La cancelamos
+		petitionService.cancel(new Identifier(petitionDTO.id));
+		petitions = petitionService.getPetitionsReceived();
+		
+		petitionDTO = petitions.get(petitions.size() - 1);
+		assertEquals(StatusPetition.CANCELLED.name(), petitionDTO.statusPetition);
+	}
+	
+	@Test
+	/**
+	 * Se prueba a cancelar una petición en estado ACEPTADA por un usuario que ni la recibe ni la emite
+	 * @throws PetitionException
+	 */
+	public void test25ResponseCancelAcceptedPetitionSecurityERROR003() throws PetitionException, InvestigatorException, ExperimentException, AttempsException {
+		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Celsa";
+		dto.surname = "Torre";
+		dto.username = "celsa123";
+		dto.mail = "celsa@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "celsa123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en La Felgura";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("celsa@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+	
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//REGISTRAMOS LA PETICIÓN
+		PetitionDTO petitionDTO = new PetitionDTO();
+		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.manager = true;
+		
+		//LA GUARDAMOS EN BASE DE DATOS
+		petitionService.register(petitionDTO);
+		
+		List<PetitionDTO> petitions = petitionService.getPetitionsSent();
+		
+		petitionDTO = petitions.get(petitions.size() - 1);
+		assertEquals(StatusPetition.PENDING.name(), petitionDTO.statusPetition);
+		
+		//INICIAMOS SESIÓN
+		authDTO = new AuthDTO();
+		authDTO.username = "pelgarTor";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//La aceptamos como Pelayo. Al estar PENDING no debe saltar error de sguridad
+		petitionService.accept(new Identifier(petitionDTO.id));
+		
+		petitionDTO = petitionService.getDetail(petitionDTO.id);
+		
+		//petitionDTO = petitions.get(petitions.size() - 1);
+		assertEquals(StatusPetition.ACCEPTED.name(), petitionDTO.statusPetition);
+		
+		//CREAMOS UN NUEVO INVESTIGADOR QUE NO ESTÁ RELACIONADO Y LA CANCELAMOS
+		
+		dto = new InvestigatorDTO();
+		dto.name = "Mamasa";
+		dto.surname = "Torre";
+		dto.username = "mamasa123";
+		dto.mail = "mamasa@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		authDTO = new AuthDTO();
+		authDTO.username = "mamasa123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//La cancelamos
+		try {
+			petitionService.cancel(new Identifier(petitionDTO.id));
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (PetitionException e) {
+			assertEquals("307", e.getMessage());
+		}
+	}
+
 }

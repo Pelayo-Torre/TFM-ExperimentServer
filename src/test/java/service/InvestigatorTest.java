@@ -47,7 +47,7 @@ import com.uniovi.es.utils.Identifier;
 @ActiveProfiles("test")
 @TestMethodOrder(Alphanumeric.class)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-class InvestigatorTest {
+public class InvestigatorTest {
 	
 	@Autowired
 	private InvestigatorService investigatorService;
