@@ -142,6 +142,11 @@ public class ExperimentServiceImpl implements ExperimentService{
 		Optional<Experiment> optional = experimentDAO.findById(id);
 		Experiment experiment = getExperiment(optional);
 		
+		if(petitionDAO.isInvestigatorAssociatedExperiment(userInSession.getInvestigator().getId(), id) == null) {
+			logger.error("[ERROR -- 117] - Los datos del experimento solo pueden ser visualizados por investigadores asociados al experimento.");
+			throw new ExperimentException("117");
+		}
+		
 		logger.info("\t \t Obteniendo los datos del creador del experimento con ID: " + id);
 		Investigator investigator = investigatorDAO.findCreatorOfExperiment(id);
 		

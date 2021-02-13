@@ -1460,4 +1460,70 @@ public class ExperimentTest {
 		}
 	}
 	
+	@Test
+	/**
+	 * Se prueba la seguridad de modificar el estado de un experimento del que no se es manager
+	 * @throws InvestigatorException
+	 * @throws AttempsException
+	 * @throws ExperimentException
+	 */
+	public void test40DetailExperimentByInvestigatorNotAssociated() throws InvestigatorException, AttempsException, ExperimentException {
+		//REGISTRAMOS UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Jorge";
+		dto.surname = "Garcia";
+		dto.username = "jorge123";
+		dto.mail = "jorge@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "jorge123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento de personas entre 30 y 40 años";
+		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("jorge@gmail.com").id;
+		
+		Date hoy = new Date();
+		experientDTO.birthDate = hoy;
+		experientDTO.gender = Gender.FEMALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();;
+		experientDTO.idDevice = 1L;
+		
+		experimentService.register(experientDTO);
+		
+		//Actualizamos los datos
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//REGISTRAMOS UN INVESTIGADOR
+		dto = new InvestigatorDTO();
+		dto.name = "Perez";
+		dto.surname = "Garcia";
+		dto.username = "perez123";
+		dto.mail = "perez@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		authDTO = new AuthDTO();
+		authDTO.username = "perez123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//Obtenemos el detalle del experimento anteriormente creado
+		
+		try {
+			experimentService.getDetail(experiments.get(experiments.size() - 1).id);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch(ExperimentException e) {
+			assertEquals("117", e.getMessage());
+		}
+	}
 }
