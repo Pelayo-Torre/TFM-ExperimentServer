@@ -75,8 +75,8 @@ public class PetitionTest {
 			InvestigatorDTO dto = new InvestigatorDTO();
 			dto.name = "Pelayo";
 			dto.surname = "Garcia Torre";
-			dto.username = "pelgarTor";
-			dto.mail = "pelayo@gmail.com";
+			dto.username = "pelgarTor23";
+			dto.mail = "pelayo1234@gmail.com";
 			dto.password = "123456789";
 			
 			//LO GUARDAMOS EN BASE DE DATOS
@@ -90,7 +90,7 @@ public class PetitionTest {
 			
 			//INICIAMOS SESIÓN
 			AuthDTO authDTO = new AuthDTO();
-			authDTO.username = "pelgarTor";
+			authDTO.username = "pelgarTor23";
 			authDTO.password = "123456789";
 			authenticateUser.authenticateUser(authDTO);
 			
@@ -121,7 +121,7 @@ public class PetitionTest {
 		ExperimentDTO experientDTO = new ExperimentDTO();
 		experientDTO.title = "Experimento en Langreo";
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
-		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
 		
 		experientDTO.birthDate = new Date();
 		experientDTO.gender = Gender.MALE.name();
@@ -287,7 +287,7 @@ public class PetitionTest {
 		//CREAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -299,7 +299,7 @@ public class PetitionTest {
 		
 		//Nos logueamos como el usuario que va a aceptar la petición
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor";
+		authDTO.username = "pelgarTor23";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -351,7 +351,7 @@ public class PetitionTest {
 		//CREAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -363,7 +363,7 @@ public class PetitionTest {
 		
 		//Nos logueamos como el usuario que va a aceptar la petición
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor";
+		authDTO.username = "pelgarTor23";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -422,7 +422,7 @@ public class PetitionTest {
 		//CREAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -434,7 +434,7 @@ public class PetitionTest {
 		
 		//Nos logueamos como el usuario que va a aceptar la petición
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor";
+		authDTO.username = "pelgarTor23";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -491,7 +491,7 @@ public class PetitionTest {
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -504,7 +504,7 @@ public class PetitionTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor";
+		authDTO.username = "pelgarTor23";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -556,7 +556,7 @@ public class PetitionTest {
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -615,7 +615,7 @@ public class PetitionTest {
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -628,7 +628,7 @@ public class PetitionTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor";
+		authDTO.username = "pelgarTor23";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -680,7 +680,7 @@ public class PetitionTest {
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -737,7 +737,7 @@ public class PetitionTest {
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -750,7 +750,7 @@ public class PetitionTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor";
+		authDTO.username = "pelgarTor23";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -809,7 +809,7 @@ public class PetitionTest {
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo@gmail.com").id;
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -822,7 +822,7 @@ public class PetitionTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor";
+		authDTO.username = "pelgarTor23";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
