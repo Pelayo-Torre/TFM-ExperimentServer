@@ -6,6 +6,7 @@ import java.util.List;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.PetitionDTO;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 
 
@@ -29,7 +30,7 @@ public interface InvestigatorController {
 	 * Punto de entrada para actualizar los datos de un investigador
 	 * @param dto, los datos nuevos del investigador 
 	 */
-	public void updateInvestigator(InvestigatorDTO dto) throws InvestigatorException;
+	public void updateInvestigator(InvestigatorDTO dto) throws InvestigatorException, ForbiddenException;
 
 	
 	/**
@@ -38,7 +39,7 @@ public interface InvestigatorController {
 	 * @return lista de experimentos asociados en estado ACEPTADO
 	 * @throws InvestigatorException  en caso de que el investigador no exista en base de datos
 	 */
-	public List<ExperimentDTO> getExperimentsAcceptedByIdInvestigator(Long idInvestigator) throws InvestigatorException;
+	public List<ExperimentDTO> getExperimentsAcceptedByIdInvestigator(Long idInvestigator) throws InvestigatorException, ForbiddenException;
 	
 	/**
 	 * Recibe una petición para realizar la consulta de la lista de petiticones pendientes de responder de un investigador
@@ -46,7 +47,7 @@ public interface InvestigatorController {
 	 * @return lista de peticiones asociados en estado PENDIENTE
 	 * @throws InvestigatorException  en caso de que el investigador no exista en base de datos
 	 */
-	public List<PetitionDTO> getPetitionsPendingByIdInvestigator(Long idInvestigator) throws InvestigatorException;
+	public List<PetitionDTO> getPetitionsPendingByIdInvestigator(Long idInvestigator) throws InvestigatorException, ForbiddenException;
 	
 	/**
 	 * Recibe una petiticón para devolver la lista de investigadores registrados en el sistema

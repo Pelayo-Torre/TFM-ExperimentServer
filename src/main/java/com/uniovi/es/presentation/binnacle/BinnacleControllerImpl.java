@@ -16,6 +16,7 @@ import com.uniovi.es.business.binnacle.BinnacleService;
 import com.uniovi.es.business.dto.NoteDTO;
 import com.uniovi.es.exceptions.NoteException;
 import com.uniovi.es.exceptions.ExperimentException;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.utils.Identifier;
 
 @RestController
@@ -30,7 +31,7 @@ public class BinnacleControllerImpl implements BinnacleController{
 
 	@Override
 	@RequestMapping(value = "/register/note", method = RequestMethod.POST)
-	public void registerNote(@RequestBody NoteDTO dto) throws NoteException, ExperimentException {
+	public void registerNote(@RequestBody NoteDTO dto) throws NoteException, ExperimentException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE CONTROLLER -- register note");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + dto);
 		
@@ -41,7 +42,7 @@ public class BinnacleControllerImpl implements BinnacleController{
 
 	@Override
 	@RequestMapping(value = "/update/note", method = RequestMethod.PUT)
-	public void updateNote(@RequestBody NoteDTO dto) throws NoteException {
+	public void updateNote(@RequestBody NoteDTO dto) throws NoteException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE CONTROLLER -- update note");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + dto);
 		
@@ -52,7 +53,7 @@ public class BinnacleControllerImpl implements BinnacleController{
 
 	@Override
 	@RequestMapping(value = "/notes/experiment/{idExperiment}", method = RequestMethod.GET)
-	public List<NoteDTO> getNotesByExperiment(@PathVariable Long idExperiment) throws ExperimentException, NoteException {
+	public List<NoteDTO> getNotesByExperiment(@PathVariable Long idExperiment) throws ExperimentException, NoteException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE CONTROLLER -- notes by experiment");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + idExperiment);
 		
@@ -65,7 +66,7 @@ public class BinnacleControllerImpl implements BinnacleController{
 
 	@Override
 	@RequestMapping(value = "/delete/note", method = RequestMethod.PUT)
-	public void deleteNote(@RequestBody Identifier id) throws NoteException {
+	public void deleteNote(@RequestBody Identifier id) throws NoteException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE CONTROLLER -- delete note");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + id);
 		
@@ -76,7 +77,7 @@ public class BinnacleControllerImpl implements BinnacleController{
 
 	@Override
 	@RequestMapping(value = "/detail/note/{id}", method = RequestMethod.GET)
-	public NoteDTO detail(@PathVariable Long id) throws NoteException {
+	public NoteDTO detail(@PathVariable Long id) throws NoteException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE CONTROLLER -- detail note");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + id);
 		

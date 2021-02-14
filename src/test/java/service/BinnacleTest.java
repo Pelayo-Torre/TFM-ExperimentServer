@@ -30,6 +30,7 @@ import com.uniovi.es.business.experiment.ExperimentService;
 import com.uniovi.es.business.investigator.InvestigatorService;
 import com.uniovi.es.exceptions.AttempsException;
 import com.uniovi.es.exceptions.ExperimentException;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.NoteException;
 import com.uniovi.es.model.types.Device;
@@ -66,7 +67,7 @@ class BinnacleTest {
 	private static final Long ID_NOT_EXIST = 4345245786396523496L;
 	
 	@PostConstruct
-	public void init() throws InvestigatorException, AttempsException, ExperimentException {
+	public void init() throws InvestigatorException, AttempsException, ExperimentException, ForbiddenException {
 		if(primeraVez) {
 			//COMENZAMOS CREANDO UN INVESTIGADOR Y UN EXPERIMENTO
 			InvestigatorDTO dto = new InvestigatorDTO();
@@ -124,7 +125,7 @@ class BinnacleTest {
 	 * @throws ExperimentException
 	 * @throws NoteException
 	 */
-	void test10RegisterNote() throws InvestigatorException, ExperimentException, NoteException {
+	void test10RegisterNote() throws InvestigatorException, ExperimentException, NoteException, ForbiddenException {
 				
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
@@ -150,7 +151,7 @@ class BinnacleTest {
 	 * @throws ExperimentException experimento no registrado en el sistema
 	 * @throws NoteException
 	 */
-	public void test11RegisterNoteERROR100() throws ExperimentException, NoteException{
+	public void test11RegisterNoteERROR100() throws ExperimentException, NoteException, ForbiddenException{
 		
 		//CREAMOS UNA NOTA
 		NoteDTO noteDTO = new NoteDTO();
@@ -171,7 +172,7 @@ class BinnacleTest {
 	 * @throws ExperimentException
 	 * @throws NoteException el título es obligatorio
 	 */
-	public void test12RegisterNoteERROR401() throws ExperimentException, NoteException{
+	public void test12RegisterNoteERROR401() throws ExperimentException, NoteException, ForbiddenException{
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
@@ -194,7 +195,7 @@ class BinnacleTest {
 	 * @throws ExperimentException
 	 * @throws NoteException la descripción es obligatoria
 	 */
-	public void test13RegisterNoteERROR402() throws ExperimentException, NoteException{
+	public void test13RegisterNoteERROR402() throws ExperimentException, NoteException, ForbiddenException{
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 
 		//CREAMOS UNA NOTA
@@ -215,7 +216,7 @@ class BinnacleTest {
 	 * Se prueba la edición de los datos de una nota de una bitácora
 	 * @throws NoteException
 	 */
-	public void test14UpdateNote() throws NoteException, ExperimentException {
+	public void test14UpdateNote() throws NoteException, ExperimentException, ForbiddenException {
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
@@ -240,7 +241,7 @@ class BinnacleTest {
 	 * Prueba la edición de una nota que no existe en el sistema
 	 * @throws NoteException La nota especificada no se encuentra registrada en el sistema
 	 */
-	public void test15UpdateNoteERROR400() throws NoteException {
+	public void test15UpdateNoteERROR400() throws NoteException, ForbiddenException {
 		
 		//CREAMOS UNA NOTA
 		NoteDTO noteDTO = new NoteDTO();
@@ -261,7 +262,7 @@ class BinnacleTest {
 	 * Prueba la edición de una nota que no tiene título
 	 * @throws NoteException La nota especificada no tiene título
 	 */
-	public void test16UpdateNoteERROR401() throws NoteException, ExperimentException {
+	public void test16UpdateNoteERROR401() throws NoteException, ExperimentException, ForbiddenException {
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
@@ -285,7 +286,7 @@ class BinnacleTest {
 	 * Prueba la edición de una nota que no tiene descripción
 	 * @throws NoteException La nota especificada no tiene descripción
 	 */
-	public void test17UpdateNoteERROR402() throws NoteException, ExperimentException {
+	public void test17UpdateNoteERROR402() throws NoteException, ExperimentException, ForbiddenException {
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
 		
@@ -308,7 +309,7 @@ class BinnacleTest {
 	 * @throws NoteException
 	 * @throws ExperimentException
 	 */
-	public void test18NotesByExperiment() throws NoteException, ExperimentException{
+	public void test18NotesByExperiment() throws NoteException, ExperimentException, ForbiddenException{
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
@@ -327,7 +328,7 @@ class BinnacleTest {
 	 * Prueba el obtener el detalle de una nota
 	 * @throws NoteException
 	 */
-	public void test20DetailNote() throws NoteException, ExperimentException{
+	public void test20DetailNote() throws NoteException, ExperimentException, ForbiddenException{
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
 		
@@ -345,7 +346,7 @@ class BinnacleTest {
 	 * Prueba el obtener el detalle de una nota que no se encuentra registrada en el sistema
 	 * @throws NoteException la nota no existe
 	 */
-	public void test21DetailNoteERROR400() throws NoteException{
+	public void test21DetailNoteERROR400() throws NoteException, ForbiddenException{
 		
 		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
 		try {
@@ -360,7 +361,7 @@ class BinnacleTest {
 	 * Se prueba la eliminación de una nota de un experimento
 	 * @throws NoteException
 	 */
-	public void test22DeleteNote() throws NoteException, ExperimentException{
+	public void test22DeleteNote() throws NoteException, ExperimentException, ForbiddenException{
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
@@ -390,7 +391,7 @@ class BinnacleTest {
 	 * Se prueba a eliminar una nota que no existe en el sistema
 	 * @throws NoteException la nota no eiste en el sistema
 	 */
-	public void test23DeleteNoteERROR400() throws NoteException {
+	public void test23DeleteNoteERROR400() throws NoteException, ForbiddenException {
 		
 		try {
 			Identifier identifier = new Identifier(ID_NOT_EXIST);
@@ -405,7 +406,7 @@ class BinnacleTest {
 	 * Se prueba a eliminar una nota por un investigador que no está asociado al experimento
 	 * @throws NoteException
 	 */
-	public void test23DeleteNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException{
+	public void test23DeleteNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException, ForbiddenException{
 		
 		//INICIAMOS SESIÓN como investigador asociado
 		AuthDTO authDTO = new AuthDTO();
@@ -428,7 +429,7 @@ class BinnacleTest {
 		//COMPROBAMOS QUE SE HA BORRADO
 		try {
 			binnacleService.deleteNote(identifier);
-		} catch (NoteException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("403", e.getMessage());
 		}
 	}
@@ -438,7 +439,7 @@ class BinnacleTest {
 	 * Se prueba a acceder al detalle de una nota por un investigador que no está asociado al experimento
 	 * @throws NoteException
 	 */
-	public void test24DetailNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException{
+	public void test24DetailNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException, ForbiddenException{
 		
 		//INICIAMOS SESIÓN como investigador asociado
 		AuthDTO authDTO = new AuthDTO();
@@ -457,7 +458,7 @@ class BinnacleTest {
 	
 		try {
 			binnacleService.detail(notes.get(notes.size()-1).id);
-		} catch (NoteException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("403", e.getMessage());
 		}
 	}
@@ -491,7 +492,7 @@ class BinnacleTest {
 	
 		try {
 			binnacleService.registerNote(noteDTO);
-		} catch (NoteException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("403", e.getMessage());
 		}
 	}
@@ -501,7 +502,7 @@ class BinnacleTest {
 	 * Se prueba a actualizar los datos una nota por un investigador que no está asociado al experimento
 	 * @throws NoteException
 	 */
-	public void test26UpdateNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException{
+	public void test26UpdateNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException, ForbiddenException{
 		
 		//INICIAMOS SESIÓN como investigador asociado
 		AuthDTO authDTO = new AuthDTO();
@@ -527,7 +528,7 @@ class BinnacleTest {
 	
 		try {
 			binnacleService.updateNote(noteDTO);
-		} catch (NoteException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("403", e.getMessage());
 		}
 	}
@@ -555,7 +556,7 @@ class BinnacleTest {
 		
 		try {
 			binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
-		} catch (NoteException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("403", e.getMessage());
 		}
 	}

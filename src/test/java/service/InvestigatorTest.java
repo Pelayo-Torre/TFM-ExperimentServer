@@ -31,6 +31,7 @@ import com.uniovi.es.business.investigator.InvestigatorService;
 import com.uniovi.es.business.petition.PetitionService;
 import com.uniovi.es.exceptions.AttempsException;
 import com.uniovi.es.exceptions.ExperimentException;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.PetitionException;
 import com.uniovi.es.model.types.Device;
@@ -326,7 +327,7 @@ public class InvestigatorTest {
 	 * Se prueba la edición de los datos de un investigador de manera correcta
 	 * @throws InvestigatorException
 	 */
-	public void test19updateInvestigator() throws InvestigatorException, AttempsException {
+	public void test19updateInvestigator() throws InvestigatorException, AttempsException, ForbiddenException {
 		
 		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -370,7 +371,7 @@ public class InvestigatorTest {
 	 * Edición de un investigador con error 201 (El nombre es obligatorio)
 	 * @throws InvestigatorException, nombre obligatorio
 	 */
-	public void test20UpdateInvestigatorERROR201() throws InvestigatorException, AttempsException {
+	public void test20UpdateInvestigatorERROR201() throws InvestigatorException, AttempsException, ForbiddenException {
 		
 		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -409,7 +410,7 @@ public class InvestigatorTest {
 	 * Edición de un investigador con error 202 (Los apellidos son obligatorios)
 	 * @throws InvestigatorException, apellidos obligatorios
 	 */
-	public void test21UpdateInvestigatorERROR202() throws InvestigatorException, AttempsException {
+	public void test21UpdateInvestigatorERROR202() throws InvestigatorException, AttempsException, ForbiddenException {
 		
 		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -448,7 +449,7 @@ public class InvestigatorTest {
 	 * Edición de un investigador con error 203 (Email obligatorio)
 	 * @throws InvestigatorException, email obligatorio
 	 */
-	public void test22UpdateInvestigatorERROR203() throws InvestigatorException, AttempsException {
+	public void test22UpdateInvestigatorERROR203() throws InvestigatorException, AttempsException, ForbiddenException {
 		
 		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -487,7 +488,7 @@ public class InvestigatorTest {
 	 * Edición de un investigador con error 204 (Email ya registrado)
 	 * @throws InvestigatorException, email ya registrado
 	 */
-	public void test23UpdateInvestigatorERROR204() throws InvestigatorException, AttempsException {
+	public void test23UpdateInvestigatorERROR204() throws InvestigatorException, AttempsException, ForbiddenException {
 		
 		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -538,7 +539,7 @@ public class InvestigatorTest {
 	 * Edición de un investigador con error 205 (username obligatorio)
 	 * @throws InvestigatorException, username obligatorio
 	 */
-	public void test24UpdateInvestigatorERROR205() throws InvestigatorException, AttempsException {
+	public void test24UpdateInvestigatorERROR205() throws InvestigatorException, AttempsException, ForbiddenException {
 		
 		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -578,7 +579,7 @@ public class InvestigatorTest {
 	 * Edición de un investigador con error 206 (username ya registrado)
 	 * @throws InvestigatorException, username ya registrado
 	 */
-	public void test25UpdateInvestigatorERROR206() throws InvestigatorException, AttempsException {
+	public void test25UpdateInvestigatorERROR206() throws InvestigatorException, AttempsException, ForbiddenException {
 		
 		//CREAMOS el investigador
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -659,7 +660,7 @@ public class InvestigatorTest {
 		try {
 			investigatorService.updateInvestigator(dto);
 			Assert.fail("Debe lanzarse excepción.");
-		} catch (InvestigatorException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("210", e.getMessage());
 		}
 	}
@@ -671,7 +672,7 @@ public class InvestigatorTest {
 	 * @throws ExperimentException
 	 * @throws PetitionException
 	 */
-	public void test27getPetitionsPending() throws InvestigatorException, ExperimentException, PetitionException, AttempsException {
+	public void test27getPetitionsPending() throws InvestigatorException, ExperimentException, PetitionException, AttempsException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();

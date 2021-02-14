@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import com.uniovi.es.business.experiment.commands.Open;
 import com.uniovi.es.business.experiment.commands.ReOpen;
 import com.uniovi.es.business.validators.ExperimentValidator;
 import com.uniovi.es.exceptions.ExperimentException;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
@@ -71,14 +74,14 @@ public class ExperimentServiceImpl implements ExperimentService{
 	}
 		
 	@Override
-	public void register(ExperimentDTO dto) throws ExperimentException, InvestigatorException {
+	public void register(ExperimentDTO dto) throws ExperimentException, InvestigatorException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- register experiment");
 		
 		//Se comprueba que el id del investigador que nos llega del cliente es el que se encuentra en sesión
 		Investigator investigatorInSession = userInSession.getInvestigator();
 		if(investigatorInSession == null || investigatorInSession.getId() != dto.idInvestigator) {
 			logger.error("[ERROR - 115] -- Los identificadores del investigador del cliente con el de sesión del servidor son distintos");
-			throw new ExperimentException("115");
+			throw new ForbiddenException("115");
 		}
 		
 		logger.info("\t \t Obteniendo el investigador a partir del ID: " + dto.idInvestigator);
@@ -116,7 +119,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 	}
 
 	@Override
-	public void update(ExperimentDTO dto) throws ExperimentException {
+	public void update(ExperimentDTO dto) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- update experiment");
 		
 		isManager(dto.id);
@@ -135,7 +138,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 	}
 	
 	@Override
-	public ExperimentDTO getDetail(Long id) throws ExperimentException {
+	public ExperimentDTO getDetail(Long id) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- detail experiment");
 
 		logger.info("\t \t Obteniendo el experimento a partir del ID: " + id);
@@ -144,7 +147,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 		
 		if(petitionDAO.isInvestigatorAssociatedExperiment(userInSession.getInvestigator().getId(), id) == null) {
 			logger.error("[ERROR -- 117] - Los datos del experimento solo pueden ser visualizados por investigadores asociados al experimento.");
-			throw new ExperimentException("117");
+			throw new ForbiddenException("117");
 		}
 		
 		logger.info("\t \t Obteniendo los datos del creador del experimento con ID: " + id);
@@ -156,7 +159,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 	}
 	
 	@Override
-	public void open(Identifier id) throws ExperimentException {
+	public void open(Identifier id) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- open experiment");
 		
 		if(id == null) {
@@ -182,7 +185,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 
 
 	@Override
-	public void reOpen(Identifier id) throws ExperimentException {
+	public void reOpen(Identifier id) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- reOpen experiment");
 		
 		if(id == null) {
@@ -207,7 +210,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 	}
 
 	@Override
-	public void close(Identifier id) throws ExperimentException {
+	public void close(Identifier id) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- close experiment");
 		
 		if(id == null) {
@@ -232,7 +235,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 	}
 
 	@Override
-	public void delete(Identifier id) throws ExperimentException {
+	public void delete(Identifier id) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- delete experiment");
 
 		if(id == null) {
@@ -257,8 +260,13 @@ public class ExperimentServiceImpl implements ExperimentService{
 	}
 	
 	@Override
-	public List<InvestigatorDTO> getInvestigatorsOfExperiment(Long id) throws ExperimentException {
+	public List<InvestigatorDTO> getInvestigatorsOfExperiment(Long id) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- getInvestigatorsOfExperiment");
+		
+		if(petitionDAO.isInvestigatorAssociatedExperiment(userInSession.getInvestigator().getId(), id) == null) {
+			logger.error("[ERROR -- 117] - Los datos del experimento solo pueden ser visualizados por investigadores asociados al experimento.");
+			throw new ForbiddenException("117");
+		}
 		
 		List<Petition> list = petitionDAO.findByIdExperiment(id, StatusPetition.ACCEPTED);
 		
@@ -271,14 +279,14 @@ public class ExperimentServiceImpl implements ExperimentService{
 	 * @param idExperiment identificador del experimento que se quiere pasar como parámetro.
 	 * @throws ExperimentException 
 	 */
-	private void isManager(Long idExperiment) throws ExperimentException {
+	private void isManager(Long idExperiment) throws ExperimentException, ForbiddenException {
 		
 		logger.info("Se comprueba si el investigador es gestor del experimento");
 		
 		Investigator investigator = userInSession.getInvestigator();
 		if(investigator == null) {
 			logger.error("[ERROR -- 116] - Un experimento solo puede ser gestionado por sus investigadores gestores");
-			throw new ExperimentException("116");
+			throw new ForbiddenException("116");
 		}
 		
 		//Comprobamos si el investigador es gestor del experimento
@@ -286,7 +294,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 		
 		if(p == null) {
 			logger.error("[ERROR -- 116] - Un experimento solo puede ser gestionado por sus investigadores gestores");
-			throw new ExperimentException("116");
+			throw new ForbiddenException("116");
 		}
 		
 	}

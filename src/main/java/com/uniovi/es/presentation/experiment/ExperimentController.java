@@ -7,6 +7,7 @@ import com.uniovi.es.business.dto.DeviceDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.exceptions.ExperimentException;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.utils.Identifier;
 
@@ -18,7 +19,7 @@ public interface ExperimentController {
 	 * @throws ExperimentException 
 	 * @throws InvestigatorException 
 	 */
-	public void registerExperiment(ExperimentDTO dto) throws ExperimentException, InvestigatorException;
+	public void registerExperiment(ExperimentDTO dto) throws ExperimentException, InvestigatorException, ForbiddenException;
 	
 	/**
 	 * Recibe una petición para obtener el experimento a partir del id
@@ -26,14 +27,14 @@ public interface ExperimentController {
 	 * @return los datos del experimento
 	 * @throws ExperimentException 
 	 */
-	public ExperimentDTO getExperiment(Long id) throws ExperimentException;
+	public ExperimentDTO getExperiment(Long id) throws ExperimentException, ForbiddenException, ForbiddenException;
 	
 	/**
 	 * Recibe una petición para realizar la edición de los datos de un experimento
 	 * @param dto, los nuevos datos del experimento
 	 * @throws ExperimentException 
 	 */
-	public void editExperiment(ExperimentDTO dto) throws ExperimentException;
+	public void editExperiment(ExperimentDTO dto) throws ExperimentException, ForbiddenException;
 	
 	/**
 	 * Recibe una petición para cambiarle el estado del experimento que se pasa
@@ -42,7 +43,7 @@ public interface ExperimentController {
 	 * @param id, identificador del experimento que se desea abrir
 	 * @throws ExperimentException 
 	 */
-	public void openExperiment(Identifier id) throws ExperimentException;
+	public void openExperiment(Identifier id) throws ExperimentException, ForbiddenException;
 	
 	/**
 	 * Recibe una petición para cambiarle el estado del experimento que se pasa
@@ -51,7 +52,7 @@ public interface ExperimentController {
 	 * @param id, identificador del experimento que se desea abrir
 	 * @throws ExperimentException 
 	 */
-	public void closeExperiment(Identifier id) throws ExperimentException;
+	public void closeExperiment(Identifier id) throws ExperimentException, ForbiddenException;
 	
 	/**
 	 * Recibe una petición para cambiarle el estado del experimento que se pasa
@@ -60,7 +61,7 @@ public interface ExperimentController {
 	 * @param id, identificador del experimento que se desea abrir
 	 * @throws ExperimentException 
 	 */
-	public void deleteExperiment(Identifier id) throws ExperimentException;
+	public void deleteExperiment(Identifier id) throws ExperimentException, ForbiddenException;
 	
 	/**
 	 * Recibe una petición para cambiarle el estado del experimento que se pasa
@@ -69,7 +70,7 @@ public interface ExperimentController {
 	 * @param id, identificador del experimento que se desea abrir
 	 * @throws ExperimentException 
 	 */
-	public void reOpenExperiment(Identifier id) throws ExperimentException;
+	public void reOpenExperiment(Identifier id) throws ExperimentException, ForbiddenException;
 	
 	/**
 	 * Recibe una petición para obtener la lista de investigadores asociados a un experimento
@@ -77,7 +78,7 @@ public interface ExperimentController {
 	 * @return lista de investigadores asociados al experimento
 	 * @throws ExperimentException, en caso de que el identificador no exista en base de datos
 	 */
-	public List<InvestigatorDTO> getInvestigatorsOfExperiment(Long id) throws ExperimentException; 
+	public List<InvestigatorDTO> getInvestigatorsOfExperiment(Long id) throws ExperimentException, ForbiddenException; 
 	
 	/**
 	 * Recibe una petición para obtener la lista de experimentos del sistema

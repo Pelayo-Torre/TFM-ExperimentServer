@@ -18,6 +18,7 @@ import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.experiment.ExperimentService;
 import com.uniovi.es.exceptions.ExperimentException;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.utils.Identifier;
 
@@ -33,7 +34,7 @@ public class ExperimentControllerImpl implements ExperimentController {
 
 	@Override
 	@RequestMapping(value = "/open", method = RequestMethod.PUT, consumes="application/json")
-	public void openExperiment(@RequestBody Identifier id) throws ExperimentException {
+	public void openExperiment(@RequestBody Identifier id) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- open experiment");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + id);
 		
@@ -44,7 +45,7 @@ public class ExperimentControllerImpl implements ExperimentController {
 
 	@Override
 	@RequestMapping(value = "/close", method = RequestMethod.PUT, consumes="application/json")
-	public void closeExperiment(@RequestBody Identifier id) throws ExperimentException {
+	public void closeExperiment(@RequestBody Identifier id) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- close experiment");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + id);
 
@@ -55,7 +56,7 @@ public class ExperimentControllerImpl implements ExperimentController {
 
 	@Override
 	@RequestMapping(value = "/delete", method = RequestMethod.PUT)
-	public void deleteExperiment(@RequestBody Identifier id) throws ExperimentException {
+	public void deleteExperiment(@RequestBody Identifier id) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- delete experiment");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + id);
 
@@ -66,7 +67,7 @@ public class ExperimentControllerImpl implements ExperimentController {
 	
 	@Override
 	@RequestMapping(value = "/reopen", method = RequestMethod.PUT, consumes="application/json")
-	public void reOpenExperiment(@RequestBody Identifier id) throws ExperimentException {
+	public void reOpenExperiment(@RequestBody Identifier id) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- reOpen experiment");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + id);
 
@@ -77,7 +78,7 @@ public class ExperimentControllerImpl implements ExperimentController {
 
 	@Override
 	@RequestMapping(value = "/register", method = RequestMethod.POST, consumes="application/json")
-	public void registerExperiment(@RequestBody ExperimentDTO dto) throws ExperimentException, InvestigatorException {
+	public void registerExperiment(@RequestBody ExperimentDTO dto) throws ExperimentException, InvestigatorException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- register experiment");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + dto);
 
@@ -88,7 +89,7 @@ public class ExperimentControllerImpl implements ExperimentController {
 
 	@Override
 	@RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-	public ExperimentDTO getExperiment(@PathVariable Long id) throws ExperimentException {
+	public ExperimentDTO getExperiment(@PathVariable Long id) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- detail experiment");
 		
 		ExperimentDTO dto = experimentService.getDetail(id);
@@ -99,7 +100,7 @@ public class ExperimentControllerImpl implements ExperimentController {
 
 	@Override
 	@RequestMapping(value = "/update", method = RequestMethod.PUT, consumes="application/json")
-	public void editExperiment(@RequestBody ExperimentDTO dto) throws ExperimentException{
+	public void editExperiment(@RequestBody ExperimentDTO dto) throws ExperimentException, ForbiddenException{
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- update experiment");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + dto);
 
@@ -111,7 +112,7 @@ public class ExperimentControllerImpl implements ExperimentController {
 
 	@Override
 	@RequestMapping(value = "/investigators/{id}", method = RequestMethod.GET)
-	public List<InvestigatorDTO> getInvestigatorsOfExperiment(@PathVariable Long id) throws ExperimentException {
+	public List<InvestigatorDTO> getInvestigatorsOfExperiment(@PathVariable Long id) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT CONTROLLER -- investigators of experiment");
 		logger.info("\t \t PARÁMETROS DE ENTRADA: " + id);
 		

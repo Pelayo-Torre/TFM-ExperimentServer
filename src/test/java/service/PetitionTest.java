@@ -31,6 +31,7 @@ import com.uniovi.es.business.investigator.InvestigatorService;
 import com.uniovi.es.business.petition.PetitionService;
 import com.uniovi.es.exceptions.AttempsException;
 import com.uniovi.es.exceptions.ExperimentException;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.PetitionException;
 import com.uniovi.es.model.types.Device;
@@ -104,7 +105,7 @@ public class PetitionTest {
 	 * @throws ExperimentException
 	 * @throws PetitionException
 	 */
-	public void test10RegisterPetition() throws InvestigatorException, ExperimentException, PetitionException, AttempsException {
+	public void test10RegisterPetition() throws InvestigatorException, ExperimentException, PetitionException, AttempsException, ForbiddenException {
 		//CREAMOS otro investigador
 		InvestigatorDTO dto2 = new InvestigatorDTO();
 		dto2.name = "Juan";
@@ -251,7 +252,7 @@ public class PetitionTest {
 	 * Se prueba aceptar una petición que se encuentra en estado PENDING
 	 * @throws PetitionException
 	 */
-	public void test16AcceptPetition() throws PetitionException, InvestigatorException, AttempsException, ExperimentException {
+	public void test16AcceptPetition() throws PetitionException, InvestigatorException, AttempsException, ExperimentException, ForbiddenException {
 		
 		//REGISTRAMOS EL INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -315,7 +316,7 @@ public class PetitionTest {
 	 * Se prueba a rechazar una petición que se encuentra en estado ACCEPTED
 	 * @throws PetitionException No se puede rechazar una petición en estado ACCEPTED
 	 */
-	public void test18RejectPetitionERROR302() throws PetitionException, AttempsException, InvestigatorException, ExperimentException{
+	public void test18RejectPetitionERROR302() throws PetitionException, AttempsException, InvestigatorException, ExperimentException, ForbiddenException{
 		
 		//REGISTRAMOS EL INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -386,7 +387,7 @@ public class PetitionTest {
 	 * Se prueba a cancelar una petición que se encuentra en estado ACCEPTED
 	 * @throws PetitionException
 	 */
-	public void test19CancelPetition() throws PetitionException, AttempsException, InvestigatorException, ExperimentException{
+	public void test19CancelPetition() throws PetitionException, AttempsException, InvestigatorException, ExperimentException, ForbiddenException{
 		
 		//REGISTRAMOS EL INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -455,7 +456,7 @@ public class PetitionTest {
 	 * Se prueba a rechazar una petición
 	 * @throws PetitionException
 	 */
-	public void test20RejectPetition() throws PetitionException, InvestigatorException, ExperimentException, AttempsException {
+	public void test20RejectPetition() throws PetitionException, InvestigatorException, ExperimentException, AttempsException, ForbiddenException {
 		
 		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -521,7 +522,7 @@ public class PetitionTest {
 	 * Se prueba a rechazar una aceptar una petición como investegador que no recibe la petición.
 	 * @throws PetitionException
 	 */
-	public void test21ResponseAPetitionSecurityERROR001() throws PetitionException, InvestigatorException, ExperimentException, AttempsException {
+	public void test21ResponseAPetitionSecurityERROR001() throws PetitionException, InvestigatorException, ExperimentException, AttempsException, ForbiddenException {
 		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Alberto";
@@ -570,7 +571,7 @@ public class PetitionTest {
 		try {
 			petitionService.accept(new Identifier(petitionDTO.id));
 			Assert.fail("Debe lanzarse excepción.");
-		} catch (PetitionException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("305", e.getMessage());
 		}
 	}
@@ -580,7 +581,7 @@ public class PetitionTest {
 	 * Se prueba a cancelar una petición en estado PENDING por el usuario que la recibe
 	 * @throws PetitionException
 	 */
-	public void test22ResponseCancelAPetitionSecurityERROR002() throws PetitionException, InvestigatorException, ExperimentException, AttempsException {
+	public void test22ResponseCancelAPetitionSecurityERROR002() throws PetitionException, InvestigatorException, ExperimentException, AttempsException, ForbiddenException {
 		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Daniela";
@@ -635,7 +636,7 @@ public class PetitionTest {
 		try {
 			petitionService.cancel(new Identifier(petitionDTO.id));
 			Assert.fail("Debe lanzarse excepción.");
-		} catch (PetitionException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("306", e.getMessage());
 		}
 	}
@@ -645,7 +646,7 @@ public class PetitionTest {
 	 * Se prueba a cancelar una petición en estado PENDING por el usuario que la envía
 	 * @throws PetitionException
 	 */
-	public void test23ResponseCancelAPetitionSecurity() throws PetitionException, InvestigatorException, ExperimentException, AttempsException {
+	public void test23ResponseCancelAPetitionSecurity() throws PetitionException, InvestigatorException, ExperimentException, AttempsException, ForbiddenException {
 		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Paola";
@@ -702,7 +703,7 @@ public class PetitionTest {
 	 * Se prueba a cancelar una petición en estado ACEPTADA por el usuario que la recibe y la acepta
 	 * @throws PetitionException
 	 */
-	public void test24ResponseCancelAcceptedPetitionSecurity() throws PetitionException, InvestigatorException, ExperimentException, AttempsException {
+	public void test24ResponseCancelAcceptedPetitionSecurity() throws PetitionException, InvestigatorException, ExperimentException, AttempsException, ForbiddenException {
 		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Coral";
@@ -774,7 +775,7 @@ public class PetitionTest {
 	 * Se prueba a cancelar una petición en estado ACEPTADA por un usuario que ni la recibe ni la emite
 	 * @throws PetitionException
 	 */
-	public void test25ResponseCancelAcceptedPetitionSecurityERROR003() throws PetitionException, InvestigatorException, ExperimentException, AttempsException {
+	public void test25ResponseCancelAcceptedPetitionSecurityERROR003() throws PetitionException, InvestigatorException, ExperimentException, AttempsException, ForbiddenException {
 		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Celsa";
@@ -854,7 +855,7 @@ public class PetitionTest {
 		try {
 			petitionService.cancel(new Identifier(petitionDTO.id));
 			Assert.fail("Debe lanzarse excepción.");
-		} catch (PetitionException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("307", e.getMessage());
 		}
 	}

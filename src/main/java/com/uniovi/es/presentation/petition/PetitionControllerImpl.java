@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.business.petition.PetitionService;
 import com.uniovi.es.exceptions.ExperimentException;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.PetitionException;
 import com.uniovi.es.utils.Identifier;
@@ -41,7 +42,7 @@ public class PetitionControllerImpl implements PetitionController{
 
 	@Override
 	@RequestMapping(value = "/accept", method = RequestMethod.PUT)
-	public void accept(@RequestBody Identifier id) throws PetitionException {
+	public void accept(@RequestBody Identifier id) throws PetitionException, ForbiddenException {
 		logger.info("[INICIO] PETITION CONTROLLER -- accept petition");
 		
 		petitionService.accept(id);
@@ -51,7 +52,7 @@ public class PetitionControllerImpl implements PetitionController{
 	
 	@Override
 	@RequestMapping(value = "/reject", method = RequestMethod.PUT)
-	public void reject(@RequestBody Identifier id) throws PetitionException {
+	public void reject(@RequestBody Identifier id) throws PetitionException, ForbiddenException {
 		logger.info("[INICIO] PETITION CONTROLLER -- reject petition");
 		
 		petitionService.reject(id);
@@ -61,7 +62,7 @@ public class PetitionControllerImpl implements PetitionController{
 
 	@Override
 	@RequestMapping(value = "/cancel", method = RequestMethod.PUT)
-	public void cancel(@RequestBody Identifier id) throws PetitionException {
+	public void cancel(@RequestBody Identifier id) throws PetitionException, ForbiddenException {
 		logger.info("[INICIO] PETITION CONTROLLER -- cancel petition");
 		
 		petitionService.cancel(id);

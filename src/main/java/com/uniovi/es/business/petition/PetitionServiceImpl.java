@@ -16,6 +16,7 @@ import com.uniovi.es.business.petition.commands.Cancel;
 import com.uniovi.es.business.petition.commands.Reject;
 import com.uniovi.es.business.validators.PetitionValidator;
 import com.uniovi.es.exceptions.ExperimentException;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.PetitionException;
 import com.uniovi.es.model.Experiment;
@@ -76,7 +77,7 @@ public class PetitionServiceImpl implements PetitionService{
 	}
 
 	@Override
-	public void accept(Identifier id) throws PetitionException {
+	public void accept(Identifier id) throws PetitionException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- accept petition");
 		
 		if(id == null) {
@@ -91,7 +92,7 @@ public class PetitionServiceImpl implements PetitionService{
 		Investigator investigator = userInSession.getInvestigator();
 		if(investigator == null || investigator.getId() != petition.getInvestigator().getId()) {
 			logger.error("[ERROR -- 305] - Una petición solo puede ser aceptada o rechazada por el investigador receptor de dicha petición");
-			throw new PetitionException("305");
+			throw new ForbiddenException("305");
 		}
 		
 		actionManager.setPetition(petition);
@@ -104,7 +105,7 @@ public class PetitionServiceImpl implements PetitionService{
 	}
 	
 	@Override
-	public void reject(Identifier id) throws PetitionException {
+	public void reject(Identifier id) throws PetitionException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- reject petition");
 		
 		if(id == null) {
@@ -119,7 +120,7 @@ public class PetitionServiceImpl implements PetitionService{
 		Investigator investigator = userInSession.getInvestigator();
 		if(investigator == null || investigator.getId() != petition.getInvestigator().getId()) {
 			logger.error("[ERROR -- 305] - Una petición solo puede ser aceptada o rechazada por el investigador receptor de dicha petición");
-			throw new PetitionException("305");
+			throw new ForbiddenException("305");
 		}
 		
 		actionManager.setPetition(petition);
@@ -132,7 +133,7 @@ public class PetitionServiceImpl implements PetitionService{
 	}
 
 	@Override
-	public void cancel(Identifier id) throws PetitionException {
+	public void cancel(Identifier id) throws PetitionException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- cancel petition");
 		
 		if(id == null) {
@@ -149,14 +150,14 @@ public class PetitionServiceImpl implements PetitionService{
 		if(petition.getStatus().equals(StatusPetition.PENDING) && 
 				(investigator == null || investigator.getId() != petition.getIdInvestigatorSend())) {
 			logger.error("[ERROR -- 306] - Una petición solo puede ser cancelada por el investigador emisor de dicha petición si está en estado PENDING");
-			throw new PetitionException("306");
+			throw new ForbiddenException("306");
 		}
 		//Si la petición está en estado ACEPTADA solo la pueden cancelar el emisor y el receptor
 		else if(petition.getStatus().equals(StatusPetition.ACCEPTED) && 
 				(investigator == null || 
 				(investigator.getId() != petition.getIdInvestigatorSend() && investigator.getId() != petition.getInvestigator().getId()))) {
 			logger.error("[ERROR -- 307] - Una petición solo puede ser cancelada por el investigador emisor de dicha petición si está en estado PENDING");
-			throw new PetitionException("307");
+			throw new ForbiddenException("307");
 		}
 		
 		actionManager.setPetition(petition);

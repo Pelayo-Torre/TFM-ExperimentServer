@@ -29,6 +29,7 @@ import com.uniovi.es.business.experiment.ExperimentService;
 import com.uniovi.es.business.investigator.InvestigatorService;
 import com.uniovi.es.exceptions.AttempsException;
 import com.uniovi.es.exceptions.ExperimentException;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.model.types.Device;
 import com.uniovi.es.model.types.Gender;
@@ -80,7 +81,7 @@ public class ExperimentTest {
 	 * @throws InvestigatorException
 	 * @throws ExperimentException
 	 */
-	public void test10RegisterExperiment() throws InvestigatorException, ExperimentException, AttempsException {
+	public void test10RegisterExperiment() throws InvestigatorException, ExperimentException, AttempsException, ForbiddenException {
 			
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -129,7 +130,7 @@ public class ExperimentTest {
 	 * Se prueba el registro de un experimento de manera incorrecta (título sin especificar)
 	 * @throws ExperimentException el título es un campo obligatorio
 	 */
-	public void test11RegisterExperimentERROR105() throws ExperimentException, InvestigatorException, AttempsException{
+	public void test11RegisterExperimentERROR105() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException{
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -171,7 +172,7 @@ public class ExperimentTest {
 	 * Se prueba el registro de un experimento de manera incorrecta (descripción sin especificar)
 	 * @throws ExperimentException la descripción es un campo obligatorio
 	 */
-	public void test12RegisterExperimentERROR106() throws ExperimentException, InvestigatorException, AttempsException{
+	public void test12RegisterExperimentERROR106() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException{
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -245,7 +246,7 @@ public class ExperimentTest {
 		try {
 			experimentService.register(experientDTO);
 			Assert.fail("Debe lanzarse excepción.");
-		} catch (ExperimentException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("115", e.getMessage());
 		}
 	}
@@ -255,7 +256,7 @@ public class ExperimentTest {
 	 * Se prueba la edición de los datos de un experimento de manera correcta
 	 * @throws ExperimentException
 	 */
-	public void test14UpdateExperiment() throws ExperimentException, InvestigatorException, AttempsException{
+	public void test14UpdateExperiment() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException{
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -312,7 +313,7 @@ public class ExperimentTest {
 	 * Se prueba la edición de un experimento de manera incorrecta (título sin especificar)
 	 * @throws ExperimentException el título es un campo obligatorio
 	 */
-	public void test15UpdateExperimentERROR105() throws ExperimentException, InvestigatorException, AttempsException{
+	public void test15UpdateExperimentERROR105() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException{
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -365,7 +366,7 @@ public class ExperimentTest {
 	 * Se prueba la edición de un experimento de manera incorrecta (descripción sin especificar)
 	 * @throws ExperimentException la descripción es un campo obligatorio
 	 */
-	public void test16UpdateExperimentERROR106() throws ExperimentException, InvestigatorException, AttempsException{
+	public void test16UpdateExperimentERROR106() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException{
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -430,7 +431,7 @@ public class ExperimentTest {
 		try {
 			experimentService.update(experientDTO);
 			Assert.fail("Debe lanzarse excepción.");
-		} catch (ExperimentException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("116", e.getMessage());
 		}
 	}
@@ -440,7 +441,7 @@ public class ExperimentTest {
 	 * Se prueba el detalle de un experimento de manera incorrecta (Experimento no existe)
 	 * @throws ExperimentException experimento no existe
 	 */
-	public void test19DetailExperimentERROR100() throws ExperimentException{
+	public void test19DetailExperimentERROR100() throws ExperimentException, ForbiddenException{
 			
 		try {
 			experimentService.getDetail(ID_NOT_EXIST);
@@ -455,7 +456,7 @@ public class ExperimentTest {
 	 * Se prueba a obtener la lista de investigadores asociados a un experimento
 	 * @throws ExperimentException
 	 */
-	public void test20InvestigatorsOfExperiments() throws ExperimentException, InvestigatorException, AttempsException{
+	public void test20InvestigatorsOfExperiments() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException{
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -505,12 +506,31 @@ public class ExperimentTest {
 	 * Se prueba a obtener la lista de investigadores asociados a un experimento que no existe
 	 * @throws ExperimentException
 	 */
-	public void test21InvestigatorsOfExperimentsERROR100() throws ExperimentException{
+	public void test21InvestigatorsOfExperimentsERROR100() throws ExperimentException, ForbiddenException, InvestigatorException, AttempsException{
 		
-		List<InvestigatorDTO> investigators = experimentService.getInvestigatorsOfExperiment(ID_NOT_EXIST);
+		//REGISTRAMOS UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Junior";
+		dto.surname = "Garcia";
+		dto.username = "junior123";
+		dto.mail = "junior@gmail.com";
+		dto.password = "123456789";
 		
-		assertNotNull(investigators);
-		assertEquals(0, investigators.size());		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "junior123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		try {
+			experimentService.getInvestigatorsOfExperiment(ID_NOT_EXIST);
+			Assert.fail("Debe lanzarse excepción.");
+		}
+		catch(ForbiddenException e) {
+			assertEquals("117", e.getMessage());
+		}
 	}
 	
 	@Test
@@ -519,7 +539,7 @@ public class ExperimentTest {
 	 * @throws InvestigatorException
 	 * @throws ExperimentException
 	 */
-	public void test23OpenExperiment() throws InvestigatorException, ExperimentException, AttempsException {
+	public void test23OpenExperiment() throws InvestigatorException, ExperimentException, AttempsException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -567,7 +587,7 @@ public class ExperimentTest {
 	 * Se prueba a cambiar el estado de un experimento a OPEN cuando no está CLOSED o CREATED
 	 * @throws ExperimentException no se puede cambiar el estado del experimento de OPEN a OPEN
 	 */
-	public void test24OpenExperimentERROR101() throws ExperimentException, InvestigatorException, AttempsException {
+	public void test24OpenExperimentERROR101() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -622,7 +642,7 @@ public class ExperimentTest {
 	 * Se prueba a eliminar un experimento que se encuentra en estado OPEN
 	 * @throws ExperimentException, el experimento está en estado OPEN
 	 */
-	public void test25DeleteExperimentERROR104() throws ExperimentException, InvestigatorException, AttempsException {
+	public void test25DeleteExperimentERROR104() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -677,7 +697,7 @@ public class ExperimentTest {
 	 * Se prueba a reabrir un experimento que se encuentra en estado OPEN
 	 * @throws ExperimentException no se puede reAbrir un experimento que está en estado ABIERTO
 	 */
-	public void test26ReOpenExperimentERROR102() throws ExperimentException, InvestigatorException, AttempsException {
+	public void test26ReOpenExperimentERROR102() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -733,7 +753,7 @@ public class ExperimentTest {
 	 * Se prueba a cerrar un experimento que se encuentra en estado OPEN
 	 * @throws ExperimentException
 	 */
-	public void test27CloseExperiment() throws ExperimentException, InvestigatorException, AttempsException {
+	public void test27CloseExperiment() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -786,7 +806,7 @@ public class ExperimentTest {
 	 * Se prueba a reAbrir un experimento que se encuentra en estado CLOSED
 	 * @throws ExperimentException
 	 */
-	public void test28ReOpenExperiment() throws ExperimentException, InvestigatorException, AttempsException {
+	public void test28ReOpenExperiment() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -847,7 +867,7 @@ public class ExperimentTest {
 	 * Se prueba a eliminar un experimento que se encuentra en estado OPEN
 	 * @throws ExperimentException
 	 */
-	public void test29DELETEExperiment() throws ExperimentException, InvestigatorException, AttempsException {
+	public void test29DELETEExperiment() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -907,7 +927,7 @@ public class ExperimentTest {
 	 * Se registra un experimento sin el género como campo obligatorio sin rellenar
 	 * @throws InvestigatorException 
 	 */
-	public void test30RegisterExperimentERROR110() throws InvestigatorException, AttempsException {
+	public void test30RegisterExperimentERROR110() throws InvestigatorException, AttempsException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -950,7 +970,7 @@ public class ExperimentTest {
 	 * Se registra un experimento sin la fecha de nacimento como campo obligatorio sin rellenar
 	 * @throws InvestigatorException 
 	 */
-	public void test31RegisterExperimentERROR111() throws InvestigatorException, AttempsException {
+	public void test31RegisterExperimentERROR111() throws InvestigatorException, AttempsException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -992,7 +1012,7 @@ public class ExperimentTest {
 	 * Se registra un experimento con la lateralidad informada incorrectamente
 	 * @throws InvestigatorException 
 	 */
-	public void test32RegisterExperimentERROR112() throws InvestigatorException, AttempsException {
+	public void test32RegisterExperimentERROR112() throws InvestigatorException, AttempsException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -1035,7 +1055,7 @@ public class ExperimentTest {
 	 * Se registra un experimento sin un dispositivo sin especificar como campo obligatorio
 	 * @throws InvestigatorException 
 	 */
-	public void test33RegisterExperimentERROR113() throws InvestigatorException, AttempsException {
+	public void test33RegisterExperimentERROR113() throws InvestigatorException, AttempsException, ForbiddenException {
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Gonzalo";
@@ -1077,7 +1097,7 @@ public class ExperimentTest {
 	 * Se registra un experimento con un dispositivo registrado en el sistema
 	 * @throws InvestigatorException 
 	 */
-	public void test34RegisterExperimentERROR114() throws InvestigatorException, AttempsException {
+	public void test34RegisterExperimentERROR114() throws InvestigatorException, AttempsException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -1122,7 +1142,7 @@ public class ExperimentTest {
 	 * @throws AttempsException
 	 * @throws ExperimentException
 	 */
-	public void test35UpdateExperimentByInvestigatorNotManager() throws InvestigatorException, AttempsException, ExperimentException {
+	public void test35UpdateExperimentByInvestigatorNotManager() throws InvestigatorException, AttempsException, ExperimentException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -1182,7 +1202,7 @@ public class ExperimentTest {
 		try {
 			experimentService.update(experientDTO);
 			Assert.fail("Debe lanzarse excepción.");
-		} catch (ExperimentException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("116", e.getMessage());
 		}
 	}
@@ -1194,7 +1214,7 @@ public class ExperimentTest {
 	 * @throws AttempsException
 	 * @throws ExperimentException
 	 */
-	public void test36OpenExperimentByInvestigatorNotManager() throws InvestigatorException, AttempsException, ExperimentException {
+	public void test36OpenExperimentByInvestigatorNotManager() throws InvestigatorException, AttempsException, ExperimentException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -1248,7 +1268,7 @@ public class ExperimentTest {
 		try {
 			experimentService.open(new Identifier(experiments.get(experiments.size()-1).id));
 			Assert.fail("Debe lanzarse excepción.");
-		} catch (ExperimentException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("116", e.getMessage());
 		}
 	}
@@ -1260,7 +1280,7 @@ public class ExperimentTest {
 	 * @throws AttempsException
 	 * @throws ExperimentException
 	 */
-	public void test37DeleteExperimentByInvestigatorNotManager() throws InvestigatorException, AttempsException, ExperimentException {
+	public void test37DeleteExperimentByInvestigatorNotManager() throws InvestigatorException, AttempsException, ExperimentException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -1314,7 +1334,7 @@ public class ExperimentTest {
 		try {
 			experimentService.delete(new Identifier(experiments.get(experiments.size()-1).id));
 			Assert.fail("Debe lanzarse excepción.");
-		} catch (ExperimentException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("116", e.getMessage());
 		}
 	}
@@ -1326,7 +1346,7 @@ public class ExperimentTest {
 	 * @throws AttempsException
 	 * @throws ExperimentException
 	 */
-	public void test38CloseExperimentByInvestigatorNotManager() throws InvestigatorException, AttempsException, ExperimentException {
+	public void test38CloseExperimentByInvestigatorNotManager() throws InvestigatorException, AttempsException, ExperimentException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -1383,7 +1403,7 @@ public class ExperimentTest {
 		try {
 			experimentService.close(new Identifier(experiments.get(experiments.size()-1).id));
 			Assert.fail("Debe lanzarse excepción.");
-		} catch (ExperimentException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("116", e.getMessage());
 		}
 	}
@@ -1395,7 +1415,7 @@ public class ExperimentTest {
 	 * @throws AttempsException
 	 * @throws ExperimentException
 	 */
-	public void test39ReOpenExperimentByInvestigatorNotManager() throws InvestigatorException, AttempsException, ExperimentException {
+	public void test39ReOpenExperimentByInvestigatorNotManager() throws InvestigatorException, AttempsException, ExperimentException, ForbiddenException {
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -1455,7 +1475,7 @@ public class ExperimentTest {
 		try {
 			experimentService.reOpen(new Identifier(experiments.get(experiments.size()-1).id));
 			Assert.fail("Debe lanzarse excepción.");
-		} catch (ExperimentException e) {
+		} catch (ForbiddenException e) {
 			assertEquals("116", e.getMessage());
 		}
 	}
@@ -1467,7 +1487,7 @@ public class ExperimentTest {
 	 * @throws AttempsException
 	 * @throws ExperimentException
 	 */
-	public void test40DetailExperimentByInvestigatorNotAssociated() throws InvestigatorException, AttempsException, ExperimentException {
+	public void test40DetailExperimentByInvestigatorNotAssociated() throws InvestigatorException, AttempsException, ExperimentException, ForbiddenException {
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Jorge";
@@ -1522,7 +1542,7 @@ public class ExperimentTest {
 		try {
 			experimentService.getDetail(experiments.get(experiments.size() - 1).id);
 			Assert.fail("Debe lanzarse excepción.");
-		} catch(ExperimentException e) {
+		} catch(ForbiddenException e) {
 			assertEquals("117", e.getMessage());
 		}
 	}

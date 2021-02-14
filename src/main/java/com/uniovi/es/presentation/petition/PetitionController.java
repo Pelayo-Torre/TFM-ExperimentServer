@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.exceptions.ExperimentException;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.PetitionException;
 import com.uniovi.es.utils.Identifier;
@@ -24,21 +25,21 @@ public interface PetitionController {
 	 * @param id, identificador de la petición a aceptar
 	 * @throws PetitionException, en caso de que la petición no exista en la base de datos
 	 */
-	public void accept(Identifier id) throws PetitionException;
+	public void accept(Identifier id) throws PetitionException, ForbiddenException;
 	
 	/**
 	 * Punto de entrada para marcar una petición como rechazada
 	 * @param id, identificador de la petición a rechazar
 	 * @throws PetitionException, en caso de que la petición no exista en la base de datos
 	 */
-	public void reject(Identifier id) throws PetitionException;
+	public void reject(Identifier id) throws PetitionException, ForbiddenException;
 	
 	/**
 	 * Punto de entrada para marcar una petición como cancelada
 	 * @param id, identificador de la petición a cancelar
 	 * @throws PetitionException, en caso de que la petición no exista en la base de datos
 	 */
-	public void cancel(Identifier id) throws PetitionException;
+	public void cancel(Identifier id) throws PetitionException, ForbiddenException;
 	
 	/**
 	 * Punto de entrada para obtener el detalle de una petición

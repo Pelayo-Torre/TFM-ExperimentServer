@@ -16,6 +16,7 @@ import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
 import com.uniovi.es.business.validators.InvestigatorValidator;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
@@ -76,13 +77,13 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 	}
 
 	@Override
-	public void updateInvestigator(InvestigatorDTO dto) throws InvestigatorException {
+	public void updateInvestigator(InvestigatorDTO dto) throws InvestigatorException, ForbiddenException {
 		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- update INVESTIGATOR ");
 		
 		Investigator investigatorInSession = userInSession.getInvestigator();
 		if(investigatorInSession == null || investigatorInSession.getId() != dto.id) {
 			logger.error("[ERROR - 210] -- Un investigador solo puede modificar sus propios datos");
-			throw new InvestigatorException("210");
+			throw new ForbiddenException("210");
 		}
 		
 		logger.info("\t \t Obteniendo el investigador a partir del ID: " + dto.id);
@@ -118,13 +119,13 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 	}
 	
 	@Override
-	public List<ExperimentDTO> getExperimentsAcceptedByIdInvestigator(Long idInvestigator) throws InvestigatorException {
+	public List<ExperimentDTO> getExperimentsAcceptedByIdInvestigator(Long idInvestigator) throws InvestigatorException, ForbiddenException {
 		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- getExperimentsAcceptedByIdInvestigator INVESTIGATOR ");
 		
 		Investigator investigatorInSession = userInSession.getInvestigator();
 		if(investigatorInSession == null || investigatorInSession.getId() != idInvestigator) {
-			logger.error("[ERROR - 210] -- Un investigador solo puede ver los experimentos que él ha aceptado");
-			throw new InvestigatorException("211");
+			logger.error("[ERROR - 211] -- Un investigador solo puede ver los experimentos que él ha aceptado");
+			throw new ForbiddenException("211");
 		}
 		
 		logger.info("\t \t Obteniendo los experimentos del investigador: " + idInvestigator);
@@ -136,13 +137,13 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 	}
 	
 	@Override
-	public List<PetitionDTO> getPetitionsPendingByIdInvestigator(Long idInvestigator) throws InvestigatorException {
+	public List<PetitionDTO> getPetitionsPendingByIdInvestigator(Long idInvestigator) throws InvestigatorException, ForbiddenException {
 		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- getPetitionsPendingByIdInvestigator INVESTIGATOR ");
 		
 		Investigator investigatorInSession = userInSession.getInvestigator();
 		if(investigatorInSession == null || investigatorInSession.getId() != idInvestigator) {
 			logger.error("[ERROR - 212] -- Un investigador solo puede ver los experimentos que él tiene pendientes de responder");
-			throw new InvestigatorException("211");
+			throw new ForbiddenException("212");
 		}
 		
 		logger.info("\t \t Obteniendo las peticiones del investigador: " + idInvestigator);

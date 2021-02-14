@@ -18,6 +18,7 @@ import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Note;
 import com.uniovi.es.exceptions.ExperimentException;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.persistence.BinnacleDAO;
 import com.uniovi.es.persistence.ExperimentDAO;
 import com.uniovi.es.persistence.PetitionDAO;
@@ -44,7 +45,7 @@ public class BinnacleServiceImpl implements BinnacleService{
 	private UserInSession userInSession;
 
 	@Override
-	public void registerNote(NoteDTO dto) throws NoteException, ExperimentException {
+	public void registerNote(NoteDTO dto) throws NoteException, ExperimentException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE SERVICE -- register note");
 		
 		logger.info("\t \t Obteniendo el experimento a partir del ID: " + dto.idExperiment);
@@ -65,7 +66,7 @@ public class BinnacleServiceImpl implements BinnacleService{
 	}
 
 	@Override
-	public void updateNote(NoteDTO dto) throws NoteException {
+	public void updateNote(NoteDTO dto) throws NoteException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE SERVICE -- update note");
 		
 		logger.info("\t \t Obteniendo la nota a partir del ID: " + dto.id);
@@ -84,7 +85,7 @@ public class BinnacleServiceImpl implements BinnacleService{
 	}
 
 	@Override
-	public List<NoteDTO> getNotesByExperiment(Long idExperiment) throws ExperimentException, NoteException {
+	public List<NoteDTO> getNotesByExperiment(Long idExperiment) throws ExperimentException, NoteException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE SERVICE -- notes by experiment");
 		
 		isInvestigatorAssociatedExperiment(idExperiment);
@@ -95,7 +96,7 @@ public class BinnacleServiceImpl implements BinnacleService{
 	}
 
 	@Override
-	public void deleteNote(Identifier id) throws NoteException {
+	public void deleteNote(Identifier id) throws NoteException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE SERVICE -- delete note");
 
 		logger.info("\t \t Obteniendo la nota a partir del ID: " + id.getId());
@@ -113,7 +114,7 @@ public class BinnacleServiceImpl implements BinnacleService{
 	}
 
 	@Override
-	public NoteDTO detail(Long id) throws NoteException {
+	public NoteDTO detail(Long id) throws NoteException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE SERVICE -- detail note");
 
 		logger.info("\t \t Obteniendo la nota a partir del ID: " + id);
@@ -130,12 +131,13 @@ public class BinnacleServiceImpl implements BinnacleService{
 	 * Validamos que el investigador tiene acceso al experimento para gestionar la bitácora
 	 * @param idExperiment
 	 * @throws NoteException
+	 * @throws ForbiddenException 
 	 */
-	private void isInvestigatorAssociatedExperiment(Long idExperiment) throws NoteException{
+	private void isInvestigatorAssociatedExperiment(Long idExperiment) throws NoteException, ForbiddenException{
 		Investigator investigator = userInSession.getInvestigator();
 		if(petitionDAO.isInvestigatorAssociatedExperiment(investigator.getId(), idExperiment) == null) {
 			logger.error("[ERROR -- 403] - El investigador que quiere gestionar la bitácora no se encuentra asociado al experimento.");
-			throw new NoteException("403");
+			throw new ForbiddenException("403");
 		}
 	}
 	

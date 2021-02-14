@@ -16,6 +16,7 @@ import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.business.investigator.InvestigatorService;
+import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 
 
@@ -52,7 +53,7 @@ public class InvestigatorControllerImpl implements InvestigatorController{
 
 	@Override
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public void updateInvestigator(@RequestBody InvestigatorDTO dto) throws InvestigatorException {
+	public void updateInvestigator(@RequestBody InvestigatorDTO dto) throws InvestigatorException, ForbiddenException {
 		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- update investigator");
 		
 		investigatorService.updateInvestigator(dto);
@@ -62,7 +63,7 @@ public class InvestigatorControllerImpl implements InvestigatorController{
 	
 	@Override
 	@RequestMapping(value = "/experiments/accepted/{idInvestigator}", method = RequestMethod.GET)
-	public List<ExperimentDTO> getExperimentsAcceptedByIdInvestigator(@PathVariable Long idInvestigator) throws InvestigatorException {
+	public List<ExperimentDTO> getExperimentsAcceptedByIdInvestigator(@PathVariable Long idInvestigator) throws InvestigatorException, ForbiddenException {
 		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- experiments accepted investigator");
 		
 		List<ExperimentDTO> list = investigatorService.getExperimentsAcceptedByIdInvestigator(idInvestigator);
@@ -73,7 +74,7 @@ public class InvestigatorControllerImpl implements InvestigatorController{
 
 	@Override
 	@RequestMapping(value = "/petitions/pending/{idInvestigator}", method = RequestMethod.GET)
-	public List<PetitionDTO> getPetitionsPendingByIdInvestigator(Long idInvestigator) throws InvestigatorException {
+	public List<PetitionDTO> getPetitionsPendingByIdInvestigator(Long idInvestigator) throws InvestigatorException, ForbiddenException {
 		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- petitions pending investigator");
 		
 		List<PetitionDTO> list = investigatorService.getPetitionsPendingByIdInvestigator(idInvestigator);
