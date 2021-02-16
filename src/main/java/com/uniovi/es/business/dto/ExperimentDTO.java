@@ -18,6 +18,8 @@ public class ExperimentDTO {
 	
 	public Long idInvestigator; //ID del investigador creador
 	
+	public boolean isManagerInvestigatorInSession;
+	
 	//Datos del investigador creador del experimento
 	public String nameInvestigator;
 	public String surnameInvestigator;

@@ -103,4 +103,14 @@ public class PetitionControllerImpl implements PetitionController{
 		return list;
 	}
 
+	@Override
+	@RequestMapping(value = "/cancel/association", method = RequestMethod.PUT)
+	public void cancel(@RequestBody PetitionDTO dto) throws PetitionException, ForbiddenException {
+		logger.info("[INICIO] PETITION CONTROLLER -- cancel association between Investigator and Experiment");
+		
+		petitionService.cancel(dto);
+		
+		logger.info("[FINAL] PETITION CONTROLLER -- cancel association between Investigator and Experiment");
+	}
+
 }

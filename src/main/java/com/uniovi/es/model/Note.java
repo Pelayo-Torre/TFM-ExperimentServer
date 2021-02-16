@@ -3,6 +3,7 @@ package com.uniovi.es.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +23,7 @@ public class Note implements Serializable {
 	private Experiment experiment;
 	
 	private String title;
+	@Column(name = "descrition", length = 10000)
 	private String descrition;
 	
 	private Date creationDate;

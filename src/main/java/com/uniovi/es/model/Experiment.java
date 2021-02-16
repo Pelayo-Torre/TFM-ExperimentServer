@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,6 +27,7 @@ public class Experiment implements Serializable {
 	private Long id;
 	
 	private String title;
+	@Column(name = "description", length = 10000)
 	private String description;
 	
 	@Enumerated(EnumType.STRING)

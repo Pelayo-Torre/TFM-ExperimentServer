@@ -145,7 +145,10 @@ public class ExperimentServiceImpl implements ExperimentService{
 		Optional<Experiment> optional = experimentDAO.findById(id);
 		Experiment experiment = getExperiment(optional);
 		
-		if(petitionDAO.isInvestigatorAssociatedExperiment(userInSession.getInvestigator().getId(), id) == null) {
+		Investigator investigatorInSessionRol = userInSession.getInvestigator();
+		Petition petition = petitionDAO.isInvestigatorAssociatedExperiment(investigatorInSessionRol.getId(), id);
+		
+		if(petition == null) {
 			logger.error("[ERROR -- 117] - Los datos del experimento solo pueden ser visualizados por investigadores asociados al experimento.");
 			throw new ForbiddenException("117");
 		}
@@ -155,7 +158,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- detail experiment");
 		
-		return DtoAssembler.toDTO(experiment, investigator);
+		return DtoAssembler.toDTO(experiment, investigator, petition.getManager());
 	}
 	
 	@Override

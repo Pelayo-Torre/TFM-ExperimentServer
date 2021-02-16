@@ -16,7 +16,7 @@ import com.uniovi.es.model.types.Device;
 
 public class DtoAssembler {
 	
-	public static ExperimentDTO toDTO(Experiment experiment, Investigator investigator) {
+	public static ExperimentDTO toDTO(Experiment experiment, Investigator investigator, Boolean rol) {
 		ExperimentDTO dto = new ExperimentDTO();
 		
 		if(experiment != null) {
@@ -31,6 +31,8 @@ public class DtoAssembler {
 			dto.gender = experiment.getDemographicData().getGender().name();
 			dto.idDevice = experiment.getDemographicData().getIdDevice();
 			dto.laterality = experiment.getDemographicData().getLaterality().name();
+			if(rol != null)
+				dto.isManagerInvestigatorInSession = rol;
 		}
 				
 		if(investigator != null) {
@@ -48,7 +50,7 @@ public class DtoAssembler {
 		List<ExperimentDTO> list = new ArrayList<ExperimentDTO>();
 		
 		for(Experiment experiment: experiments) {
-			list.add(toDTO(experiment, null));
+			list.add(toDTO(experiment, null, null));
 		}
 		
 		return list;

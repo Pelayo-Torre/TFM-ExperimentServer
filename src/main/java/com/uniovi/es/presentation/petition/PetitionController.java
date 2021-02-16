@@ -42,6 +42,14 @@ public interface PetitionController {
 	public void cancel(Identifier id) throws PetitionException, ForbiddenException;
 	
 	/**
+	 * Punto de entrada para cancelar una petición cuando no se tiene el ID de la misma
+	 * @param dto, contiene el id del experimento y el id del investigador que va a ser eliminado del experimento
+	 * @throws PetitionException, validaciones de la petición
+	 * @throws ForbiddenException, el usuario en sesión no tiene permisos para cancelar la petición de otro investigador
+	 */
+	public void cancel(PetitionDTO dto) throws PetitionException, ForbiddenException;
+	
+	/**
 	 * Punto de entrada para obtener el detalle de una petición
 	 * @param id, identificador de la petición
 	 * @return la petición con sus datos
@@ -61,5 +69,7 @@ public interface PetitionController {
 	 * @return lista de peticiones enviadas
 	 */
 	public List<PetitionDTO> getPetitionSent();
+	
+	
 
 }

@@ -52,7 +52,7 @@ public class PetitionServiceImpl implements PetitionService{
 
 	@Override
 	public void register(PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException {
-		logger.info("[INICIO] EXPERIMENT SERVICE -- register petition");
+		logger.info("[INICIO] PETITION SERVICE -- register petition");
 				
 		logger.info("\t \t Obteniendo el investigador receptor a partir del ID: " + dto.idInvestigator);
 		Optional<Investigator> optional = investigatorDAO.findById(dto.idInvestigator);
@@ -73,12 +73,12 @@ public class PetitionServiceImpl implements PetitionService{
 		logger.info("\t \t Registrando la petitición en base de datos");
 		petitionDAO.save(petition);
 		
-		logger.info("[FINAL] EXPERIMENT SERVICE -- register petition");
+		logger.info("[FINAL] PETITION SERVICE -- register petition");
 	}
 
 	@Override
 	public void accept(Identifier id) throws PetitionException, ForbiddenException {
-		logger.info("[INICIO] EXPERIMENT SERVICE -- accept petition");
+		logger.info("[INICIO] PETITION SERVICE -- accept petition");
 		
 		if(id == null) {
 			logger.error("[ERROR - 300] -- La petición especificada no se encuentra registrada en el sistema");
@@ -101,12 +101,12 @@ public class PetitionServiceImpl implements PetitionService{
 		logger.info("\t \t Actualizando estado de la petitición en base de datos");
 		petitionDAO.save(petition);
 		
-		logger.info("[FINAL] EXPERIMENT SERVICE -- accept petition");
+		logger.info("[FINAL] PETITION SERVICE -- accept petition");
 	}
 	
 	@Override
 	public void reject(Identifier id) throws PetitionException, ForbiddenException {
-		logger.info("[INICIO] EXPERIMENT SERVICE -- reject petition");
+		logger.info("[INICIO] PETITION SERVICE -- reject petition");
 		
 		if(id == null) {
 			logger.error("[ERROR - 300] -- La petición especificada no se encuentra registrada en el sistema");
@@ -129,14 +129,14 @@ public class PetitionServiceImpl implements PetitionService{
 		logger.info("\t \t Actualizando estado de la petitición en base de datos");
 		petitionDAO.save(petition);
 		
-		logger.info("[FINAL] EXPERIMENT SERVICE -- reject petition");
+		logger.info("[FINAL] PETITION SERVICE -- reject petition");
 	}
 
 	@Override
 	public void cancel(Identifier id) throws PetitionException, ForbiddenException {
-		logger.info("[INICIO] EXPERIMENT SERVICE -- cancel petition");
+		logger.info("[INICIO] PETITION SERVICE -- cancel petition");
 		
-		if(id == null) {
+		if(id == null || id.getId() == null) {
 			logger.error("[ERROR - 300] -- La petición especificada no se encuentra registrada en el sistema");
 			throw new PetitionException("300");
 		}
@@ -152,11 +152,13 @@ public class PetitionServiceImpl implements PetitionService{
 			logger.error("[ERROR -- 306] - Una petición solo puede ser cancelada por el investigador emisor de dicha petición si está en estado PENDING");
 			throw new ForbiddenException("306");
 		}
-		//Si la petición está en estado ACEPTADA solo la pueden cancelar el emisor y el receptor
-		else if(petition.getStatus().equals(StatusPetition.ACCEPTED) && 
+		
+		//Si la petición está en estado ACEPTADA solo la pueden cancelar los investigadores asociados al experimento como gestores y el receptor
+		if(petition.getStatus().equals(StatusPetition.ACCEPTED) && 
 				(investigator == null || 
-				(investigator.getId() != petition.getIdInvestigatorSend() && investigator.getId() != petition.getInvestigator().getId()))) {
-			logger.error("[ERROR -- 307] - Una petición solo puede ser cancelada por el investigador emisor de dicha petición si está en estado PENDING");
+				(petitionDAO.isManager(petition.getExperiment().getId(), investigator.getId()) == null
+				&& investigator.getId() != petition.getInvestigator().getId()))) {
+			logger.error("[ERROR -- 307] - Una petición solo puede ser cancelada por los investigadores asociados al experimento como gestores y el investigador que la recibe si está en estado ACEPTADA");
 			throw new ForbiddenException("307");
 		}
 		
@@ -166,39 +168,54 @@ public class PetitionServiceImpl implements PetitionService{
 		logger.info("\t \t Actualizando estado de la petitición en base de datos");
 		petitionDAO.save(petition);
 		
-		logger.info("[FINAL] EXPERIMENT SERVICE -- cancel petition");
+		logger.info("[FINAL] PETITION SERVICE -- cancel petition");
 	}
 
 	@Override
 	public PetitionDTO getDetail(Long id) throws PetitionException {
-		logger.info("[INICIO] EXPERIMENT SERVICE -- detail petition");
+		logger.info("[INICIO] PETITION SERVICE -- detail petition");
 		
 		logger.info("\t \t Obteniendo la petición a partir del ID: " + id);
 		Optional<Petition> optional = petitionDAO.findById(id);
 		Petition petition = getPetition(optional);
 		
-		logger.info("[FINAL] EXPERIMENT SERVICE -- detail petition");
+		logger.info("[FINAL] PETITION SERVICE -- detail petition");
 		return DtoAssembler.toDTO(petition);
 	}
 	
 	@Override
 	public List<PetitionDTO> getPetitionsReceived(){
-		logger.info("[INICIO] EXPERIMENT SERVICE -- list petitions received");
+		logger.info("[INICIO] PETITION SERVICE -- list petitions received");
 		
 		List<Petition> list = petitionDAO.findPetitionsReceived(userInSession.getInvestigator().getId());
 		
-		logger.info("[FINAL] EXPERIMENT SERVICE -- list petitions received");
+		logger.info("[FINAL] PETITION SERVICE -- list petitions received");
 		return DtoAssembler.toListPetitions(list);
 	}
 	
 	@Override
 	public List<PetitionDTO> getPetitionsSent(){
-		logger.info("[INICIO] EXPERIMENT SERVICE -- list petitions sent");
+		logger.info("[INICIO] PETITION SERVICE -- list petitions sent");
 		
 		List<Petition> list = petitionDAO.findPetitionsSent(userInSession.getInvestigator().getId());
 		
-		logger.info("[FINAL] EXPERIMENT SERVICE -- list petitions sent");
+		logger.info("[FINAL] PETITION SERVICE -- list petitions sent");
 		return DtoAssembler.toListPetitions(list);
+	}
+	
+	@Override
+	public void cancel(PetitionDTO dto) throws PetitionException, ForbiddenException {
+		logger.info("[INICIO] PETITION SERVICE -- cancel association between Investigator and Experiment");
+		
+		Petition petition = petitionDAO.isInvestigatorAssociatedExperiment(dto.idInvestigator, dto.idExperiment);
+		
+		if(petition == null) 
+			cancel(new Identifier(null));
+		else
+			cancel(new Identifier(petition.getId()));
+		
+		
+		logger.info("[FINAL] PETITION SERVICE -- cancel association between Investigator and Experiment");
 	}
 	
 	/**

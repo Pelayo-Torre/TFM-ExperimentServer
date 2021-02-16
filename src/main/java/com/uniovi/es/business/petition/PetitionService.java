@@ -24,5 +24,7 @@ public interface PetitionService {
 	public List<PetitionDTO> getPetitionsReceived();
 
 	public List<PetitionDTO> getPetitionsSent();
+	
+	public void cancel(PetitionDTO dto) throws PetitionException, ForbiddenException;
 
 }
