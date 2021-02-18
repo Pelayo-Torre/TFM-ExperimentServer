@@ -8,7 +8,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.junit.Assert;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
 import org.junit.runner.RunWith;
@@ -201,11 +202,43 @@ public class PetitionTest {
 	 * @throws ExperimentException
 	 * @throws PetitionException, ya existe una petición
 	 */
-	public void test13RegisterPetitionERROR304() throws InvestigatorException, ExperimentException, PetitionException, AttempsException{
+	public void test13RegisterPetitionERROR304() throws InvestigatorException, ExperimentException, PetitionException, AttempsException, ForbiddenException{
+		
+		//CREAMOS otro investigador
+		InvestigatorDTO dto2 = new InvestigatorDTO();
+		dto2.name = "Juanita";
+		dto2.surname = "Torre";
+		dto2.username = "juanita123";
+		dto2.mail = "juanita@gmail.com";
+		dto2.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto2);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "juanita123";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("juanita@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+	
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
 		//CREAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
-		petitionDTO.idExperiment = 1L;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("juan@gmail.com").id;
+		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
+		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("juanita@gmail.com").id;
 		petitionDTO.manager = true;
 		
 		try {
@@ -214,21 +247,6 @@ public class PetitionTest {
 		} catch (PetitionException e) {
 			assertEquals("304", e.getMessage());
 		}
-	}
-	
-	@Test
-	/**
-	 * Se prueba el detalle de una petición
-	 * @throws PetitionException
-	 */
-	public void test14DetailPetition() throws PetitionException{
-		
-		PetitionDTO dto = petitionService.getDetail(2L);
-		
-		assertNotNull(dto);
-		assertEquals(false, dto.creator);
-		assertEquals(true, dto.manager);
-		assertEquals(StatusPetition.PENDING.name(), dto.statusPetition);
 	}
 	
 	@Test

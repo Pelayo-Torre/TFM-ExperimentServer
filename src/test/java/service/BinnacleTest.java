@@ -7,7 +7,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
 import org.junit.runner.RunWith;
@@ -45,7 +46,7 @@ import com.uniovi.es.utils.Identifier;
 @ActiveProfiles("test")
 @TestMethodOrder(Alphanumeric.class)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
-class BinnacleTest {
+public class BinnacleTest {
 	
 	@Autowired
 	private BinnacleService binnacleService;
@@ -125,7 +126,7 @@ class BinnacleTest {
 	 * @throws ExperimentException
 	 * @throws NoteException
 	 */
-	void test10RegisterNote() throws InvestigatorException, ExperimentException, NoteException, ForbiddenException {
+	public void test10RegisterNote() throws InvestigatorException, ExperimentException, NoteException, ForbiddenException {
 				
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
@@ -216,13 +217,52 @@ class BinnacleTest {
 	 * Se prueba la edición de los datos de una nota de una bitácora
 	 * @throws NoteException
 	 */
-	public void test14UpdateNote() throws NoteException, ExperimentException, ForbiddenException {
+	public void test14UpdateNote() throws NoteException, ExperimentException, ForbiddenException, AttempsException, InvestigatorException {
+		
+		//CREAMOS OTRO INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Mayte";
+		dto.surname = "Garcia";
+		dto.username = "mayte23";
+		dto.mail = "mayte@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "mayte23";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("mayte@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+		
+		experimentService.register(experientDTO);
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
-		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
 		
 		//CREAMOS UNA NOTA
 		NoteDTO noteDTO = new NoteDTO();
+		noteDTO.title = "Nota 1";
+		noteDTO.description = "Se ha creado el experimento para hacer pruebas sobre menores entre 12 y 16 años";
+		noteDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		
+		binnacleService.registerNote(noteDTO);
+		
+		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
+		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
+		
+		//CREAMOS UNA NOTA
+		noteDTO = new NoteDTO();
 		noteDTO.title = "Creación de experimento para menores";
 		noteDTO.description = "Se ha creado el experimento para hacer pruebas sobre menores entre 12 y 16 años";
 		noteDTO.id = notes.get(notes.size() - 1).id;
@@ -262,13 +302,52 @@ class BinnacleTest {
 	 * Prueba la edición de una nota que no tiene título
 	 * @throws NoteException La nota especificada no tiene título
 	 */
-	public void test16UpdateNoteERROR401() throws NoteException, ExperimentException, ForbiddenException {
+	public void test16UpdateNoteERROR401() throws NoteException, ExperimentException, ForbiddenException, InvestigatorException, AttempsException {
+		
+		//CREAMOS OTRO INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Faustino";
+		dto.surname = "Garcia";
+		dto.username = "fausto23";
+		dto.mail = "fausto@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "fausto23";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("fausto@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+		
+		experimentService.register(experientDTO);
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
-		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
 		
 		//CREAMOS UNA NOTA
 		NoteDTO noteDTO = new NoteDTO();
+		noteDTO.title = "Nota 1";
+		noteDTO.description = "Se ha creado el experimento para hacer pruebas sobre menores entre 12 y 16 años";
+		noteDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		
+		binnacleService.registerNote(noteDTO);
+		
+		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
+		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
+				
+		//CREAMOS UNA NOTA
+		noteDTO = new NoteDTO();
 		noteDTO.title = null;
 		noteDTO.description = "Se ha creado el experimento para hacer pruebas sobre menores entre 12 y 16 años";
 		noteDTO.id = notes.get(notes.size() - 1).id;
@@ -286,12 +365,51 @@ class BinnacleTest {
 	 * Prueba la edición de una nota que no tiene descripción
 	 * @throws NoteException La nota especificada no tiene descripción
 	 */
-	public void test17UpdateNoteERROR402() throws NoteException, ExperimentException, ForbiddenException {
+	public void test17UpdateNoteERROR402() throws NoteException, ExperimentException, ForbiddenException, AttempsException, InvestigatorException {
+		//CREAMOS OTRO INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Gargamel";
+		dto.surname = "Garcia";
+		dto.username = "garga23";
+		dto.mail = "gargamel@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "garga23";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("gargamel@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+		
+		experimentService.register(experientDTO);
+		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
-		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
 		
 		//CREAMOS UNA NOTA
 		NoteDTO noteDTO = new NoteDTO();
+		noteDTO.title = "Nota 1";
+		noteDTO.description = "Se ha creado el experimento para hacer pruebas sobre menores entre 12 y 16 años";
+		noteDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		
+		binnacleService.registerNote(noteDTO);
+		
+		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
+		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
+		
+		//CREAMOS UNA NOTA
+		noteDTO = new NoteDTO();
 		noteDTO.title = "Creación de experimento para menores";
 		noteDTO.description = "";
 		noteDTO.id = notes.get(notes.size() - 1).id;
@@ -309,16 +427,53 @@ class BinnacleTest {
 	 * @throws NoteException
 	 * @throws ExperimentException
 	 */
-	public void test18NotesByExperiment() throws NoteException, ExperimentException, ForbiddenException{
+	public void test18NotesByExperiment() throws NoteException, ExperimentException, ForbiddenException, InvestigatorException, AttempsException{
+		
+		//CREAMOS OTRO INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Josito";
+		dto.surname = "Garcia";
+		dto.username = "josito23";
+		dto.mail = "josito@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "josito23";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("josito@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+		
+		experimentService.register(experientDTO);
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//CREAMOS UNA NOTA
+		NoteDTO noteDTO = new NoteDTO();
+		noteDTO.title = "Nota 1";
+		noteDTO.description = "Se ha creado el experimento para hacer pruebas sobre menores entre 12 y 16 años";
+		noteDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		
+		binnacleService.registerNote(noteDTO);
 		
 		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
 		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
 		
 		assertNotNull(notes);
 		assertEquals(1, notes.size());
-		assertEquals("Creación de experimento para menores", notes.get(notes.size() - 1).title);
+		assertEquals("Nota 1", notes.get(notes.size() - 1).title);
 		assertEquals("Se ha creado el experimento para hacer pruebas sobre menores entre 12 y 16 años", notes.get(notes.size()-1).description);
 	
 	}
@@ -328,16 +483,55 @@ class BinnacleTest {
 	 * Prueba el obtener el detalle de una nota
 	 * @throws NoteException
 	 */
-	public void test20DetailNote() throws NoteException, ExperimentException, ForbiddenException{
+	public void test20DetailNote() throws NoteException, ExperimentException, ForbiddenException, InvestigatorException, AttempsException{
+		//CREAMOS OTRO INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Repuchel";
+		dto.surname = "Garcia";
+		dto.username = "repuchel23";
+		dto.mail = "repuchel@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.username = "repuchel23";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("repuchel@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+		
+		experimentService.register(experientDTO);
+		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//CREAMOS UNA NOTA
+		NoteDTO noteDTO = new NoteDTO();
+		noteDTO.title = "Nota 1";
+		noteDTO.description = "Se ha creado el experimento para hacer pruebas sobre menores entre 12 y 16 años";
+		noteDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		
+		binnacleService.registerNote(noteDTO);
+		
+		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
 		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
 		
 		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
-		NoteDTO dto = binnacleService.detail(notes.get(notes.size()-1).id);
+		NoteDTO dtoNote = binnacleService.detail(notes.get(notes.size()-1).id);
 		
-		assertNotNull(dto);
-		assertEquals("Creación de experimento para menores", dto.title);
-		assertEquals("Se ha creado el experimento para hacer pruebas sobre menores entre 12 y 16 años", dto.description);
+		assertNotNull(dtoNote);
+		assertEquals("Nota 1", dtoNote.title);
+		assertEquals("Se ha creado el experimento para hacer pruebas sobre menores entre 12 y 16 años", dtoNote.description);
 	
 	}
 	
@@ -406,20 +600,63 @@ class BinnacleTest {
 	 * Se prueba a eliminar una nota por un investigador que no está asociado al experimento
 	 * @throws NoteException
 	 */
-	public void test23DeleteNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException, ForbiddenException{
+	public void test23DeleteNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException, ForbiddenException, InvestigatorException{
 		
-		//INICIAMOS SESIÓN como investigador asociado
+		//CREAMOS OTRO INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Andrea";
+		dto.surname = "Garcia";
+		dto.username = "andrea23";
+		dto.mail = "andrea@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "ramiro123";
+		authDTO.username = "andrea23";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
-		List<ExperimentDTO> experiments = experimentService.getExperiments();		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("andrea@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+		
+		experimentService.register(experientDTO);
+		
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//CREAMOS UNA NOTA
+		NoteDTO noteDTO = new NoteDTO();
+		noteDTO.title = "Nota 1";
+		noteDTO.description = "Se ha creado el experimento para hacer pruebas sobre menores entre 12 y 16 años";
+		noteDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		
+		binnacleService.registerNote(noteDTO);
+		
+		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
 		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
+		
+		//CREAMOS OTRO INVESTIGADOR
+		dto = new InvestigatorDTO();
+		dto.name = "Estevez";
+		dto.surname = "Garcia";
+		dto.username = "estevez1234";
+		dto.mail = "estevez@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
 		
 		//INICIAMOS SESIÓN como investigador no asociado
 		authDTO = new AuthDTO();
-		authDTO.username = "angela123";
+		authDTO.username = "estevez1234";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -439,20 +676,63 @@ class BinnacleTest {
 	 * Se prueba a acceder al detalle de una nota por un investigador que no está asociado al experimento
 	 * @throws NoteException
 	 */
-	public void test24DetailNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException, ForbiddenException{
+	public void test24DetailNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException, ForbiddenException, InvestigatorException{
 		
-		//INICIAMOS SESIÓN como investigador asociado
+		//CREAMOS OTRO INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Perotti";
+		dto.surname = "Garcia";
+		dto.username = "perotti23";
+		dto.mail = "perotti@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "ramiro123";
+		authDTO.username = "perotti23";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
-		List<ExperimentDTO> experiments = experimentService.getExperiments();		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("perotti@gmail.com").id;
+		
+		experientDTO.birthDate = new Date();
+		experientDTO.gender = Gender.MALE.name();
+		experientDTO.laterality = Laterality.LEFT_HANDED.name();
+		experientDTO.idDevice = 1L;
+		
+		experimentService.register(experientDTO);
+		
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//CREAMOS UNA NOTA
+		NoteDTO noteDTO = new NoteDTO();
+		noteDTO.title = "Nota 1";
+		noteDTO.description = "Se ha creado el experimento para hacer pruebas sobre menores entre 12 y 16 años";
+		noteDTO.idExperiment = experiments.get(experiments.size() - 1).id;
+		
+		binnacleService.registerNote(noteDTO);
+		
+		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
 		List<NoteDTO> notes = binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
+		
+		//CREAMOS OTRO INVESTIGADOR
+		dto = new InvestigatorDTO();
+		dto.name = "Papugomez";
+		dto.surname = "Garcia";
+		dto.username = "papu1234";
+		dto.mail = "papu@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
 		
 		//INICIAMOS SESIÓN como investigador no asociado
 		authDTO = new AuthDTO();
-		authDTO.username = "angela123";
+		authDTO.username = "papu1234";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 	

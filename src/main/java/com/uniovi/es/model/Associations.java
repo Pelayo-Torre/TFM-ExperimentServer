@@ -22,6 +22,20 @@ public class Associations {
 		
 	}
 	
+	public static class InvestigatorRequest {
+		
+		public static void link(Investigator investigator, Request request) {
+			request.setInvestigator(investigator);
+			investigator.getRequests().add(request);
+		}
+		
+		public static void unlink(Investigator investigator, Request request) {
+			investigator.getRequests().remove(request);
+			request.setInvestigator(null);
+		}
+		
+	}
+	
 	public static class UserExperiment{
 		
 		public static void link(User user, Experiment experiment) {

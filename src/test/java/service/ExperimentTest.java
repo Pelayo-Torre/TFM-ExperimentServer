@@ -8,7 +8,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.junit.Assert;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
 import org.junit.runner.RunWith;
@@ -114,7 +115,8 @@ public class ExperimentTest {
 		experimentService.register(experientDTO);
 		
 		//COMPROBAMOS QUE SE REGISTRÓ CORRECTAMENTE
-		ExperimentDTO exp = experimentService.getDetail(1L);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		ExperimentDTO exp = experimentService.getDetail(experiments.get(experiments.size() - 1).id);
 		
 		assertNotNull(exp);
 		assertEquals("Experimento en Langreo", exp.title);

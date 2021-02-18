@@ -80,7 +80,7 @@ public class PetitionServiceImpl implements PetitionService{
 	public void accept(Identifier id) throws PetitionException, ForbiddenException {
 		logger.info("[INICIO] PETITION SERVICE -- accept petition");
 		
-		if(id == null) {
+		if(id == null || id.getId() == null) {
 			logger.error("[ERROR - 300] -- La petición especificada no se encuentra registrada en el sistema");
 			throw new PetitionException("300");
 		}

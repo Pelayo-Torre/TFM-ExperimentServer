@@ -17,7 +17,10 @@ public class Identifier {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
 
+	@Override
+	public String toString() {
+		return "Identifier [id=" + id + "]";
+	}
+	
 }

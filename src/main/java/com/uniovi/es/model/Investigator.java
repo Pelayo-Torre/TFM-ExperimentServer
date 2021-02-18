@@ -41,6 +41,9 @@ public class Investigator implements Serializable {
 	@OneToMany(mappedBy = "investigator")
 	private Set<Petition> petitions = new HashSet<Petition>();
 	
+	@OneToMany(mappedBy = "investigator")
+	private Set<Request> requests = new HashSet<Request>();
+	
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
@@ -119,5 +122,13 @@ public class Investigator implements Serializable {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	
+
+	public Set<Request> getRequests() {
+		return requests;
+	}
+
+	public void setRequests(Set<Request> requests) {
+		this.requests = requests;
+	}
+		
 }

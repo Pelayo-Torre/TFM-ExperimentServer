@@ -8,10 +8,12 @@ import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.NoteDTO;
 import com.uniovi.es.business.dto.PetitionDTO;
+import com.uniovi.es.business.dto.RequestDTO;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Note;
 import com.uniovi.es.model.Petition;
+import com.uniovi.es.model.Request;
 import com.uniovi.es.model.types.Device;
 
 public class DtoAssembler {
@@ -191,6 +193,38 @@ public class DtoAssembler {
 		}
 		
 		return devicesDTO;
+	}
+	
+	public static RequestDTO toDto(Request request) {
+		RequestDTO dto = new RequestDTO();
+		
+		dto.id = request.getId();
+		dto.idInvestigator = request.getInvestigator().getId();
+		dto.shippingDate = request.getShippingDate();
+		dto.answerDate = request.getAnswerDate();
+		dto.status = request.getStatus().name();
+		dto.name = request.getInvestigator().getName();
+		dto.surname = request.getInvestigator().getSurname();
+		dto.username = request.getInvestigator().getUsername();
+		dto.mail = request.getInvestigator().getMail();
+		
+		return dto;
+	}
+	
+	public static List<RequestDTO> toListRequests(List<Request> requests){
+		List<RequestDTO> requestsDTO = new ArrayList<RequestDTO>();
+		
+		for(Request request : requests) {
+			requestsDTO.add(toDto(request));
+		}
+		
+		return requestsDTO;
+	}
+	
+	public static void fillData(Request request, RequestDTO dto) {
+		
+		request.setAnswerDate(dto.answerDate);
+		request.setShippingDate(dto.shippingDate);
 	}
 
 }
