@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,16 +62,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 	
 	@Autowired
 	private UserInSession userInSession;
-	
-	//@PostConstruct
-	public void init() {
-		Device d = new Device("MOUSE");
-		Device d1 = new Device("TOUCHPAD");
-		
-		deviceDAO.save(d);
-		deviceDAO.save(d1);
-	}
-		
+			
 	@Override
 	public void register(ExperimentDTO dto) throws ExperimentException, InvestigatorException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- register experiment");

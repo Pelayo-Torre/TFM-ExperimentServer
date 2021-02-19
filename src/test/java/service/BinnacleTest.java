@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.junit.Assert;
 //import org.junit.jupiter.api.Test;
 import org.junit.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -162,6 +163,7 @@ public class BinnacleTest {
 				
 		try {
 			binnacleService.registerNote(noteDTO);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (ExperimentException e) {
 			assertEquals("100", e.getMessage());
 		}
@@ -185,6 +187,7 @@ public class BinnacleTest {
 				
 		try {
 			binnacleService.registerNote(noteDTO);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (NoteException e) {
 			assertEquals("401", e.getMessage());
 		}
@@ -207,6 +210,7 @@ public class BinnacleTest {
 				
 		try {
 			binnacleService.registerNote(noteDTO);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (NoteException e) {
 			assertEquals("402", e.getMessage());
 		}
@@ -291,6 +295,7 @@ public class BinnacleTest {
 				
 		try {
 			binnacleService.updateNote(noteDTO);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (NoteException e) {
 			assertEquals("400", e.getMessage());
 		}
@@ -354,6 +359,7 @@ public class BinnacleTest {
 				
 		try {
 			binnacleService.updateNote(noteDTO);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (NoteException e) {
 			assertEquals("401", e.getMessage());
 		}
@@ -416,6 +422,7 @@ public class BinnacleTest {
 				
 		try {
 			binnacleService.updateNote(noteDTO);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (NoteException e) {
 			assertEquals("402", e.getMessage());
 		}
@@ -545,6 +552,7 @@ public class BinnacleTest {
 		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
 		try {
 			binnacleService.detail(ID_NOT_EXIST);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (NoteException e) {
 			assertEquals("400", e.getMessage());
 		}
@@ -567,6 +575,7 @@ public class BinnacleTest {
 		//COMPROBAMOS QUE SE HA BORRADO
 		try {
 			binnacleService.detail(notes.get(notes.size()-1).id);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (NoteException e) {
 			assertEquals("400", e.getMessage());
 		}
@@ -590,6 +599,7 @@ public class BinnacleTest {
 		try {
 			Identifier identifier = new Identifier(ID_NOT_EXIST);
 			binnacleService.deleteNote(identifier);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (NoteException e) {
 			assertEquals("400", e.getMessage());
 		}
@@ -666,6 +676,7 @@ public class BinnacleTest {
 		//COMPROBAMOS QUE SE HA BORRADO
 		try {
 			binnacleService.deleteNote(identifier);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (ForbiddenException e) {
 			assertEquals("403", e.getMessage());
 		}
@@ -738,6 +749,7 @@ public class BinnacleTest {
 	
 		try {
 			binnacleService.detail(notes.get(notes.size()-1).id);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (ForbiddenException e) {
 			assertEquals("403", e.getMessage());
 		}
@@ -772,6 +784,7 @@ public class BinnacleTest {
 	
 		try {
 			binnacleService.registerNote(noteDTO);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (ForbiddenException e) {
 			assertEquals("403", e.getMessage());
 		}
@@ -808,6 +821,7 @@ public class BinnacleTest {
 	
 		try {
 			binnacleService.updateNote(noteDTO);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (ForbiddenException e) {
 			assertEquals("403", e.getMessage());
 		}
@@ -836,6 +850,7 @@ public class BinnacleTest {
 		
 		try {
 			binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
+			Assert.fail("Debe lanzarse excepción.");
 		} catch (ForbiddenException e) {
 			assertEquals("403", e.getMessage());
 		}

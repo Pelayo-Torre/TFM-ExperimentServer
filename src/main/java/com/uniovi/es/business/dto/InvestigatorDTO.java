@@ -13,6 +13,9 @@ public class InvestigatorDTO {
 	public Boolean creator;
 	public Boolean manager;
 	
+	//indica si el investigador tiene pedida la solicitud de cuenta
+	public Boolean requestPending;
+	
 	@Override
 	public String toString() {
 		return "InvestigatorDTO [id=" + id + ", name=" + name + ", surname=" + surname + ", mail=" + mail

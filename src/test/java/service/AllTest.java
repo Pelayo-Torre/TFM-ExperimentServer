@@ -9,7 +9,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	service.InvestigatorTest.class,
 	service.ExperimentTest.class,
 	service.PetitionTest.class,
-	service.BinnacleTest.class
+	service.BinnacleTest.class,
+	service.AdministrationTest.class
 })
 public class AllTest {
 

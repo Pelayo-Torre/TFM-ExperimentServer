@@ -127,5 +127,16 @@ public class InvestigatorControllerImpl implements InvestigatorController{
 		
 		return dto;
 	}
+
+	@Override
+	@RequestMapping(value = "/list/not/administrator", method = RequestMethod.GET)
+	public List<InvestigatorDTO> getInvestigatorsNotAdministrator() {
+		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- not administrators");
+
+		List<InvestigatorDTO> list = investigatorService.getInvestigatorsNotAdministrator();
+		
+		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- not administrators");
+		return list;
+	}
 	
 }

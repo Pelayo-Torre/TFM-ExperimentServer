@@ -15,10 +15,12 @@ import com.uniovi.es.business.dto.RequestDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
 import com.uniovi.es.exceptions.AdministrationException;
 import com.uniovi.es.exceptions.ForbiddenException;
+import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Request;
 import com.uniovi.es.model.types.Role;
 import com.uniovi.es.persistence.AdministrationDAO;
+import com.uniovi.es.persistence.InvestigatorDAO;
 import com.uniovi.es.utils.Identifier;
 
 @Service
@@ -29,6 +31,9 @@ public class AdministrationServiceImpl implements AdministrationService{
 	
 	@Autowired
 	private UserInSession userInSession;
+	
+	@Autowired
+	private InvestigatorDAO investigatorDAO;
 	
 	private ActionManager actionManager = new ActionManager(null);
 	
@@ -95,6 +100,7 @@ public class AdministrationServiceImpl implements AdministrationService{
 		
 		logger.info("\t \t Se registran los datos en base de datos");
 		administrationDAO.save(request);
+		investigatorDAO.save(request.getInvestigator());
 		
 		logger.info("[FINAL] ADMINISTRATION SERVICE -- accept request");
 	}
@@ -151,6 +157,39 @@ public class AdministrationServiceImpl implements AdministrationService{
 		return dto;
 	}
 	
+	@Override
+	public void convertInvestigatorIntoAdministrator(Identifier id) throws AdministrationException, ForbiddenException, InvestigatorException {
+		logger.info("[INICIO] ADMINISTRATION SERVICE -- convert administrator");
+		
+		if(id == null || id.getId() == null) {
+			logger.error("[ERROR -- 200] - El investigador especificado no se encuentra registrado en el sistema");
+			throw new InvestigatorException("200");
+		}
+		
+		Investigator sesion = userInSession.getInvestigator();
+		if(sesion == null || 
+				!sesion.getRole().name().equals(Role.ADMINISTRATOR.name())) {
+			logger.error("[ERROR -- 507] - Solamente un Investigador con rol ADMINISTRATOR puede establecerle a otro investigador el rol ADMINISTRATOR");
+			throw new ForbiddenException("507");
+		}
+		
+		logger.info("\t \t Obteniendo el investigador a partir del ID: " + id);
+		Optional<Investigator> optional = investigatorDAO.findById(id.getId());
+		Investigator investigator = getInvestigator(optional);
+		
+		logger.info("\t \t Se comprueba el rol del investigador al que se le va a establecer el rol ADMINISTRATOR");
+		if(investigator.getRole().name().equals(Role.ADMINISTRATOR.name())) {
+			logger.error("[ERROR -- 506] - Para convertir un investigador en administrador, éste debe tener el rol INVESTIGATOR_EVALUATION o INVESTIGATOR_VALIDATED");
+			throw new AdministrationException("506");
+		}
+		
+		logger.info("\t \t Se procede a cambiar el rol al investigador y a registrarlo en base de datos");
+		investigator.setRole(Role.ADMINISTRATOR);
+		investigatorDAO.save(investigator);
+		
+		logger.info("[FINAL] ADMINISTRATION SERVICE -- convert administrator");
+	}
+	
 	/**
 	 * Devuelve la solicitud a partir del optional que se le pasa como parámetro
 	 * @param optional, parámetro de entrada con la posible solicitud
@@ -168,5 +207,24 @@ public class AdministrationServiceImpl implements AdministrationService{
 		}
 		return request;
 	}
+	
+	/**
+	 * Devuelve el investigador a partir del optional que se pasa como parámetro
+	 * @param optional, parámetro de entrada
+	 * @return investigador encontrado
+	 * @throws InvestigatorException, en caso de que el investigador no exista en base de datos.
+	 */
+	private Investigator getInvestigator(Optional<Investigator> optional) throws InvestigatorException{
+		Investigator investigator = null;
+		if(optional.isPresent()) {
+			investigator = optional.get();
+		}
+		else {
+			logger.error("[ERROR - 200] -- El investigador especificado no se encuentra registrado en el sistema");
+			throw new InvestigatorException("200");
+		}
+		return investigator;
+	}
+
 
 }

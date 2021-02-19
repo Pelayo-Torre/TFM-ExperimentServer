@@ -21,9 +21,11 @@ import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Petition;
+import com.uniovi.es.model.Request;
 import com.uniovi.es.model.types.StatusExperiment;
 import com.uniovi.es.model.types.Role;
 import com.uniovi.es.model.types.StatusPetition;
+import com.uniovi.es.persistence.AdministrationDAO;
 import com.uniovi.es.persistence.InvestigatorDAO;
 
 @Service
@@ -42,6 +44,9 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 	
 	@Autowired
 	private UserInSession userInSession;
+	
+	@Autowired
+	private AdministrationDAO administrationDAO;
 
 	@Override
 	public void registerInvestigator(InvestigatorDTO dto) throws InvestigatorException {
@@ -205,11 +210,32 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- investigator in session ");
 		
 		Investigator investigator = userInSession.getInvestigator();
+		InvestigatorDTO dto = DtoAssembler.toDTO(investigator);
+		
+		//Se busca si tiene solicitud enviada
+		Request r = administrationDAO.findRequestPending(investigator.getId());
+		if(r != null) {
+			dto.requestPending = true;
+		}
+		else {
+			dto.requestPending = false;
+		}
 		
 		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- investigator in session ");
-		return DtoAssembler.toDTO(investigator);
+		return dto;
 	}
 
+	@Override
+	public List<InvestigatorDTO> getInvestigatorsNotAdministrator() {
+		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- investigators not administrator");
+		
+		List<Investigator> list = new ArrayList<Investigator>();
+		investigatorDAO.getInvestigatorsNotAdministrator().forEach(list::add);;
+		
+		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- investigators not administrator");
+		return DtoAssembler.toListInvestigators(list);
+	}
+	
 	/**
 	 * Devuelve el investigador a partir del optional que se pasa como parámetro
 	 * @param optional, parámetro de entrada
@@ -226,7 +252,5 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 			throw new InvestigatorException("200");
 		}
 		return investigator;
-	}
-
-	
+	}	
 }

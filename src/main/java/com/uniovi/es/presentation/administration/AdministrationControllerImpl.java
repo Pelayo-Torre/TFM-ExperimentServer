@@ -16,6 +16,7 @@ import com.uniovi.es.business.administration.AdministrationService;
 import com.uniovi.es.business.dto.RequestDTO;
 import com.uniovi.es.exceptions.AdministrationException;
 import com.uniovi.es.exceptions.ForbiddenException;
+import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.utils.Identifier;
 
 @RestController
@@ -82,6 +83,17 @@ public class AdministrationControllerImpl implements AdministrationController{
 		
 		logger.info("[FINAL] ADMINISTRATION CONTROLLER -- detail request");
 		return dto;
+	}
+
+	@Override
+	@RequestMapping(value = "/convert/administrator", method = RequestMethod.PUT)
+	public void convertInvestigatorIntoAdministrator(@RequestBody Identifier id) throws AdministrationException, ForbiddenException, InvestigatorException {
+		logger.info("[INICIO] ADMINISTRATION CONTROLLER -- convert administrator");
+		logger.info("\t\t Parámetros de entrada: " + id);
+		
+		administrationService.convertInvestigatorIntoAdministrator(id);
+		
+		logger.info("[FINAL] ADMINISTRATION CONTROLLER -- convert administrator");
 	}
 
 }

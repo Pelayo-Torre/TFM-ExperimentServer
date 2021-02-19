@@ -5,6 +5,7 @@ import java.util.List;
 import com.uniovi.es.business.dto.RequestDTO;
 import com.uniovi.es.exceptions.AdministrationException;
 import com.uniovi.es.exceptions.ForbiddenException;
+import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.utils.Identifier;
 
 public interface AdministrationService {
@@ -18,5 +19,7 @@ public interface AdministrationService {
 	public List<RequestDTO> getPendingRequests() throws AdministrationException, ForbiddenException;
 	
 	public RequestDTO getDetail(Long id) throws AdministrationException;
+	
+	public void convertInvestigatorIntoAdministrator(Identifier id) throws AdministrationException, ForbiddenException, InvestigatorException;
 
 }

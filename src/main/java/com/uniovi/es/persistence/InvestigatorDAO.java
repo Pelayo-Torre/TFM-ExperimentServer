@@ -30,5 +30,8 @@ public interface InvestigatorDAO extends CrudRepository <Investigator, Long> {
 	
 	@Query("SELECT i FROM Investigator i, Petition p WHERE p.experiment.id = ?1 AND p.creator = true AND p.investigator.id = i.id")
 	public Investigator findCreatorOfExperiment(Long idExperiment);
+	
+	@Query("SELECT i FROM Investigator i WHERE i.role != 'ADMINISTRATOR'")
+	public List<Investigator> getInvestigatorsNotAdministrator();
 
 }

@@ -78,4 +78,10 @@ public interface InvestigatorController {
 	 */
 	public InvestigatorDTO validateNameOfAccount() throws InvestigatorException;
 	
+	/**
+	 * Punto de entrada para obtener la lista de investigadores que no sean administradores 
+	 * @return la lista de investigadores de la aplicación que no sean administradores
+	 */
+	public List<InvestigatorDTO> getInvestigatorsNotAdministrator();
+	
 }

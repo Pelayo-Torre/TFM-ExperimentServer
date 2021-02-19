@@ -5,6 +5,7 @@ import java.util.List;
 import com.uniovi.es.business.dto.RequestDTO;
 import com.uniovi.es.exceptions.AdministrationException;
 import com.uniovi.es.exceptions.ForbiddenException;
+import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.utils.Identifier;
 
 public interface AdministrationController {
@@ -47,5 +48,13 @@ public interface AdministrationController {
 	 * @throws AdministrationException
 	 */
 	public RequestDTO getDetail(Long id) throws AdministrationException;
+	
+	/**
+	 * Punto de entrada para convertir un investigador en administrador de la aplicación
+	 * @param id, identificador del investigador que va a ser convertido
+	 * @throws AdministrationException
+	 * @throws ForbiddenException, en caso de que el investigador que lo va a convertir no tiene los permisos adecuados
+	 */
+	public void convertInvestigatorIntoAdministrator(Identifier id) throws AdministrationException, ForbiddenException, InvestigatorException;
 	
 }
