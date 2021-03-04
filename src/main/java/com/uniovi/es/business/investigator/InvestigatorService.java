@@ -26,8 +26,6 @@ public interface InvestigatorService {
 
 	public List<InvestigatorDTO> getListInvestigators();
 
-	public InvestigatorDTO getInvestigatorByUsername(String username) throws InvestigatorException;
-
 	public InvestigatorDTO getInvestigatorInSession();
 	
 	public List<InvestigatorDTO> getInvestigatorsNotAdministrator();

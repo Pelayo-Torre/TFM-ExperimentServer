@@ -5,19 +5,11 @@ import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.model.Experiment;
 
 public class ActionManager {
+		
+	public ActionManager() {}
 	
-	private Experiment experiment;
-	
-	public ActionManager(Experiment experiment) {
-		this.experiment = experiment;
-	}
-	
-	public void execute(ExperimentCommand command) throws ExperimentException {
+	public void execute(ExperimentCommand command, Experiment experiment) throws ExperimentException {
 		command.execute(experiment);
-	}
-	
-	public void setExperiment(Experiment experiment) {
-		this.experiment = experiment;
 	}
 
 }

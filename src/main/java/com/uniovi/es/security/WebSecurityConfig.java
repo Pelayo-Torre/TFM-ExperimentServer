@@ -72,12 +72,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 		"/investigator/mail/**",
                 		"/investigator/username/**"
                 	).permitAll()
+                .antMatchers(
+						"/investigator/list/not/administrator/**"
+				).hasAnyAuthority("ADMINISTRATOR")
 				.antMatchers(
 						"/investigator/**", 
 						"/experiment/**", 
 						"/binnacle/**",
 						"/petition/**")
-					.hasAnyAuthority("INVESTIGATOR_EVALUATION", "INVESTIGATOR_VALIDATED")
+					.hasAnyAuthority("INVESTIGATOR_EVALUATION", "INVESTIGATOR_VALIDATED", "ADMINISTRATOR")
+				.antMatchers(
+						"/administration/register/request/**"
+				).hasAnyAuthority("INVESTIGATOR_EVALUATION")
+				.antMatchers(
+						"/administration/**"
+				).hasAnyAuthority("ADMINISTRATOR")
 //				.antMatchers(
 //						"/association/validate/name/**",
 //						"/association/edit/**",

@@ -22,7 +22,7 @@ public class UserInSession {
 	public Investigator getInvestigator() {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
-		Investigator investigator = investigatorDAO.findByUsername(auth.getName().toLowerCase());
+		Investigator investigator = investigatorDAO.findByMail(auth.getName().toLowerCase());
 		return investigator;
 	}
 

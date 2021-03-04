@@ -54,10 +54,9 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		
 		investigatorValidator.validate(dto);
 		investigatorValidator.validateExistenceOfMail(dto.mail);
-		investigatorValidator.validateExistenceOfUsername(dto.username);
 		investigatorValidator.validatePassword(dto.password);
 		
-		Investigator investigator = new Investigator(dto.mail, dto.username);
+		Investigator investigator = new Investigator(dto.mail);
 		DtoAssembler.fillData(investigator, dto);
 		
 		investigator.setPassword(bCryptPasswordEncoder.encode(investigator.getPassword()));
@@ -106,16 +105,7 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 			}
 		}
 		
-		logger.info("\t \t Validando existencia del username: " + dto.username);
-		if(!investigator.getUsername().toLowerCase().equals(dto.username.toLowerCase())) {
-			Investigator i = investigatorDAO.findByUsername(dto.username.toLowerCase());
-			if(i != null) {
-				logger.error("[ERROR - 206] -- El nombre de usuario del investigador ya se encuentra registrado en la aplicación");
-				throw new InvestigatorException("206");
-			}
-		}
-
-		DtoAssembler.fillData(investigator, dto);
+		DtoAssembler.fillDataUpdate(investigator, dto);
 		
 		logger.info("\t \t Registrando el investigador en base de datos");
 		investigatorDAO.save(investigator);
@@ -181,24 +171,6 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		Investigator investigator = investigatorDAO.findByMail(mail.toLowerCase());
 		
 		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- investigator by mail ");
-		
-		if(investigator == null)
-			return null;
-		return DtoAssembler.toDTO(investigator);
-	}
-	
-	@Override
-	public InvestigatorDTO getInvestigatorByUsername(String username) throws InvestigatorException {
-		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- investigator by username ");
-		
-		if(username == null) {
-			logger.error("[ERROR - 205] -- El nombre de usuario es un campo obligatorio");
-			throw new InvestigatorException("205");
-		}
-		
-		Investigator investigator = investigatorDAO.findByUsername(username.toLowerCase());
-		
-		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- investigator by username ");
 		
 		if(investigator == null)
 			return null;

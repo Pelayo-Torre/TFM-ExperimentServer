@@ -1,6 +1,7 @@
 package com.uniovi.es.business.validators;
 
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -54,6 +55,12 @@ public class ExperimentValidator {
 		if(dto.birthDate == null) {
 			logger.error("[ERROR - 111] -- La edad de los usuarios de un experimento es un campo obligatorio");
 			throw new ExperimentException("111");
+		}
+		else {
+			if(dto.birthDate.after(new Date())) {
+				logger.error("[ERROR - 118] -- La fecha de nacimiento debe no debe ser posterior al dia actual");
+				throw new ExperimentException("118");
+			}
 		}
 		
 		if(dto.laterality == null) {

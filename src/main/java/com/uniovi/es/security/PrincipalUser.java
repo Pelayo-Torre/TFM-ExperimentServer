@@ -37,7 +37,7 @@ public class PrincipalUser implements UserDetails {
 		SimpleGrantedAuthority a = new SimpleGrantedAuthority(investigator.getRole().name());
 		
 		authorities.add(a);
-		PrincipalUser pu = new PrincipalUser(investigator.getId(), investigator.getUsername(),
+		PrincipalUser pu = new PrincipalUser(investigator.getId(), investigator.getMail(),
 				investigator.getPassword(), authorities);
 		
 		return pu;

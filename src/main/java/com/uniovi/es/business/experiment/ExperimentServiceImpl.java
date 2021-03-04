@@ -43,7 +43,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 
 	private static final Logger logger = LoggerFactory.getLogger(ExperimentServiceImpl.class);
 	
-	private ActionManager actionManager = new ActionManager(null);
+	private ActionManager actionManager = new ActionManager();
 	
 	@Autowired
 	private ExperimentValidator experimentValidator;
@@ -167,8 +167,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 		Experiment experiment = getExperiment(optional);
 		
 		logger.info("\t \t Cambiando el estado del experimento a ABIERTO");
-		actionManager.setExperiment(experiment);
-		actionManager.execute(new Open());
+		actionManager.execute(new Open(), experiment);
 		
 		logger.info("\t \t Actualizando cambios en base de datos");
 		experimentDAO.save(experiment);
@@ -193,8 +192,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 		Experiment experiment = getExperiment(optional);
 		
 		logger.info("\t \t Cambiando el estado del experimento a ABIERTO");
-		actionManager.setExperiment(experiment);
-		actionManager.execute(new ReOpen());
+		actionManager.execute(new ReOpen(), experiment);
 		
 		logger.info("\t \t Actualizando cambios en base de datos");
 		experimentDAO.save(experiment);
@@ -218,8 +216,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 		Experiment experiment = getExperiment(optional);
 		
 		logger.info("\t \t Cambiando el estado del experimento a CERRADO");
-		actionManager.setExperiment(experiment);
-		actionManager.execute(new Close());
+		actionManager.execute(new Close(), experiment);
 		
 		logger.info("\t \t Actualizando cambios en base de datos");
 		experimentDAO.save(experiment);
@@ -243,8 +240,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 		Experiment experiment = getExperiment(optional);
 		
 		logger.info("\t \t Cambiando el estado del experimento a ELIMINADO");
-		actionManager.setExperiment(experiment);
-		actionManager.execute(new Delete());
+		actionManager.execute(new Delete(), experiment);
 		
 		logger.info("\t \t Actualizando cambios en base de datos");
 		experimentDAO.save(experiment);

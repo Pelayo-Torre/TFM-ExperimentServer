@@ -75,7 +75,6 @@ public class BinnacleTest {
 			InvestigatorDTO dto = new InvestigatorDTO();
 			dto.name = "Ramiro";
 			dto.surname = "Garcia";
-			dto.username = "ramiro123";
 			dto.mail = "ramiro@gmail.com";
 			dto.password = "123456789";
 			
@@ -85,7 +84,6 @@ public class BinnacleTest {
 			dto = new InvestigatorDTO();
 			dto.name = "Angela";
 			dto.surname = "Garcia";
-			dto.username = "angela123";
 			dto.mail = "angela@gmail.com";
 			dto.password = "123456789";
 			
@@ -93,7 +91,7 @@ public class BinnacleTest {
 			
 			//INICIAMOS SESIÓN
 			AuthDTO authDTO = new AuthDTO();
-			authDTO.username = "ramiro123";
+			authDTO.mail = "ramiro@gmail.com";
 			authDTO.password = "123456789";
 			authenticateUser.authenticateUser(authDTO);
 			
@@ -227,7 +225,6 @@ public class BinnacleTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Mayte";
 		dto.surname = "Garcia";
-		dto.username = "mayte23";
 		dto.mail = "mayte@gmail.com";
 		dto.password = "123456789";
 		
@@ -235,7 +232,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "mayte23";
+		authDTO.mail = "mayte@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -313,7 +310,6 @@ public class BinnacleTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Faustino";
 		dto.surname = "Garcia";
-		dto.username = "fausto23";
 		dto.mail = "fausto@gmail.com";
 		dto.password = "123456789";
 		
@@ -321,7 +317,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "fausto23";
+		authDTO.mail = "fausto@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -376,7 +372,6 @@ public class BinnacleTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Gargamel";
 		dto.surname = "Garcia";
-		dto.username = "garga23";
 		dto.mail = "gargamel@gmail.com";
 		dto.password = "123456789";
 		
@@ -384,7 +379,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "garga23";
+		authDTO.mail = "gargamel@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -440,7 +435,6 @@ public class BinnacleTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Josito";
 		dto.surname = "Garcia";
-		dto.username = "josito23";
 		dto.mail = "josito@gmail.com";
 		dto.password = "123456789";
 		
@@ -448,7 +442,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "josito23";
+		authDTO.mail = "josito@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -495,7 +489,6 @@ public class BinnacleTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Repuchel";
 		dto.surname = "Garcia";
-		dto.username = "repuchel23";
 		dto.mail = "repuchel@gmail.com";
 		dto.password = "123456789";
 		
@@ -503,7 +496,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "repuchel23";
+		authDTO.mail = "repuchel@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -616,7 +609,6 @@ public class BinnacleTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Andrea";
 		dto.surname = "Garcia";
-		dto.username = "andrea23";
 		dto.mail = "andrea@gmail.com";
 		dto.password = "123456789";
 		
@@ -624,7 +616,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "andrea23";
+		authDTO.mail = "andrea@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -658,7 +650,6 @@ public class BinnacleTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Estevez";
 		dto.surname = "Garcia";
-		dto.username = "estevez1234";
 		dto.mail = "estevez@gmail.com";
 		dto.password = "123456789";
 		
@@ -666,7 +657,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN como investigador no asociado
 		authDTO = new AuthDTO();
-		authDTO.username = "estevez1234";
+		authDTO.mail = "estevez@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -693,7 +684,6 @@ public class BinnacleTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Perotti";
 		dto.surname = "Garcia";
-		dto.username = "perotti23";
 		dto.mail = "perotti@gmail.com";
 		dto.password = "123456789";
 		
@@ -701,7 +691,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "perotti23";
+		authDTO.mail = "perotti@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -735,7 +725,6 @@ public class BinnacleTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Papugomez";
 		dto.surname = "Garcia";
-		dto.username = "papu1234";
 		dto.mail = "papu@gmail.com";
 		dto.password = "123456789";
 		
@@ -743,7 +732,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN como investigador no asociado
 		authDTO = new AuthDTO();
-		authDTO.username = "papu1234";
+		authDTO.mail = "papu@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 	
@@ -764,7 +753,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN como investigador asociado
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "ramiro123";
+		authDTO.mail = "ramiro@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -772,7 +761,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN como investigador no asociado
 		authDTO = new AuthDTO();
-		authDTO.username = "angela123";
+		authDTO.mail = "angela@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -799,7 +788,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN como investigador asociado
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "ramiro123";
+		authDTO.mail = "ramiro@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -815,7 +804,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN como investigador no asociado
 		authDTO = new AuthDTO();
-		authDTO.username = "angela123";
+		authDTO.mail = "angela@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 	
@@ -836,7 +825,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN como investigador asociado
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "ramiro123";
+		authDTO.mail = "ramiro@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -844,7 +833,7 @@ public class BinnacleTest {
 		
 		//INICIAMOS SESIÓN como investigador no asociado
 		authDTO = new AuthDTO();
-		authDTO.username = "angela123";
+		authDTO.mail = "angela@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		

@@ -41,13 +41,13 @@ public class AuthenticationService {
 	public ResponseEntity<?> authenticateUser(AuthDTO dto)
 			throws AttempsException {
 
-		if (loginService.blocked(dto.username)) {
+		if (loginService.blocked(dto.mail)) {
 			throw new AttempsException(
 					"Usuario bloquedo por sobrepasar el número de intentos");
 		}
 
 		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(dto.username,
+				new UsernamePasswordAuthenticationToken(dto.mail,
 						dto.password));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -55,14 +55,14 @@ public class AuthenticationService {
 		String token = generator.generateToken(authentication);
 		UserDetails details = (UserDetails) authentication.getPrincipal();
 
-		Investigator investigator = getUserByUsername(authentication.getName());
+		Investigator investigator = getUserByMail(authentication.getName());
 
 //		if (user.getAssociation() != null) {
 //			return ResponseEntity.ok(new Response(user.getLogin(), token,
 //					user.getStatus(), user.getAssociation().getStatus(),
 //					details.getAuthorities()));
 //		} else {
-			return ResponseEntity.ok(new Response(investigator.getUsername(), token,
+			return ResponseEntity.ok(new Response(investigator.getMail(), token,
 					details.getAuthorities()));
 		//}
 
@@ -73,8 +73,8 @@ public class AuthenticationService {
 	 * @param username, nombre del usuario
 	 * @return el usuario o null si no existe
 	 */
-	public Investigator getUserByUsername(String username) {
-		return investigatorDAO.findByUsername(username.toLowerCase());
+	public Investigator getUserByMail(String mail) {
+		return investigatorDAO.findByMail(mail.toLowerCase());
 	}
 	
 }

@@ -16,22 +16,19 @@ public interface InvestigatorDAO extends CrudRepository <Investigator, Long> {
 	@Query("SELECT i FROM Investigator i WHERE LOWER(i.mail) = ?1")
 	public Investigator findByMail(String mail);
 	
-	@Query("SELECT i FROM Investigator i WHERE LOWER(i.username) = ?1")
-	public Investigator findByUsername(String username);
-	
 	@Query("SELECT e "
 			+ "FROM Experiment e, Petition p "
 			+ "WHERE p.investigator.id = ?1 AND p.experiment.id = e.id AND p.status = ?2 AND e.status != ?3 "
 			+ "ORDER BY e.creationDate DESC")
 	public List<Experiment> findExperimentsByIdInvestigator(Long idInvestigator, StatusPetition status, StatusExperiment statusExperiment);
 
-	@Query("SELECT p FROM Petition p WHERE p.investigator.id = ?1 AND p.status = ?2")
+	@Query("SELECT p FROM Petition p WHERE p.investigator.id = ?1 AND p.status = ?2 ORDER BY p.investigator.name DESC")
 	public List<Petition> findPetitionsByIdInvestigator(Long idInvestigator, StatusPetition pending);
 	
 	@Query("SELECT i FROM Investigator i, Petition p WHERE p.experiment.id = ?1 AND p.creator = true AND p.investigator.id = i.id")
 	public Investigator findCreatorOfExperiment(Long idExperiment);
 	
-	@Query("SELECT i FROM Investigator i WHERE i.role != 'ADMINISTRATOR'")
+	@Query("SELECT i FROM Investigator i WHERE i.role != 'ADMINISTRATOR' ORDER BY i.name ASC, i.surname ASC")
 	public List<Investigator> getInvestigatorsNotAdministrator();
 
 }

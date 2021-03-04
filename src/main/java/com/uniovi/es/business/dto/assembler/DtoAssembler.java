@@ -41,7 +41,6 @@ public class DtoAssembler {
 			dto.nameInvestigator = investigator.getName();
 			dto.surnameInvestigator = investigator.getSurname();
 			dto.mailInvestigator = investigator.getMail();
-			dto.usernameInvestigator = investigator.getUsername();
 			dto.idInvestigator = investigator.getId();
 		}
 		
@@ -71,8 +70,8 @@ public class DtoAssembler {
 		dto.name = investigator.getName();
 		dto.surname = investigator.getSurname();
 		dto.mail = investigator.getMail();
-		dto.username = investigator.getUsername();
 		dto.role = investigator.getRole().name();
+		dto.registrationDate = investigator.getRegistrationDate();
 				
 		return dto;
 	}
@@ -105,8 +104,14 @@ public class DtoAssembler {
 		investigator.setName(dto.name);
 		investigator.setSurname(dto.surname);
 		investigator.setMail(dto.mail);
-		investigator.setUsername(dto.username);
 		investigator.setPassword(dto.password);
+	}
+	
+	public static void fillDataUpdate(Investigator investigator, InvestigatorDTO dto) {
+		
+		investigator.setName(dto.name);
+		investigator.setSurname(dto.surname);
+		investigator.setMail(dto.mail);
 	}
 	
 	public static PetitionDTO toDTO(Petition petition) {
@@ -128,7 +133,6 @@ public class DtoAssembler {
 		dto.name = petition.getInvestigator().getName();
 		dto.surname = petition.getInvestigator().getSurname();
 		dto.mail = petition.getInvestigator().getMail();
-		dto.username = petition.getInvestigator().getUsername();		
 		
 		return dto;
 	}
@@ -205,7 +209,6 @@ public class DtoAssembler {
 		dto.status = request.getStatus().name();
 		dto.name = request.getInvestigator().getName();
 		dto.surname = request.getInvestigator().getSurname();
-		dto.username = request.getInvestigator().getUsername();
 		dto.mail = request.getInvestigator().getMail();
 		
 		return dto;

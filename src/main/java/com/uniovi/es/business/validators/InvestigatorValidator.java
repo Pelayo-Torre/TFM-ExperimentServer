@@ -46,11 +46,6 @@ public class InvestigatorValidator {
 			throw new InvestigatorException("203");
 		}
 		
-		if(dto.username == null || dto.username.equals("")) {
-			logger.error("[ERROR - 205] -- El nombre de usuario es un campo obligatorio");
-			throw new InvestigatorException("205");
-		}
-		
 		Pattern pattern = Pattern.compile(PATTERN_EMAIL);
 		Matcher matcher = pattern.matcher(dto.mail);
 		
@@ -87,18 +82,6 @@ public class InvestigatorValidator {
 		if(investigatorDAO.findByMail(mail.toLowerCase()) != null) {
 			logger.error("[ERROR - 204] -- El email del investigador ya se encuentra registrado en la aplicación");
 			throw new InvestigatorException("204");
-		}
-	}
-	
-	/**
-	 * Valida la existencia de un nombre de usuario que se pasa como parámetro
-	 * @param username parámetro de entrada
-	 * @throws InvestigatorException en caso de que el nombre de usuario ya se encuentre registrado en la aplicación
-	 */
-	public void validateExistenceOfUsername(String username) throws InvestigatorException {
-		if(investigatorDAO.findByUsername(username.toLowerCase()) != null) {
-			logger.error("[ERROR - 206] -- El nombre del usuario ya se encuentra registrado en la aplicación");
-			throw new InvestigatorException("206");
 		}
 	}
 

@@ -21,7 +21,6 @@ public class PetitionDTO {
 	//Datos del investigador receptor
 	public String name;
 	public String surname;
-	public String username;
 	public String mail;
 	
 	
@@ -31,7 +30,7 @@ public class PetitionDTO {
 				+ ", shippingDate=" + shippingDate + ", answerDate=" + answerDate + ", manager=" + manager
 				+ ", creator=" + creator + ", idExperiment=" + idExperiment + ", title=" + title + ", description="
 				+ description + ", statusExperiment=" + statusExperiment + ", name=" + name + ", surname=" + surname
-				+ ", username=" + username + ", mail=" + mail + "]";
+				+ ", mail=" + mail + "]";
 	}
 		
 }

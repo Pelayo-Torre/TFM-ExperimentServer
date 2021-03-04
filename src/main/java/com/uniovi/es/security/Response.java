@@ -11,19 +11,7 @@ public class Response {
 	private String type = "Bearer";
 	private String username;
 	private String token;
-	//private Status userStatus;
-	//private Status associationStatus;
 	private Collection<? extends GrantedAuthority> auths;
-
-//	public Response(String username, String token, Status userStatus,
-//			Status associationStatus,
-//			Collection<? extends GrantedAuthority> auths) {
-//		this.token = token;
-//		this.username = username;
-//		this.userStatus = userStatus;
-//		this.associationStatus = associationStatus;
-//		this.auths = auths;
-//	}
 	
 	public Response(String username, String token,
 			Collection<? extends GrantedAuthority> auths) {
@@ -60,20 +48,5 @@ public class Response {
 		return auths;
 	}
 
-//	public Status getUserStatus() {
-//		return userStatus;
-//	}
-//
-//	public void setUserStatus(Status userStatus) {
-//		this.userStatus = userStatus;
-//	}
-//
-//	public Status getAssociationStatus() {
-//		return associationStatus;
-//	}
-//
-//	public void setAssociationStatus(Status associationStatus) {
-//		this.associationStatus = associationStatus;
-//	}
 
 }

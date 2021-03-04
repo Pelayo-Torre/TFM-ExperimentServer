@@ -95,7 +95,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Pelayo";
 		dto.surname = "Garcia Torre";
-		dto.username = "pgarciat";
 		dto.mail = "pelayo@gmail.com";
 		dto.password = "123456789";
 		
@@ -108,7 +107,6 @@ public class InvestigatorTest {
 		assertNotNull(investigator);
 		assertEquals("Pelayo", investigator.name);
 		assertEquals("Garcia Torre", investigator.surname);
-		assertEquals("pgarciat", investigator.username);
 		assertEquals("pelayo@gmail.com", investigator.mail);
 	}
 	
@@ -122,7 +120,6 @@ public class InvestigatorTest {
 		//REGISTRAMOS EL INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = null;
-		dto.username = "pgarcitorre";
 		dto.surname = "Garcia Torre";
 		dto.mail = "pelayo@gmail.com";
 		dto.password = "123456789";
@@ -130,7 +127,6 @@ public class InvestigatorTest {
 		//LO GUARDAMOS EN BASE DE DATOS
 		try {
 			investigatorService.registerInvestigator(dto);
-			Assert.fail("Debe lanzarse excepción.");
 			Assert.fail("Debe lanzarse excepción.");
 		} catch (InvestigatorException e) {
 			assertEquals("201", e.getMessage());
@@ -148,7 +144,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Pelayo";
 		dto.surname = "";
-		dto.username = "pgarcitorre";
 		dto.mail = "pelayo@gmail.com";
 		dto.password = "123456789";
 		
@@ -172,7 +167,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Pelayo";
 		dto.surname = "Garcia Torre";
-		dto.username = "pgarcitorre";
 		dto.mail = null;
 		dto.password = "123456789";
 		
@@ -196,7 +190,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Pelayo";
 		dto.surname = "Gonzalez";
-		dto.username = "pgarcitorre45";
 		dto.mail = "pel@gmail.com";
 		dto.password = "123456789";
 		
@@ -206,7 +199,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto2 = new InvestigatorDTO();
 		dto2.name = "Pelayo";
 		dto2.surname = "Gonzalez";
-		dto2.username = "pgartorre45";
 		dto2.mail = "PEL@GMAIL.COM";
 		dto.password = "123456789";
 		
@@ -221,64 +213,6 @@ public class InvestigatorTest {
 	
 	@Test
 	/**
-	 * Registro de un investigador con error 205 (Username obligatorio)
-	 * @throws InvestigatorException, username obligatorio
-	 */
-	public void test15CreateInvestigatorERROR205() throws InvestigatorException {
-		
-		//REGISTRAMOS EL INVESTIGADOR
-		InvestigatorDTO dto = new InvestigatorDTO();
-		dto.name = "Pelayo";
-		dto.surname = "Garcia Torre";
-		dto.username = null;
-		dto.mail = "pelayo@hotmail.com";
-		dto.password = "123456789";
-		
-		//LO GUARDAMOS EN BASE DE DATOS
-		try {
-			investigatorService.registerInvestigator(dto);
-			Assert.fail("Debe lanzarse excepción.");
-		} catch (InvestigatorException e) {
-			assertEquals("205", e.getMessage());
-		}
-	}
-	
-	@Test
-	/**
-	 * Registro de un investigador con error 206 (username ya registrado)
-	 * @throws InvestigatorException, username ya registrado
-	 */
-	public void test16CreateInvestigatorERROR206() throws InvestigatorException {
-		
-		//REGISTRAMOS EL INVESTIGADOR
-		InvestigatorDTO dto = new InvestigatorDTO();
-		dto.name = "Pelayo";
-		dto.surname = "Gonzalez";
-		dto.username = "pgarciTorre";
-		dto.mail = "pelTore@gmail.com";
-		dto.password = "123456789";
-		
-		investigatorService.registerInvestigator(dto);
-		
-		//REGISTRAMOS UN NUEVO INVESTIGADOR CON MISMO EMAIL
-		InvestigatorDTO dto2 = new InvestigatorDTO();
-		dto2.name = "Pelayo";
-		dto2.surname = "Álvarez";
-		dto2.username = "pgarciTORRe";
-		dto2.mail = "pelgar@gmail.com";
-		dto.password = "123456789";
-		
-		//LO GUARDAMOS EN BASE DE DATOS
-		try {
-			investigatorService.registerInvestigator(dto2);
-			Assert.fail("Debe lanzarse excepción.");
-		} catch (InvestigatorException e) {
-			assertEquals("206", e.getMessage());
-		}
-	}
-	
-	@Test
-	/**
 	 * Se prueba el detalle de un investigador que se encuentra registrado
 	 * @throws InvestigatorException
 	 */
@@ -288,7 +222,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Esther";
 		dto.surname = "Torre";
-		dto.username = "esther123";
 		dto.mail = "esther@gmail.com";
 		dto.password = "123456789";
 		
@@ -303,7 +236,6 @@ public class InvestigatorTest {
 		assertNotNull(investigator);
 		assertEquals("Esther", investigator.name);
 		assertEquals("Torre", investigator.surname);
-		assertEquals("esther123", investigator.username);
 		assertEquals("esther@gmail.com", investigator.mail);
 	}
 	
@@ -334,7 +266,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Juan";
 		dto.surname = "Torre";
-		dto.username = "juanele";
 		dto.mail = "juan@gmail.com";
 		dto.password = "123456789";
 		
@@ -343,7 +274,7 @@ public class InvestigatorTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "juanele";
+		authDTO.mail = "juan@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -351,7 +282,6 @@ public class InvestigatorTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Juan Antonio";
 		dto.surname = "Llaneza";
-		dto.username = "juanele27";
 		dto.mail = "juanantonio@gmail.com";
 		dto.id = investigatorService.getInvestigatorByMail("juan@gmail.com").id;
 		
@@ -363,7 +293,6 @@ public class InvestigatorTest {
 		assertNotNull(dto);
 		assertEquals("Juan Antonio", dto.name);
 		assertEquals("Llaneza", dto.surname);
-		assertEquals("juanele27", dto.username);
 		assertEquals("juanantonio@gmail.com", dto.mail);
 	}
 	
@@ -378,7 +307,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Pedro";
 		dto.surname = "Torre";
-		dto.username = "pedri123";
 		dto.mail = "pedri@gmail.com";
 		dto.password = "123456789";
 		
@@ -387,13 +315,12 @@ public class InvestigatorTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "pedri123";
+		authDTO.mail = "pedri@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
 		dto.name = null;
 		dto.surname = "Torre";
-		dto.username = "pedri123";
 		dto.mail = "pedri@gmail.com";
 		dto.id = investigatorService.getInvestigatorByMail(dto.mail).id;
 		
@@ -417,7 +344,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Jaime";
 		dto.surname = "Torre";
-		dto.username = "jaime123";
 		dto.mail = "jaime@gmail.com";
 		dto.password = "123456789";
 		
@@ -426,13 +352,12 @@ public class InvestigatorTest {
 				
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "jaime123";
+		authDTO.mail = "jaime@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 				
 		dto.name = "Jaime";
 		dto.surname = "";
-		dto.username = "jaime123";
 		dto.mail = "jaime@gmail.com";
 		dto.id = investigatorService.getInvestigatorByMail(dto.mail).id;
 		
@@ -456,7 +381,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Fonso";
 		dto.surname = "Torre";
-		dto.username = "fonso123";
 		dto.mail = "fonso@gmail.com";
 		dto.password = "123456789";
 		
@@ -465,13 +389,12 @@ public class InvestigatorTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "fonso123";
+		authDTO.mail = "fonso@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 				
 		dto.name = "Fonso";
 		dto.surname = "Torre";
-		dto.username = "fonso123";
 		dto.mail = "";
 		dto.id = investigatorService.getInvestigatorByMail("fonso@gmail.com").id;
 		
@@ -495,7 +418,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Garga";
 		dto.surname = "Torre";
-		dto.username = "garga123";
 		dto.mail = "garga@gmail.com";
 		dto.password = "123456789";
 		
@@ -506,7 +428,6 @@ public class InvestigatorTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Celjus";
 		dto.surname = "Torre";
-		dto.username = "celjus123";
 		dto.mail = "celjus@gmail.com";
 		dto.password = "123456789";
 		
@@ -515,14 +436,13 @@ public class InvestigatorTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "garga123";
+		authDTO.mail = "garga@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 				
 		dto = new InvestigatorDTO();
 		dto.name = "Garga";
 		dto.surname = "Torre";
-		dto.username = "garga123";
 		dto.mail = "celjus@gmail.com";
 		dto.id = investigatorService.getInvestigatorByMail("garga@gmail.com").id;
 		
@@ -537,97 +457,6 @@ public class InvestigatorTest {
 	
 	@Test
 	/**
-	 * Edición de un investigador con error 205 (username obligatorio)
-	 * @throws InvestigatorException, username obligatorio
-	 */
-	public void test24UpdateInvestigatorERROR205() throws InvestigatorException, AttempsException, ForbiddenException {
-		
-		//CREAMOS el investigador
-		InvestigatorDTO dto = new InvestigatorDTO();
-		dto.name = "Adan";
-		dto.surname = "Torre";
-		dto.username = "adan123";
-		dto.mail = "adan@gmail.com";
-		dto.password = "123456789";
-		
-		//LO GUARDAMOS EN BASE DE DATOS
-		investigatorService.registerInvestigator(dto);
-		
-		//INICIAMOS SESIÓN
-		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "adan123";
-		authDTO.password = "123456789";
-		authenticateUser.authenticateUser(authDTO);
-		
-		dto = new InvestigatorDTO();
-		dto.name = "Adan";
-		dto.surname = "Torre";
-		dto.username = "";
-		dto.mail = "adan@gmail.com";
-		dto.id = investigatorService.getInvestigatorByMail(dto.mail).id;
-		
-		//LO GUARDAMOS EN BASE DE DATOS
-		try {
-			investigatorService.updateInvestigator(dto);
-			Assert.fail("Debe lanzarse excepción.");
-		} catch (InvestigatorException e) {
-			assertEquals("205", e.getMessage());
-		}
-	}
-	
-	@Test
-	/**
-	 * Edición de un investigador con error 206 (username ya registrado)
-	 * @throws InvestigatorException, username ya registrado
-	 */
-	public void test25UpdateInvestigatorERROR206() throws InvestigatorException, AttempsException, ForbiddenException {
-		
-		//CREAMOS el investigador
-		InvestigatorDTO dto = new InvestigatorDTO();
-		dto.name = "Manel";
-		dto.surname = "Torre";
-		dto.username = "manel123";
-		dto.mail = "manel@gmail.com";
-		dto.password = "123456789";
-		
-		//LO GUARDAMOS EN BASE DE DATOS
-		investigatorService.registerInvestigator(dto);
-		
-		//CREAMOS otro investigador
-		dto = new InvestigatorDTO();
-		dto.name = "Ivan";
-		dto.surname = "Torre";
-		dto.username = "ivanin123";
-		dto.mail = "ivanin@gmail.com";
-		dto.password = "123456789";
-		
-		//LO GUARDAMOS EN BASE DE DATOS
-		investigatorService.registerInvestigator(dto);
-		
-		//INICIAMOS SESIÓN
-		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "manel123";
-		authDTO.password = "123456789";
-		authenticateUser.authenticateUser(authDTO);
-		
-		dto = new InvestigatorDTO();
-		dto.name = "Manel";
-		dto.surname = "Torre";
-		dto.username = "ivanin123";
-		dto.mail = "manel@gmail.com";
-		dto.id = investigatorService.getInvestigatorByMail("manel@gmail.com").id;
-		
-		//LO GUARDAMOS EN BASE DE DATOS
-		try {
-			investigatorService.updateInvestigator(dto);
-			Assert.fail("Debe lanzarse excepción.");
-		} catch (InvestigatorException e) {
-			assertEquals("206", e.getMessage());
-		}
-	}
-	
-	@Test
-	/**
 	 * Edición de un investigador con error 210 (El investigador en sesión quiere actualizar los datos de otro investigador)
 	 * @throws InvestigatorException, investigador no registrado
 	 */
@@ -637,7 +466,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Sergio";
 		dto.surname = "Torre";
-		dto.username = "sergio123";
 		dto.mail = "sergio@gmail.com";
 		dto.password = "123456789";
 		
@@ -646,14 +474,13 @@ public class InvestigatorTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "sergio123";
+		authDTO.mail = "sergio@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
 		dto = new InvestigatorDTO();
 		dto.name = "Sergio";
 		dto.surname = "Torre";
-		dto.username = "sergio123";
 		dto.mail = "sergio@gmail.com";
 		dto.id = ID_NOT_EXIST;
 		
@@ -679,7 +506,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Carlos";
 		dto.surname = "Garcia";
-		dto.username = "carlos007";
 		dto.mail = "carlos@gmail.com";
 		dto.password = "123456789";
 		
@@ -689,7 +515,6 @@ public class InvestigatorTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Luisa";
 		dto.surname = "Garcia";
-		dto.username = "luisa123";
 		dto.mail = "luisa@gmail.com";
 		dto.password = "123456789";
 		
@@ -699,7 +524,7 @@ public class InvestigatorTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "carlos007";
+		authDTO.mail = "carlos@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -718,7 +543,7 @@ public class InvestigatorTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "luisa123";
+		authDTO.mail = "luisa@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -765,7 +590,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Carlos";
 		dto.surname = "Garcia";
-		dto.username = "carlos067807";
 		dto.mail = "car567los@gmail.com";
 		dto.password = null;
 		
@@ -789,7 +613,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Carlos";
 		dto.surname = "Garcia";
-		dto.username = "carlos067807";
 		dto.mail = "car567los@gmail.com";
 		dto.password = "123";
 		
@@ -813,7 +636,6 @@ public class InvestigatorTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Carlos";
 		dto.surname = "Garcia";
-		dto.username = "carlos067807";
 		dto.mail = "car567losgmailcom";
 		dto.password = "123456789";
 		

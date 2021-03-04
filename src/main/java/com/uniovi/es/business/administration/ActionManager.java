@@ -5,18 +5,11 @@ import com.uniovi.es.exceptions.AdministrationException;
 import com.uniovi.es.model.Request;
 
 public class ActionManager {
-
-	private Request request;
 	
-	public ActionManager(Request request) {
-		this.request = request;
-	}
+	public ActionManager() {}
 	
-	public void execute(RequestCommand command) throws AdministrationException {
-		command.execute(this.request);
+	public void execute(RequestCommand command, Request request) throws AdministrationException {
+		command.execute(request);
 	}
 
-	public void setRequest(Request request) {
-		this.request = request;
-	}
 }

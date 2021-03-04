@@ -10,7 +10,7 @@ import com.uniovi.es.model.types.StatusPetition;
 
 public interface PetitionDAO extends CrudRepository <Petition, Long> {
 
-	@Query("SELECT p FROM Petition p WHERE p.experiment.id = ?1 AND p.status = ?2")
+	@Query("SELECT p FROM Petition p WHERE p.experiment.id = ?1 AND p.status = ?2 ORDER BY p.investigator.name ASC, p.investigator.surname ASC")
 	public List<Petition> findByIdExperiment(Long id, StatusPetition status);
 
 	@Query("SELECT p FROM Petition p WHERE p.investigator.id = ?1 AND p.experiment.id = ?2 AND (p.status = 'PENDING' OR p.status = 'ACCEPTED')")

@@ -6,18 +6,11 @@ import com.uniovi.es.model.Petition;
 
 public class ActionManager {
 	
-	private Petition petition;
+	public ActionManager() {}
 	
-	public ActionManager(Petition petition) {
-		this.petition = petition;
-	}
-	
-	public void execute(PetitionCommand command) throws PetitionException {
+	public void execute(PetitionCommand command, Petition petition) throws PetitionException {
 		command.execute(petition);
 	}
 	
-	public void setPetition(Petition petition) {
-		this.petition = petition;
-	}
 
 }

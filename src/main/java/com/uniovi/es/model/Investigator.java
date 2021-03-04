@@ -31,9 +31,6 @@ public class Investigator implements Serializable {
 	@Column(unique = true) 
 	private String mail;
 	
-	@Column(unique = true) 
-	private String username;
-	
 	private String password;
 	
 	private Date registrationDate;
@@ -47,9 +44,8 @@ public class Investigator implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
-	public Investigator(String mail, String username) {
+	public Investigator(String mail) {
 		this.mail = mail;
-		this.username = username;
 		this.registrationDate = new Date();
 	}
 	
@@ -77,14 +73,6 @@ public class Investigator implements Serializable {
 
 	public void setMail(String mail) {
 		this.mail = mail;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	public String getPassword() {

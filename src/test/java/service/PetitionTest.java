@@ -76,7 +76,6 @@ public class PetitionTest {
 			InvestigatorDTO dto = new InvestigatorDTO();
 			dto.name = "Pelayo";
 			dto.surname = "Garcia Torre";
-			dto.username = "pelgarTor23";
 			dto.mail = "pelayo1234@gmail.com";
 			dto.password = "123456789";
 			
@@ -91,7 +90,7 @@ public class PetitionTest {
 			
 			//INICIAMOS SESIÓN
 			AuthDTO authDTO = new AuthDTO();
-			authDTO.username = "pelgarTor23";
+			authDTO.mail = "pelayo1234@gmail.com";
 			authDTO.password = "123456789";
 			authenticateUser.authenticateUser(authDTO);
 			
@@ -111,7 +110,6 @@ public class PetitionTest {
 		InvestigatorDTO dto2 = new InvestigatorDTO();
 		dto2.name = "Juan";
 		dto2.surname = "Torre";
-		dto2.username = "juanele27";
 		dto2.mail = "juan@gmail.com";
 		dto2.password = "123456789";
 		
@@ -208,7 +206,6 @@ public class PetitionTest {
 		InvestigatorDTO dto2 = new InvestigatorDTO();
 		dto2.name = "Juanita";
 		dto2.surname = "Torre";
-		dto2.username = "juanita123";
 		dto2.mail = "juanita@gmail.com";
 		dto2.password = "123456789";
 		
@@ -217,7 +214,7 @@ public class PetitionTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "juanita123";
+		authDTO.mail = "juanita@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -276,7 +273,6 @@ public class PetitionTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Joselu";
 		dto.surname = "Garcia Torre";
-		dto.username = "joselu123";
 		dto.mail = "joselu@gmail.com";
 		dto.password = "123456789";
 		
@@ -284,7 +280,7 @@ public class PetitionTest {
 		investigatorService.registerInvestigator(dto);
 		
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "joselu123";
+		authDTO.mail = "joselu@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -317,7 +313,7 @@ public class PetitionTest {
 		
 		//Nos logueamos como el usuario que va a aceptar la petición
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor23";
+		authDTO.mail = "pelayo1234@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -340,7 +336,6 @@ public class PetitionTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Gracia";
 		dto.surname = "Garcia Torre";
-		dto.username = "gracia123";
 		dto.mail = "gracia@gmail.com";
 		dto.password = "123456789";
 		
@@ -348,7 +343,7 @@ public class PetitionTest {
 		investigatorService.registerInvestigator(dto);
 		
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "gracia123";
+		authDTO.mail = "gracia@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -381,7 +376,7 @@ public class PetitionTest {
 		
 		//Nos logueamos como el usuario que va a aceptar la petición
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor23";
+		authDTO.mail = "pelayo1234@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -411,7 +406,6 @@ public class PetitionTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Flora";
 		dto.surname = "Garcia Torre";
-		dto.username = "flora123";
 		dto.mail = "flora@gmail.com";
 		dto.password = "123456789";
 		
@@ -419,7 +413,7 @@ public class PetitionTest {
 		investigatorService.registerInvestigator(dto);
 		
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "flora123";
+		authDTO.mail = "flora@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -452,7 +446,7 @@ public class PetitionTest {
 		
 		//Nos logueamos como el usuario que va a aceptar la petición
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor23";
+		authDTO.mail = "pelayo1234@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -480,7 +474,6 @@ public class PetitionTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Gonzalo";
 		dto.surname = "Torre";
-		dto.username = "gongartor";
 		dto.mail = "gongartor@gmail.com";
 		dto.password = "123456789";
 		
@@ -488,7 +481,7 @@ public class PetitionTest {
 		investigatorService.registerInvestigator(dto);
 		
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "gongartor";
+		authDTO.mail = "gongartor@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -522,7 +515,7 @@ public class PetitionTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor23";
+		authDTO.mail = "pelayo1234@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -545,7 +538,6 @@ public class PetitionTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Alberto";
 		dto.surname = "Torre";
-		dto.username = "alberto123";
 		dto.mail = "alberto@gmail.com";
 		dto.password = "123456789";
 		
@@ -553,7 +545,7 @@ public class PetitionTest {
 		investigatorService.registerInvestigator(dto);
 		
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "alberto123";
+		authDTO.mail = "alberto@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -604,7 +596,6 @@ public class PetitionTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Daniela";
 		dto.surname = "Torre";
-		dto.username = "daniela123";
 		dto.mail = "daniela@gmail.com";
 		dto.password = "123456789";
 		
@@ -612,7 +603,7 @@ public class PetitionTest {
 		investigatorService.registerInvestigator(dto);
 		
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "daniela123";
+		authDTO.mail = "daniela@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -646,7 +637,7 @@ public class PetitionTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor23";
+		authDTO.mail = "pelayo1234@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -669,7 +660,6 @@ public class PetitionTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Paola";
 		dto.surname = "Torre";
-		dto.username = "paola123";
 		dto.mail = "paola@gmail.com";
 		dto.password = "123456789";
 		
@@ -677,7 +667,7 @@ public class PetitionTest {
 		investigatorService.registerInvestigator(dto);
 		
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "paola123";
+		authDTO.mail = "paola@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -726,7 +716,6 @@ public class PetitionTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Coral";
 		dto.surname = "Torre";
-		dto.username = "coral123";
 		dto.mail = "coral@gmail.com";
 		dto.password = "123456789";
 		
@@ -734,7 +723,7 @@ public class PetitionTest {
 		investigatorService.registerInvestigator(dto);
 		
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "coral123";
+		authDTO.mail = "coral@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -768,7 +757,7 @@ public class PetitionTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor23";
+		authDTO.mail = "pelayo1234@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -798,7 +787,6 @@ public class PetitionTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Celsa";
 		dto.surname = "Torre";
-		dto.username = "celsa123";
 		dto.mail = "celsa@gmail.com";
 		dto.password = "123456789";
 		
@@ -806,7 +794,7 @@ public class PetitionTest {
 		investigatorService.registerInvestigator(dto);
 		
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "celsa123";
+		authDTO.mail = "celsa@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -840,7 +828,7 @@ public class PetitionTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "pelgarTor23";
+		authDTO.mail = "pelayo1234@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -857,7 +845,6 @@ public class PetitionTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Mamasa";
 		dto.surname = "Torre";
-		dto.username = "mamasa123";
 		dto.mail = "mamasa@gmail.com";
 		dto.password = "123456789";
 		
@@ -865,7 +852,7 @@ public class PetitionTest {
 		investigatorService.registerInvestigator(dto);
 		
 		authDTO = new AuthDTO();
-		authDTO.username = "mamasa123";
+		authDTO.mail = "mamasa@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		

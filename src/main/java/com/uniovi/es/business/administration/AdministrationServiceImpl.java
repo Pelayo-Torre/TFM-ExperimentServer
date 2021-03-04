@@ -35,7 +35,7 @@ public class AdministrationServiceImpl implements AdministrationService{
 	@Autowired
 	private InvestigatorDAO investigatorDAO;
 	
-	private ActionManager actionManager = new ActionManager(null);
+	private ActionManager actionManager = new ActionManager();
 	
 	private static final Logger logger = LoggerFactory.getLogger(AdministrationServiceImpl.class);
 
@@ -95,8 +95,7 @@ public class AdministrationServiceImpl implements AdministrationService{
 		}
 		
 		logger.info("\t \t Se acepta la solicitud");
-		actionManager.setRequest(request);
-		actionManager.execute(new Accept());
+		actionManager.execute(new Accept(), request);
 		
 		logger.info("\t \t Se registran los datos en base de datos");
 		administrationDAO.save(request);
@@ -128,8 +127,7 @@ public class AdministrationServiceImpl implements AdministrationService{
 		}
 		
 		logger.info("\t \t Se rechaza la solicitud");
-		actionManager.setRequest(request);
-		actionManager.execute(new Reject());
+		actionManager.execute(new Reject(), request);
 		
 		logger.info("\t \t Se registran los datos en base de datos");
 		administrationDAO.save(request);
@@ -186,6 +184,13 @@ public class AdministrationServiceImpl implements AdministrationService{
 		logger.info("\t \t Se procede a cambiar el rol al investigador y a registrarlo en base de datos");
 		investigator.setRole(Role.ADMINISTRATOR);
 		investigatorDAO.save(investigator);
+		
+		//Se acepta la petición pendiente en caso de que investigador la tenga
+		Request request = administrationDAO.findRequestAccepted(id.getId());
+		if(request != null) {
+			request.accept();
+			administrationDAO.save(request);
+		}
 		
 		logger.info("[FINAL] ADMINISTRATION SERVICE -- convert administrator");
 	}

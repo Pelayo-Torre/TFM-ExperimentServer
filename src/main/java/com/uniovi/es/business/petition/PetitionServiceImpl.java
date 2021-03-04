@@ -33,7 +33,7 @@ public class PetitionServiceImpl implements PetitionService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(PetitionServiceImpl.class);
 	
-	private ActionManager actionManager = new ActionManager(null);
+	private ActionManager actionManager = new ActionManager();
 	
 	@Autowired
 	private PetitionDAO petitionDAO;
@@ -95,8 +95,7 @@ public class PetitionServiceImpl implements PetitionService{
 			throw new ForbiddenException("305");
 		}
 		
-		actionManager.setPetition(petition);
-		actionManager.execute(new Accept());
+		actionManager.execute(new Accept(), petition);
 		
 		logger.info("\t \t Actualizando estado de la petitición en base de datos");
 		petitionDAO.save(petition);
@@ -123,8 +122,7 @@ public class PetitionServiceImpl implements PetitionService{
 			throw new ForbiddenException("305");
 		}
 		
-		actionManager.setPetition(petition);
-		actionManager.execute(new Reject());
+		actionManager.execute(new Reject(), petition);
 		
 		logger.info("\t \t Actualizando estado de la petitición en base de datos");
 		petitionDAO.save(petition);
@@ -162,8 +160,7 @@ public class PetitionServiceImpl implements PetitionService{
 			throw new ForbiddenException("307");
 		}
 		
-		actionManager.setPetition(petition);
-		actionManager.execute(new Cancel());
+		actionManager.execute(new Cancel(), petition);
 		
 		logger.info("\t \t Actualizando estado de la petitición en base de datos");
 		petitionDAO.save(petition);

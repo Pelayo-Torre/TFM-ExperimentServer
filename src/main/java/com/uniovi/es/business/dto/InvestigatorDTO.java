@@ -1,14 +1,16 @@
 package com.uniovi.es.business.dto;
 
+import java.util.Date;
+
 public class InvestigatorDTO {
 	
 	public Long id;
 	public String name;
 	public String surname;
 	public String mail;
-	public String username;
 	public String password;
 	public String role;
+	public Date registrationDate;
 	
 	public Boolean creator;
 	public Boolean manager;
@@ -19,7 +21,7 @@ public class InvestigatorDTO {
 	@Override
 	public String toString() {
 		return "InvestigatorDTO [id=" + id + ", name=" + name + ", surname=" + surname + ", mail=" + mail
-				+ ", username=" + username + ", role=" + role + ", creator=" + creator + ", manager=" + manager + "]";
+				+ ", role=" + role + ", creator=" + creator + ", manager=" + manager + "]";
 	}
 	
 }

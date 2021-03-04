@@ -13,7 +13,6 @@ public class RequestDTO {
 	public Long idInvestigator;
 	public String name;
 	public String surname;
-	public String username;
 	public String mail;
 	
 	

@@ -88,7 +88,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Carlos";
 		dto.surname = "Garcia";
-		dto.username = "carlos123";
 		dto.mail = "carlos@gmail.com";
 		dto.password = "123456789";
 		
@@ -96,7 +95,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "carlos123";
+		authDTO.mail = "carlos@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 
@@ -138,7 +137,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Juan";
 		dto.surname = "Garcia";
-		dto.username = "juanin123";
 		dto.mail = "juanin@gmail.com";
 		dto.password = "123456789";
 		
@@ -146,7 +144,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "juanin123";
+		authDTO.mail = "juanin@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -180,7 +178,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Pedro";
 		dto.surname = "Garcia";
-		dto.username = "pedro123";
 		dto.mail = "pedro@gmail.com";
 		dto.password = "123456789";
 		
@@ -188,7 +185,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "pedro123";
+		authDTO.mail = "pedro@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -222,7 +219,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Dolfi";
 		dto.surname = "Garcia";
-		dto.username = "dolfi123";
 		dto.mail = "dolfi@gmail.com";
 		dto.password = "123456789";
 		
@@ -230,7 +226,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "dolfi123";
+		authDTO.mail = "dolfi@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -264,7 +260,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Paco";
 		dto.surname = "Garcia";
-		dto.username = "paco123";
 		dto.mail = "paco@gmail.com";
 		dto.password = "123456789";
 		
@@ -272,7 +267,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "paco123";
+		authDTO.mail = "paco@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -321,7 +316,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Juana";
 		dto.surname = "Garcia";
-		dto.username = "juana123";
 		dto.mail = "juana@gmail.com";
 		dto.password = "123456789";
 		
@@ -329,7 +323,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "juana123";
+		authDTO.mail = "juana@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -374,7 +368,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "julieta";
 		dto.surname = "Garcia";
-		dto.username = "julieta123";
 		dto.mail = "julieta@gmail.com";
 		dto.password = "123456789";
 		
@@ -382,7 +375,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "julieta123";
+		authDTO.mail = "julieta@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -464,7 +457,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Rodolfo";
 		dto.surname = "Garcia";
-		dto.username = "rodolfo123";
 		dto.mail = "rodolfo@gmail.com";
 		dto.password = "123456789";
 		
@@ -472,7 +464,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "rodolfo123";
+		authDTO.mail = "rodolfo@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -499,7 +491,6 @@ public class ExperimentTest {
 		assertEquals(1, investigators.size());
 		assertEquals("Rodolfo", investigators.get(0).name);
 		assertEquals("Garcia", investigators.get(0).surname);
-		assertEquals("rodolfo123", investigators.get(0).username);
 		assertEquals("rodolfo@gmail.com", investigators.get(0).mail);
 	}
 	
@@ -514,7 +505,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Junior";
 		dto.surname = "Garcia";
-		dto.username = "junior123";
 		dto.mail = "junior@gmail.com";
 		dto.password = "123456789";
 		
@@ -522,7 +512,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "junior123";
+		authDTO.mail = "junior@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -547,7 +537,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Javier";
 		dto.surname = "Garcia";
-		dto.username = "javi123";
 		dto.mail = "javi@gmail.com";
 		dto.password = "123456789";
 		
@@ -555,7 +544,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "javi123";
+		authDTO.mail = "javi@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -595,7 +584,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Sara";
 		dto.surname = "Garcia";
-		dto.username = "sara123";
 		dto.mail = "sara@gmail.com";
 		dto.password = "123456789";
 		
@@ -603,7 +591,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "sara123";
+		authDTO.mail = "sara@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -650,7 +638,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Oriol";
 		dto.surname = "Garcia";
-		dto.username = "oriol123";
 		dto.mail = "oriol@gmail.com";
 		dto.password = "123456789";
 		
@@ -658,7 +645,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "oriol123";
+		authDTO.mail = "oriol@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -705,7 +692,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Arenillas";
 		dto.surname = "Garcia";
-		dto.username = "arenillas123";
 		dto.mail = "arenillas@gmail.com";
 		dto.password = "123456789";
 		
@@ -713,7 +699,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "arenillas123";
+		authDTO.mail = "arenillas@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -761,7 +747,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "David";
 		dto.surname = "Garcia";
-		dto.username = "david123";
 		dto.mail = "david@gmail.com";
 		dto.password = "123456789";
 		
@@ -769,7 +754,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "david123";
+		authDTO.mail = "david@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -814,7 +799,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Sofia";
 		dto.surname = "Garcia";
-		dto.username = "sofia123";
 		dto.mail = "sofia@gmail.com";
 		dto.password = "123456789";
 		
@@ -822,7 +806,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "sofia123";
+		authDTO.mail = "sofia@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -875,7 +859,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Montes";
 		dto.surname = "Garcia";
-		dto.username = "montes123";
 		dto.mail = "montes@gmail.com";
 		dto.password = "123456789";
 		
@@ -883,7 +866,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "montes123";
+		authDTO.mail = "montes@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -935,7 +918,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Messi";
 		dto.surname = "Garcia";
-		dto.username = "messi123";
 		dto.mail = "messi@gmail.com";
 		dto.password = "123456789";
 		
@@ -943,7 +925,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "messi123";
+		authDTO.mail = "messi@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -978,7 +960,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Carles";
 		dto.surname = "Garcia";
-		dto.username = "carles123";
 		dto.mail = "carles@gmail.com";
 		dto.password = "123456789";
 		
@@ -986,7 +967,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "carles123";
+		authDTO.mail = "carles@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1020,7 +1001,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Luisito";
 		dto.surname = "Garcia";
-		dto.username = "suarez123";
 		dto.mail = "suarez@gmail.com";
 		dto.password = "123456789";
 		
@@ -1028,7 +1008,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "suarez123";
+		authDTO.mail = "suarez@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 				
@@ -1062,7 +1042,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Gonzalo";
 		dto.surname = "Garcia";
-		dto.username = "gonzalo123";
 		dto.mail = "gonzalo@gmail.com";
 		dto.password = "123456789";
 		
@@ -1070,7 +1049,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "gonzalo123";
+		authDTO.mail = "gonzalo@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 				
@@ -1105,7 +1084,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "De Arriba";
 		dto.surname = "Garcia";
-		dto.username = "dearriba123";
 		dto.mail = "dearriba@gmail.com";
 		dto.password = "123456789";
 		
@@ -1113,7 +1091,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "dearriba123";
+		authDTO.mail = "dearriba@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1150,7 +1128,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Aitor";
 		dto.surname = "Garcia";
-		dto.username = "aitor123";
 		dto.mail = "aitor@gmail.com";
 		dto.password = "123456789";
 		
@@ -1158,7 +1135,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "aitor123";
+		authDTO.mail = "aitor@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1180,7 +1157,6 @@ public class ExperimentTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Elena";
 		dto.surname = "Garcia";
-		dto.username = "elena123";
 		dto.mail = "elena@gmail.com";
 		dto.password = "123456789";
 		
@@ -1188,7 +1164,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "elena123";
+		authDTO.mail = "elena@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1222,7 +1198,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Secun";
 		dto.surname = "Garcia";
-		dto.username = "secun123";
 		dto.mail = "secun@gmail.com";
 		dto.password = "123456789";
 		
@@ -1230,7 +1205,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "secun123";
+		authDTO.mail = "secun@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1252,7 +1227,6 @@ public class ExperimentTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Castri";
 		dto.surname = "Garcia";
-		dto.username = "castri123";
 		dto.mail = "castri@gmail.com";
 		dto.password = "123456789";
 		
@@ -1260,7 +1234,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "castri123";
+		authDTO.mail = "castri@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1288,7 +1262,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Rut";
 		dto.surname = "Garcia";
-		dto.username = "ruti123";
 		dto.mail = "ruti@gmail.com";
 		dto.password = "123456789";
 		
@@ -1296,7 +1269,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "ruti123";
+		authDTO.mail = "ruti@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1318,7 +1291,6 @@ public class ExperimentTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Leyre";
 		dto.surname = "Garcia";
-		dto.username = "leyre123";
 		dto.mail = "leyre@gmail.com";
 		dto.password = "123456789";
 		
@@ -1326,7 +1298,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "leyre123";
+		authDTO.mail = "leyre@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1354,7 +1326,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Aida";
 		dto.surname = "Garcia";
-		dto.username = "aida123";
 		dto.mail = "aida@gmail.com";
 		dto.password = "123456789";
 		
@@ -1362,7 +1333,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "aida123";
+		authDTO.mail = "aida@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1390,7 +1361,6 @@ public class ExperimentTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Lucas";
 		dto.surname = "Garcia";
-		dto.username = "lucas123";
 		dto.mail = "lucas@gmail.com";
 		dto.password = "123456789";
 		
@@ -1398,7 +1368,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "lucas123";
+		authDTO.mail = "lucas@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1423,7 +1393,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Maria";
 		dto.surname = "Garcia";
-		dto.username = "maria123";
 		dto.mail = "maria@gmail.com";
 		dto.password = "123456789";
 		
@@ -1431,7 +1400,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "maria123";
+		authDTO.mail = "maria@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1462,7 +1431,6 @@ public class ExperimentTest {
 		dto = new InvestigatorDTO();
 		dto.name = "casals";
 		dto.surname = "Garcia";
-		dto.username = "casals123";
 		dto.mail = "casals@gmail.com";
 		dto.password = "123456789";
 		
@@ -1470,7 +1438,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "casals123";
+		authDTO.mail = "casals@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1494,7 +1462,6 @@ public class ExperimentTest {
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Jorge";
 		dto.surname = "Garcia";
-		dto.username = "jorge123";
 		dto.mail = "jorge@gmail.com";
 		dto.password = "123456789";
 		
@@ -1502,7 +1469,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		AuthDTO authDTO = new AuthDTO();
-		authDTO.username = "jorge123";
+		authDTO.mail = "jorge@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		
@@ -1527,7 +1494,6 @@ public class ExperimentTest {
 		dto = new InvestigatorDTO();
 		dto.name = "Perez";
 		dto.surname = "Garcia";
-		dto.username = "perez123";
 		dto.mail = "perez@gmail.com";
 		dto.password = "123456789";
 		
@@ -1535,7 +1501,7 @@ public class ExperimentTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.username = "perez123";
+		authDTO.mail = "perez@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		

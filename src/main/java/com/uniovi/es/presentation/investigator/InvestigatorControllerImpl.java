@@ -105,16 +105,6 @@ public class InvestigatorControllerImpl implements InvestigatorController{
 		return dto;
 	}
 
-	@Override
-	@RequestMapping(value = "/username/{username}", method = RequestMethod.GET)
-	public InvestigatorDTO getInvestigatorByUsername(@PathVariable String username) throws InvestigatorException {
-		logger.info("[INICIO] INVESTIGATOR CONTROLLER -- investigator by username");
-
-		InvestigatorDTO dto = investigatorService.getInvestigatorByUsername(username);
-		
-		logger.info("[FINAL] INVESTIGATOR CONTROLLER -- investigator by username");
-		return dto;
-	}
 	
 	@Override
 	@RequestMapping(value = "/in/session", method = RequestMethod.GET)
