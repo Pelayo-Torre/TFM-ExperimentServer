@@ -1,6 +1,7 @@
 package com.uniovi.es.business.experiment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.uniovi.es.business.authentication.UserInSession;
-import com.uniovi.es.business.dto.DeviceDTO;
+import com.uniovi.es.business.dto.DemographicDataDTO;
+import com.uniovi.es.business.dto.DemographicDataTypeDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
@@ -24,15 +27,13 @@ import com.uniovi.es.business.validators.ExperimentValidator;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
+import com.uniovi.es.model.DemographicData;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Petition;
-import com.uniovi.es.model.types.DemographicData;
-import com.uniovi.es.model.types.Device;
-import com.uniovi.es.model.types.Gender;
-import com.uniovi.es.model.types.Laterality;
 import com.uniovi.es.model.types.StatusPetition;
-import com.uniovi.es.persistence.DeviceDAO;
+import com.uniovi.es.model.types.DemographicDataType;
+import com.uniovi.es.persistence.DemographicDataDAO;
 import com.uniovi.es.persistence.ExperimentDAO;
 import com.uniovi.es.persistence.InvestigatorDAO;
 import com.uniovi.es.persistence.PetitionDAO;
@@ -58,7 +59,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 	private InvestigatorDAO investigatorDAO;
 	
 	@Autowired
-	private DeviceDAO deviceDAO;
+	private DemographicDataDAO demographicDataDAO;
 	
 	@Autowired
 	private UserInSession userInSession;
@@ -79,17 +80,10 @@ public class ExperimentServiceImpl implements ExperimentService{
 		Investigator investigator = getInvestigator(optional);
 		
 		experimentValidator.validate(dto);
-		experimentValidator.validateDemographicData(dto);
 		
 		Experiment experiment = new Experiment();
 		DtoAssembler.fillData(experiment, dto);
-		
-		//Creación de los datos demográficos
-		DemographicData demographicData = new DemographicData(dto.birthDate, Laterality.valueOf(dto.laterality), 
-				Gender.valueOf(dto.gender), dto.idDevice);
-		
-		experiment.setDemographicData(demographicData);
-		
+				
 		//Creación de la petición
 		Petition petition = new Petition(investigator, experiment);
 		petition.setAnswerDate(new Date());
@@ -100,6 +94,14 @@ public class ExperimentServiceImpl implements ExperimentService{
 		logger.info("\t \t Registrando el experimento en base de datos");
 		experimentDAO.save(experiment);
 		
+		//Creación de los datos demográficos
+		if(dto.demographicData != null && dto.demographicData.size() != 0) {
+			logger.info("\t \t Creación de los datos demográficos del experimento. TOTAL: " + dto.demographicData.size());
+			for(DemographicDataDTO dd : dto.demographicData) {
+				demographicDataDAO.save(new DemographicData(dd.name, DemographicDataType.valueOf(dd.type), experiment));
+			}
+		}
+		
 		investigatorDAO.save(investigator);
 		
 		logger.info("\t \t Registrando la petitición en base de datos");
@@ -107,8 +109,9 @@ public class ExperimentServiceImpl implements ExperimentService{
 		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- register experiment");
 	}
-
+	
 	@Override
+	@Transactional
 	public void update(ExperimentDTO dto) throws ExperimentException, ForbiddenException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- update experiment");
 		
@@ -123,6 +126,16 @@ public class ExperimentServiceImpl implements ExperimentService{
 		
 		logger.info("\t \t Actualizando cambios en base de datos");
 		experimentDAO.save(experiment);
+		
+		//Se actualizan los datos demográficos del experimento
+		logger.info("\t \t Se borran los datos previamente asociados.");
+		demographicDataDAO.deleteDemographicDataByExperiment(experiment.getId());
+		if(dto.demographicData != null && dto.demographicData.size() != 0) {
+			logger.info("\t \t Creación de los datos demográficos del experimento. TOTAL: " + dto.demographicData.size());
+			for(DemographicDataDTO dd : dto.demographicData) {
+				demographicDataDAO.save(new DemographicData(dd.name, DemographicDataType.valueOf(dd.type), experiment));
+			}
+		}
 		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- update experiment");
 	}
@@ -300,17 +313,6 @@ public class ExperimentServiceImpl implements ExperimentService{
 	}
 	
 	@Override
-	public List<DeviceDTO> getAllDevices() {
-		logger.info("[INICIO] EXPERIMENT SERVICE -- all Devices");
-		
-		List<Device> list = new ArrayList<Device>();
-		deviceDAO.findAll().forEach(list::add);
-		
-		logger.info("[FINAL] EXPERIMENT SERVICE -- all Devices");
-		return DtoAssembler.toListDevices(list);
-	}
-	
-	@Override
 	public List<InvestigatorDTO> getInvestigatorsNotAssociatedAnExperiment(Long id) throws ExperimentException {
 		logger.info("[INICIO] EXPERIMENT SERVICE -- investigators not associated an experiment");
 		
@@ -318,6 +320,17 @@ public class ExperimentServiceImpl implements ExperimentService{
 		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- investigators not associated an experiment");
 		return DtoAssembler.toListInvestigators(list);
+	}
+	
+	@Override
+	public List<DemographicDataTypeDTO> getListDemographicDataTypes() {
+		logger.info("[INICIO] EXPERIMENT SERVICE -- list demographicData types");
+		
+		List<DemographicDataType> list = new ArrayList<DemographicDataType>();
+		Collections.addAll(list, DemographicDataType.values());
+		
+		logger.info("[FINAL] EXPERIMENT SERVICE -- list demographicData types");
+		return DtoAssembler.toListDemographicDataType(list);
 	}
 	
 	/**
@@ -355,5 +368,7 @@ public class ExperimentServiceImpl implements ExperimentService{
 		}
 		return investigator;
 	}
+
+	
 
 }

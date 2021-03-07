@@ -22,6 +22,20 @@ public class Associations {
 		
 	}
 	
+	public static class PetitionNotRegisteredExperiment{
+		
+		public static void link(PetitionNotRegistered petition, Experiment experiment) {
+			petition.setExperiment(experiment);
+			experiment.getPetitionsNotRegistered().add(petition);			
+		}
+		
+		public static void unlink(PetitionNotRegistered petition, Experiment experiment) {
+			experiment.getPetitionsNotRegistered().remove(petition);
+			petition.setExperiment(null);
+		}
+		
+	}
+	
 	public static class InvestigatorRequest {
 		
 		public static void link(Investigator investigator, Request request) {
@@ -32,6 +46,20 @@ public class Associations {
 		public static void unlink(Investigator investigator, Request request) {
 			investigator.getRequests().remove(request);
 			request.setInvestigator(null);
+		}
+		
+	}
+	
+	public static class ExperimentDemographicData {
+		
+		public static void link(Experiment experiment, DemographicData demographicData) {
+			demographicData.setExperiment(experiment);
+			experiment.getDemographicData().add(demographicData);
+		}
+		
+		public static void unlink(Experiment experiment, DemographicData demographicData) {
+			experiment.getDemographicData().remove(demographicData);
+			demographicData.setExperiment(null);
 		}
 		
 	}

@@ -16,17 +16,23 @@ import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
 import com.uniovi.es.business.validators.InvestigatorValidator;
+import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
+import com.uniovi.es.model.Associations;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Petition;
+import com.uniovi.es.model.PetitionNotRegistered;
 import com.uniovi.es.model.Request;
 import com.uniovi.es.model.types.StatusExperiment;
 import com.uniovi.es.model.types.Role;
 import com.uniovi.es.model.types.StatusPetition;
 import com.uniovi.es.persistence.AdministrationDAO;
+import com.uniovi.es.persistence.ExperimentDAO;
 import com.uniovi.es.persistence.InvestigatorDAO;
+import com.uniovi.es.persistence.PetitionDAO;
+import com.uniovi.es.persistence.PetitionNotRegisteredDAO;
 
 @Service
 public class InvestigatorServiceImpl implements InvestigatorService{
@@ -47,6 +53,15 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 	
 	@Autowired
 	private AdministrationDAO administrationDAO;
+	
+	@Autowired
+	private PetitionNotRegisteredDAO petitionNotRegisteredDAO;
+	
+	@Autowired
+	private PetitionDAO petitionDAO;
+	
+	@Autowired
+	private ExperimentDAO experimentDAO;
 
 	@Override
 	public void registerInvestigator(InvestigatorDTO dto) throws InvestigatorException {
@@ -65,7 +80,50 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		logger.info("\t \t Registrando el investigador en base de datos");
 		investigatorDAO.save(investigator);
 		
+		//Una vez se haya registrado correctamente, se procede a comprobar si el investigador tenía petiones no registradas
+		generatePetitions(dto);
+		
 		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- register INVESTIGATOR ");
+	}
+
+	/**
+	 * En caso de que el investigador que se acaba de registrar tuviese peticiones no registradas, se envía 
+	 * las peticiones asociadas al propio investigador y al experimento correspondiente.
+	 * Finalmente, las peticiones no registradas son eliminadas del sistema.
+	 * @param dto datos de entrada
+	 * @throws InvestigatorException
+	 */
+	private void generatePetitions(InvestigatorDTO dto) throws InvestigatorException {
+		logger.info("\t \t Se comprueba la existencia de peticiones no registradas");
+		List<PetitionNotRegistered> list = petitionNotRegisteredDAO.getPetitionsByMail(dto.mail);
+		if(list != null && list.size() != 0) {
+			//Se procede a crear las peticiones
+			logger.info("\t \t Se han encontrado un total de " + list.size() + " peticiones no registradas");
+			for(PetitionNotRegistered p : list) {
+				logger.info("\t \t Se trata la petición no registrada: " + p);
+				Investigator i = investigatorDAO.findByMail(dto.mail);
+				
+				Optional<Experiment> optional = experimentDAO.findById(p.getExperiment().getId());
+				Experiment experiment;
+				try {
+					experiment = getExperiment(optional);
+				} catch (ExperimentException e) {
+					logger.error("[ERROR -- 100] - El experimento especificado no se encuentra registrado en el sistema.");
+					throw new InvestigatorException("100");
+				}
+				
+				logger.info("\t \t Se crea la petición con investigador y experimento.");
+				Petition petition = new Petition(i, experiment, null);
+				DtoAssembler.fillData(petition, p);
+				
+				logger.info("\t \t Se almacena la petición en base de datos");
+				petitionDAO.save(petition);
+				
+				logger.info("\t \t Se elimina la petición no registrada en base de datos");
+				Associations.PetitionNotRegisteredExperiment.unlink(p, experiment);
+				petitionNotRegisteredDAO.delete(p);
+			}
+		}
 	}
 
 	@Override
@@ -225,4 +283,22 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		}
 		return investigator;
 	}	
+	
+	/**
+	 * Devuelve el experimento a partir del optional que se pasa como parámetro
+	 * @param optional, parámetro de entrada
+	 * @return experimento encontrado
+	 * @throws ExperimentException, en caso de que el experimento no exista en base de datos.
+	 */
+	private Experiment getExperiment(Optional<Experiment> optional) throws ExperimentException {
+		Experiment experiment = null;
+		if(optional.isPresent()) {
+			experiment = optional.get();
+		}
+		else {
+			logger.error("[ERROR - 100] -- El experimento especificado no se encuentra registrado en el sistema");
+			throw new ExperimentException("100");
+		}
+		return experiment;
+	}
 }

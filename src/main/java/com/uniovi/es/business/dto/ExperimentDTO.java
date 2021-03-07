@@ -1,6 +1,8 @@
 package com.uniovi.es.business.dto;
 
 import java.util.Date;
+import java.util.List;
+
 
 public class ExperimentDTO {
 	
@@ -11,10 +13,7 @@ public class ExperimentDTO {
 	public Date creationDate;
 	
 	//Datos demográficos
-	public String laterality;
-	public String gender;
-	public Date birthDate;
-	public Long idDevice;
+	public List<DemographicDataDTO> demographicData;
 	
 	public Long idInvestigator; //ID del investigador creador
 	
@@ -25,12 +24,14 @@ public class ExperimentDTO {
 	public String surnameInvestigator;
 	public String usernameInvestigator;
 	public String mailInvestigator;
-
+	
 	@Override
 	public String toString() {
 		return "ExperimentDTO [id=" + id + ", title=" + title + ", description=" + description + ", status=" + status
-				+ ", creationDate=" + creationDate + ", idInvestigator=" + idInvestigator + "]";
+				+ ", creationDate=" + creationDate + ", demographicData=" + demographicData + ", idInvestigator="
+				+ idInvestigator + ", isManagerInvestigatorInSession=" + isManagerInvestigatorInSession
+				+ ", nameInvestigator=" + nameInvestigator + ", surnameInvestigator=" + surnameInvestigator
+				+ ", usernameInvestigator=" + usernameInvestigator + ", mailInvestigator=" + mailInvestigator + "]";
 	}
 
-	
 }

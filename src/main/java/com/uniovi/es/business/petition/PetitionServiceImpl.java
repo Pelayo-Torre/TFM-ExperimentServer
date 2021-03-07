@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.uniovi.es.business.authentication.UserInSession;
 import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
+import com.uniovi.es.business.mail.MailSenderService;
 import com.uniovi.es.business.petition.commands.Accept;
 import com.uniovi.es.business.petition.commands.Cancel;
 import com.uniovi.es.business.petition.commands.Reject;
@@ -22,10 +23,12 @@ import com.uniovi.es.exceptions.PetitionException;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Petition;
+import com.uniovi.es.model.PetitionNotRegistered;
 import com.uniovi.es.model.types.StatusPetition;
 import com.uniovi.es.persistence.ExperimentDAO;
 import com.uniovi.es.persistence.InvestigatorDAO;
 import com.uniovi.es.persistence.PetitionDAO;
+import com.uniovi.es.persistence.PetitionNotRegisteredDAO;
 import com.uniovi.es.utils.Identifier;
 
 @Service
@@ -45,33 +48,66 @@ public class PetitionServiceImpl implements PetitionService{
 	private ExperimentDAO experimentDAO;
 	
 	@Autowired
+	private PetitionNotRegisteredDAO petitionNotRegisteredDAO;
+	
+	@Autowired
 	private PetitionValidator petitionValidator;
 	
 	@Autowired
 	private UserInSession userInSession;
-
+	
+	@Autowired
+	private MailSenderService mailSenderService;
+	
 	@Override
 	public void register(PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException {
 		logger.info("[INICIO] PETITION SERVICE -- register petition");
 				
-		logger.info("\t \t Obteniendo el investigador receptor a partir del ID: " + dto.idInvestigator);
-		Optional<Investigator> optional = investigatorDAO.findById(dto.idInvestigator);
-		Investigator investigator = getInvestigator(optional);
-		
+		logger.info("\t \t Obteniendo el investigador receptor a partir del mail: " + dto.mail);
+		Investigator investigator = investigatorDAO.findByMail(dto.mail);
+				
 		logger.info("\t \t Obteniendo el experimento a partir del ID: " + dto.idExperiment);
 		Optional<Experiment> optional2 = experimentDAO.findById(dto.idExperiment);
 		Experiment experiment = getExperiment(optional2);
 		
-		logger.info("\t \t Comprobando que el investigador no tenga ya una petición PENDIENTE o ACEPTADA sobre el experimento");
-		petitionValidator.validatePetitionExistence(dto.idInvestigator, dto.idExperiment);
+		//Si el investigador es == null quiere decir que no está registrado en la aplicación
+		if(investigator == null) {
+			logger.info("\t \t Comprobando que no tenga ya una petición no registrada sobre el experimento");
+			petitionValidator.validatePetitionNotRegisteredExistence(dto.mail, dto.idExperiment);
+			
+			logger.info("\t \t Se almacena la petición no registrada en el sistema");
+			PetitionNotRegistered p = new PetitionNotRegistered(dto.mail, experiment);
+			p.setManager(dto.manager);
+			p.setIdInvestigatorSend(userInSession.getInvestigator().getId());
+			
+			petitionNotRegisteredDAO.save(p);
+		}
+		//Si el investigador es != null quiere decir que está registrado en base de datos
+		else {
+			logger.info("\t \t Comprobando que el investigador no tenga ya una petición PENDIENTE o ACEPTADA sobre el experimento");
+			petitionValidator.validatePetitionExistence(investigator.getId(), dto.idExperiment);
+			
+			Petition petition = new Petition(investigator, experiment, dto.manager);
+			DtoAssembler.fillData(petition, dto);
+			
+			petition.setIdInvestigatorSend(userInSession.getInvestigator().getId());
+					
+			logger.info("\t \t Registrando la petitición en base de datos");
+			petitionDAO.save(petition);
+		}
 		
-		Petition petition = new Petition(investigator, experiment, dto.manager);
-		DtoAssembler.fillData(petition, dto);
-		
-		petition.setIdInvestigatorSend(userInSession.getInvestigator().getId());
-				
-		logger.info("\t \t Registrando la petitición en base de datos");
-		petitionDAO.save(petition);
+		//Se envía por correo el aviso de que se le ha enviado la petición
+		try {
+			mailSenderService.sendMail(
+					dto.mail,
+					"Invitación a experimento", 
+					"Hola.\n\nUsted ha recibido una invitación para participar en el siguiente experimento:\n\n " 
+							+ "\tTítulo: " + experiment.getTitle() 
+							+ "\n\tDescripción: " + experiment.getDescription()
+							+ "\n\nPara acceder al experimento debe aceptarlo desde la siguiente url: ");
+		} catch (Exception e) {
+			logger.error("[ERROR -- 600] - Se ha producido un error al enviar el correo electrónico.  " + e);
+		}
 		
 		logger.info("[FINAL] PETITION SERVICE -- register petition");
 	}
@@ -124,7 +160,7 @@ public class PetitionServiceImpl implements PetitionService{
 		
 		actionManager.execute(new Reject(), petition);
 		
-		logger.info("\t \t Actualizando estado de la petitición en base de datos");
+		logger.info("\t \t Actu)alizando estado de la petitición en base de datos");
 		petitionDAO.save(petition);
 		
 		logger.info("[FINAL] PETITION SERVICE -- reject petition");
@@ -215,6 +251,16 @@ public class PetitionServiceImpl implements PetitionService{
 		logger.info("[FINAL] PETITION SERVICE -- cancel association between Investigator and Experiment");
 	}
 	
+	@Override
+	public PetitionNotRegistered getPetitionNotRegistered(String mail, Long idExperiment) {
+		logger.info("[INICIO] PETITION SERVICE -- get petition not registered by mail and idInvestigator");
+		
+		PetitionNotRegistered p = petitionNotRegisteredDAO.getPetitionByMailAndExperiment(mail, idExperiment);
+		
+		logger.info("[FINAL] PETITION SERVICE -- get petition not registered by mail and idInvestigator");
+		return p;
+	}
+	
 	/**
 	 * Devuelve la petición a partir del optional que se pasa como parámetro
 	 * @param optional, parámetro de entrada
@@ -231,24 +277,6 @@ public class PetitionServiceImpl implements PetitionService{
 			throw new PetitionException("300");
 		}
 		return petition;
-	}
-
-	/**
-	 * Devuelve el investigador a partir del optional que se pasa como parámetro
-	 * @param optional, parámetro de entrada
-	 * @return investigador encontrado
-	 * @throws InvestigatorException, en caso de que el investigador no exista en base de datos.
-	 */
-	private Investigator getInvestigator(Optional<Investigator> optional) throws InvestigatorException{
-		Investigator investigator = null;
-		if(optional.isPresent()) {
-			investigator = optional.get();
-		}
-		else {
-			logger.error("[ERROR - 200] -- El investigador especificado no se encuentra registrado en el sistema");
-			throw new InvestigatorException("200");
-		}
-		return investigator;
 	}
 	
 	/**
@@ -268,5 +296,5 @@ public class PetitionServiceImpl implements PetitionService{
 		}
 		return experiment;
 	}
-	
+
 }

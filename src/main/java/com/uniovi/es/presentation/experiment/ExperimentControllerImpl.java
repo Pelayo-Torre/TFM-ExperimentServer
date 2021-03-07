@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uniovi.es.business.dto.DeviceDTO;
+import com.uniovi.es.business.dto.DemographicDataTypeDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.experiment.ExperimentService;
@@ -146,13 +146,13 @@ public class ExperimentControllerImpl implements ExperimentController {
 	}
 
 	@Override
-	@RequestMapping(value = "/all/devices", method = RequestMethod.GET)
-	public List<DeviceDTO> getListDevices() {
-		logger.info("[INICIO] EXPERIMENT CONTROLLER -- all devices");
+	@RequestMapping(value = "/all/types/demographicData", method = RequestMethod.GET)
+	public List<DemographicDataTypeDTO> getListDemographicDataTypes() {
+		logger.info("[INICIO] EXPERIMENT CONTROLLER -- all demographicData types");
 		
-		List<DeviceDTO> list = experimentService.getAllDevices();
+		List<DemographicDataTypeDTO> list = experimentService.getListDemographicDataTypes();
 		
-		logger.info("[FINAL] EXPERIMENT CONTROLLER -- all devices");
+		logger.info("[FINAL] EXPERIMENT CONTROLLER -- all demographicData types");
 		return list;
 	}
 

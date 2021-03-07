@@ -3,18 +3,21 @@ package com.uniovi.es.business.dto.assembler;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.uniovi.es.business.dto.DeviceDTO;
+import com.uniovi.es.business.dto.DemographicDataDTO;
+import com.uniovi.es.business.dto.DemographicDataTypeDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.NoteDTO;
 import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.business.dto.RequestDTO;
+import com.uniovi.es.model.DemographicData;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Note;
 import com.uniovi.es.model.Petition;
+import com.uniovi.es.model.PetitionNotRegistered;
 import com.uniovi.es.model.Request;
-import com.uniovi.es.model.types.Device;
+import com.uniovi.es.model.types.DemographicDataType;
 
 public class DtoAssembler {
 	
@@ -28,13 +31,15 @@ public class DtoAssembler {
 			dto.status = experiment.getStatus().name();
 			dto.creationDate = experiment.getCreationDate();
 			
-			//Demographic data
-			dto.birthDate = experiment.getDemographicData().getBirthdate();
-			dto.gender = experiment.getDemographicData().getGender().name();
-			dto.idDevice = experiment.getDemographicData().getIdDevice();
-			dto.laterality = experiment.getDemographicData().getLaterality().name();
 			if(rol != null)
 				dto.isManagerInvestigatorInSession = rol;
+			
+			if(experiment.getDemographicData() != null && experiment.getDemographicData().size() > 0) {
+				dto.demographicData = new ArrayList<DemographicDataDTO>();
+				for(DemographicData dd : experiment.getDemographicData()) {
+					dto.demographicData.add(toDTO(dd));
+				}
+			}
 		}
 				
 		if(investigator != null) {
@@ -47,6 +52,15 @@ public class DtoAssembler {
 		return dto;
 	}
 	
+	private static DemographicDataDTO toDTO(DemographicData dd) {
+		DemographicDataDTO dto = new DemographicDataDTO();
+		
+		dto.name = dd.getName();
+		dto.type = dd.getType().name();
+		
+		return dto;
+	}
+
 	public static List<ExperimentDTO> toList(List<Experiment> experiments){
 		List<ExperimentDTO> list = new ArrayList<ExperimentDTO>();
 		
@@ -180,25 +194,6 @@ public class DtoAssembler {
 		note.setDescrition(dto.description);
 	}
 	
-	public static DeviceDTO toDTO(Device device) {
-		DeviceDTO dto = new DeviceDTO();
-		
-		dto.id = device.getId();
-		dto.name = device.getName();
-		
-		return dto;
-	}
-	
-	public static List<DeviceDTO> toListDevices(List<Device> devices){
-		List<DeviceDTO> devicesDTO = new ArrayList<DeviceDTO>();
-		
-		for(Device device : devices) {
-			devicesDTO.add(toDTO(device));
-		}
-		
-		return devicesDTO;
-	}
-	
 	public static RequestDTO toDto(Request request) {
 		RequestDTO dto = new RequestDTO();
 		
@@ -225,9 +220,27 @@ public class DtoAssembler {
 	}
 	
 	public static void fillData(Request request, RequestDTO dto) {
-		
 		request.setAnswerDate(dto.answerDate);
 		request.setShippingDate(dto.shippingDate);
+	}
+	
+	public static void fillData(Petition petition, PetitionNotRegistered p) {
+		petition.setIdInvestigatorSend(p.getIdInvestigatorSend());
+		petition.setManager(p.getManager());
+		petition.setShippingDate(p.getShippingDate());
+		
+	}
+	
+	public static List<DemographicDataTypeDTO> toListDemographicDataType(List<DemographicDataType> list){
+		List<DemographicDataTypeDTO> listDtos = new ArrayList<DemographicDataTypeDTO>();
+		
+		for(DemographicDataType type : list) {
+			DemographicDataTypeDTO dto = new DemographicDataTypeDTO();
+			dto.type = type.name();
+			listDtos.add(dto);
+		}
+		
+		return listDtos;
 	}
 
 }

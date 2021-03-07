@@ -2,10 +2,9 @@ package service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 
 import org.junit.Assert;
 //import org.junit.jupiter.api.Test;
@@ -24,6 +23,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.uniovi.es.ExperimentServerApplication;
 import com.uniovi.es.business.authentication.AuthenticationService;
 import com.uniovi.es.business.dto.AuthDTO;
+import com.uniovi.es.business.dto.DemographicDataDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.experiment.ExperimentService;
@@ -32,11 +32,8 @@ import com.uniovi.es.exceptions.AttempsException;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
-import com.uniovi.es.model.types.Device;
-import com.uniovi.es.model.types.Gender;
-import com.uniovi.es.model.types.Laterality;
+import com.uniovi.es.model.types.DemographicDataType;
 import com.uniovi.es.model.types.StatusExperiment;
-import com.uniovi.es.persistence.DeviceDAO;
 import com.uniovi.es.utils.Identifier;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -56,25 +53,8 @@ public class ExperimentTest {
 	private static final Long ID_NOT_EXIST = 4345245786396523496L;
 	
 	@Autowired
-	private DeviceDAO deviceDAO;
-	
-	@Autowired
 	private AuthenticationService authenticateUser;
-	
-	private static boolean primeraVez = true;
-	
-	@PostConstruct
-	public void init() {
-		if(primeraVez) {
-			Device d = new Device("MOUSE");
-			Device d1 = new Device("TOUCHPAD");
-			
-			deviceDAO.save(d);
-			deviceDAO.save(d1);
-			
-			primeraVez = false;
-		}
-	}
+		
 	
 	@Test
 	/**
@@ -104,12 +84,23 @@ public class ExperimentTest {
 		experientDTO.title = "Experimento en Langreo";
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("carlos@gmail.com").id;
+				
+		DemographicDataDTO dd = new DemographicDataDTO();
+		dd.name = "Profesion";
+		dd.type = DemographicDataType.STRING.name();
 		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 2L;
+		DemographicDataDTO dd1 = new DemographicDataDTO();
+		dd1.name = "Fecha de nacimiento";
+		dd1.type = DemographicDataType.DATE.name();
+		
+		DemographicDataDTO dd2 = new DemographicDataDTO();
+		dd2.name = "Lateralidad";
+		dd2.type = DemographicDataType.NUMBER.name();
+		
+		experientDTO.demographicData = new ArrayList<DemographicDataDTO>();
+		experientDTO.demographicData.add(dd);
+		experientDTO.demographicData.add(dd1);
+		experientDTO.demographicData.add(dd2);
 		
 		experimentService.register(experientDTO);
 		
@@ -120,10 +111,22 @@ public class ExperimentTest {
 		assertNotNull(exp);
 		assertEquals("Experimento en Langreo", exp.title);
 		assertEquals("Prueba en ordenadores con niños de 12 a 16 años", exp.description);
-		assertEquals(hoy, exp.birthDate);
-		assertEquals(Gender.MALE.name(), exp.gender);
-		assertEquals(Laterality.LEFT_HANDED.name(), exp.laterality);
-		assertEquals(2L, exp.idDevice);
+		assertEquals(3, exp.demographicData.size());
+		
+		for(DemographicDataDTO d : exp.demographicData) {
+			if(d.type.equals(DemographicDataType.STRING.name())) {
+				assertEquals("Profesion", d.name);
+				assertEquals(DemographicDataType.STRING.name(), d.type);
+			}
+			else if(d.type.equals(DemographicDataType.DATE.name())) {
+				assertEquals("Fecha de nacimiento", d.name);
+				assertEquals(DemographicDataType.DATE.name(), d.type);
+			}
+			else if(d.type.equals(DemographicDataType.NUMBER.name())) {
+				assertEquals("Lateralidad", d.name);
+				assertEquals(DemographicDataType.NUMBER.name(), d.type);
+			}
+		}
 	}
 	
 	@Test
@@ -153,11 +156,6 @@ public class ExperimentTest {
 		experientDTO.title = null;
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("juanin@gmail.com").id;
-		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
 		
 		try {
 			experimentService.register(experientDTO);
@@ -195,11 +193,6 @@ public class ExperimentTest {
 		experientDTO.description = "";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("pedro@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-		
 		try {
 			experimentService.register(experientDTO);
 			Assert.fail("Debe lanzarse excepción.");
@@ -235,11 +228,6 @@ public class ExperimentTest {
 		experientDTO.title = "Experimento en Langreo";
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = ID_NOT_EXIST;
-		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
 		
 		try {
 			experimentService.register(experientDTO);
@@ -277,11 +265,22 @@ public class ExperimentTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 22 a 44 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("paco@gmail.com").id;
 		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 2L;
+		DemographicDataDTO dd = new DemographicDataDTO();
+		dd.name = "Profesion";
+		dd.type = DemographicDataType.STRING.name();
+		
+		DemographicDataDTO dd1 = new DemographicDataDTO();
+		dd1.name = "Fecha de nacimiento";
+		dd1.type = DemographicDataType.DATE.name();
+		
+		DemographicDataDTO dd2 = new DemographicDataDTO();
+		dd2.name = "Lateralidad";
+		dd2.type = DemographicDataType.NUMBER.name();
+		
+		experientDTO.demographicData = new ArrayList<DemographicDataDTO>();
+		experientDTO.demographicData.add(dd);
+		experientDTO.demographicData.add(dd1);
+		experientDTO.demographicData.add(dd2);
 				
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
@@ -292,6 +291,13 @@ public class ExperimentTest {
 		experientDTO.description = "Prueba en ordenadores con adultos de 25 a 35 años";
 		experientDTO.id = experiments.get(experiments.size()-1).id;
 		
+		DemographicDataDTO dd3 = new DemographicDataDTO();
+		dd3.name = "Profesion";
+		dd3.type = DemographicDataType.STRING.name();
+		
+		experientDTO.demographicData = new ArrayList<DemographicDataDTO>();
+		experientDTO.demographicData.add(dd3);
+		
 		experimentService.update(experientDTO);
 		
 		//COMPROBAMOS QUE SE HA EDITADO CORRECTAMENTE
@@ -300,9 +306,8 @@ public class ExperimentTest {
 		assertNotNull(experientDTO);
 		assertEquals("Experimento en SAMA", experientDTO.title);
 		assertEquals("Prueba en ordenadores con adultos de 25 a 35 años", experientDTO.description);
-		assertEquals(Gender.MALE.name(), experientDTO.gender);
-		assertEquals(Laterality.LEFT_HANDED.name(), experientDTO.laterality);
-		assertEquals(2L, experientDTO.idDevice);
+		assertEquals("Profesion", experientDTO.demographicData.get(0).name);
+		assertEquals(DemographicDataType.STRING.name(), experientDTO.demographicData.get(0).type);
 	}
 	
 	@Test
@@ -333,12 +338,6 @@ public class ExperimentTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 22 a 44 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("juana@gmail.com").id;
 		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 2L;
-				
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		Long id = experiments.get(experiments.size()-1).id;
@@ -385,12 +384,6 @@ public class ExperimentTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 22 a 44 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("julieta@gmail.com").id;
 		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 2L;
-				
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		Long id = experiments.get(experiments.size()-1).id;
@@ -473,12 +466,6 @@ public class ExperimentTest {
 		experientDTO.title = "Experimento de Rodolfo";
 		experientDTO.description = "Prueba en ordenadores para Rodolfo";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("rodolfo@gmail.com").id;
-		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 2L;
 				
 		experimentService.register(experientDTO);
 		
@@ -554,11 +541,6 @@ public class ExperimentTest {
 		experimentDTO.description = "Prueba a pasar el experimento a estado OPEN";
 		experimentDTO.idInvestigator = investigatorService.getInvestigatorByMail("javi@gmail.com").id;
 		
-		experimentDTO.birthDate = new Date();
-		experimentDTO.gender = Gender.MALE.name();
-		experimentDTO.laterality = Laterality.LEFT_HANDED.name();
-		experimentDTO.idDevice = 1L;
-		
 		experimentService.register(experimentDTO);
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
@@ -600,11 +582,6 @@ public class ExperimentTest {
 		experimentDTO.title = "Experimento de prueba de estados erróneos OPEN";
 		experimentDTO.description = "Prueba a pasar el experimento a estado OPEN";
 		experimentDTO.idInvestigator = investigatorService.getInvestigatorByMail("sara@gmail.com").id;
-		
-		experimentDTO.birthDate = new Date();
-		experimentDTO.gender = Gender.MALE.name();
-		experimentDTO.laterality = Laterality.LEFT_HANDED.name();
-		experimentDTO.idDevice = 1L;
 		
 		experimentService.register(experimentDTO);
 		
@@ -655,11 +632,6 @@ public class ExperimentTest {
 		experimentDTO.description = "Prueba a pasar el experimento a estado OPEN";
 		experimentDTO.idInvestigator = investigatorService.getInvestigatorByMail("oriol@gmail.com").id;
 		
-		experimentDTO.birthDate = new Date();
-		experimentDTO.gender = Gender.MALE.name();
-		experimentDTO.laterality = Laterality.LEFT_HANDED.name();
-		experimentDTO.idDevice = 1L;
-		
 		experimentService.register(experimentDTO);
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
@@ -708,11 +680,6 @@ public class ExperimentTest {
 		experimentDTO.title = "Experimento de prueba de estados erróneos OPEN";
 		experimentDTO.description = "Prueba a pasar el experimento a estado OPEN";
 		experimentDTO.idInvestigator = investigatorService.getInvestigatorByMail("arenillas@gmail.com").id;
-		
-		experimentDTO.birthDate = new Date();
-		experimentDTO.gender = Gender.MALE.name();
-		experimentDTO.laterality = Laterality.LEFT_HANDED.name();
-		experimentDTO.idDevice = 1L;
 		
 		experimentService.register(experimentDTO);
 		
@@ -764,11 +731,6 @@ public class ExperimentTest {
 		experimentDTO.description = "Prueba a pasar el experimento a otro estado";
 		experimentDTO.idInvestigator = investigatorService.getInvestigatorByMail("david@gmail.com").id;
 		
-		experimentDTO.birthDate = new Date();
-		experimentDTO.gender = Gender.MALE.name();
-		experimentDTO.laterality = Laterality.LEFT_HANDED.name();
-		experimentDTO.idDevice = 1L;
-		
 		experimentService.register(experimentDTO);
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
@@ -815,11 +777,6 @@ public class ExperimentTest {
 		experimentDTO.title = "Experimento de prueba de estados erróneos";
 		experimentDTO.description = "Prueba a pasar el experimento a otro estado";
 		experimentDTO.idInvestigator = investigatorService.getInvestigatorByMail("sofia@gmail.com").id;
-		
-		experimentDTO.birthDate = new Date();
-		experimentDTO.gender = Gender.MALE.name();
-		experimentDTO.laterality = Laterality.LEFT_HANDED.name();
-		experimentDTO.idDevice = 1L;
 		
 		experimentService.register(experimentDTO);
 		
@@ -876,11 +833,6 @@ public class ExperimentTest {
 		experimentDTO.description = "Prueba a pasar el experimento a otro estado";
 		experimentDTO.idInvestigator = investigatorService.getInvestigatorByMail("montes@gmail.com").id;
 		
-		experimentDTO.birthDate = new Date();
-		experimentDTO.gender = Gender.MALE.name();
-		experimentDTO.laterality = Laterality.LEFT_HANDED.name();
-		experimentDTO.idDevice = 1L;
-		
 		experimentService.register(experimentDTO);
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
@@ -909,7 +861,7 @@ public class ExperimentTest {
 	
 	@Test
 	/**
-	 * Se registra un experimento sin el género como campo obligatorio sin rellenar
+	 * Se registra un experimento con un campo demográfico como null
 	 * @throws InvestigatorException 
 	 */
 	public void test30RegisterExperimentERROR110() throws InvestigatorException, AttempsException, ForbiddenException {
@@ -935,11 +887,10 @@ public class ExperimentTest {
 		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("messi@gmail.com").id;
 		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = null;
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 2L;
+		DemographicDataDTO dd = null;
+		
+		experientDTO.demographicData = new ArrayList<DemographicDataDTO>();
+		experientDTO.demographicData.add(dd);
 		
 		try {
 			experimentService.register(experientDTO);
@@ -951,7 +902,7 @@ public class ExperimentTest {
 	
 	@Test
 	/**
-	 * Se registra un experimento sin la fecha de nacimento como campo obligatorio sin rellenar
+	 * Se registra un experimento con un dato demográfico sin valor
 	 * @throws InvestigatorException 
 	 */
 	public void test31RegisterExperimentERROR111() throws InvestigatorException, AttempsException, ForbiddenException {
@@ -977,10 +928,11 @@ public class ExperimentTest {
 		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("carles@gmail.com").id;
 		
-		experientDTO.birthDate = null;
-		experientDTO.gender = Gender.FEMALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 2L;
+		DemographicDataDTO dd = new DemographicDataDTO();
+		dd.type = DemographicDataType.STRING.name();
+		
+		experientDTO.demographicData = new ArrayList<DemographicDataDTO>();
+		experientDTO.demographicData.add(dd);
 		
 		try {
 			experimentService.register(experientDTO);
@@ -992,7 +944,7 @@ public class ExperimentTest {
 	
 	@Test
 	/**
-	 * Se registra un experimento con la lateralidad informada incorrectamente
+	 * Se registra un experimento con un dato demográfico sin tipo
 	 * @throws InvestigatorException 
 	 */
 	public void test32RegisterExperimentERROR112() throws InvestigatorException, AttempsException, ForbiddenException {
@@ -1018,11 +970,11 @@ public class ExperimentTest {
 		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("suarez@gmail.com").id;
 		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.FEMALE.name();
-		experientDTO.laterality = "IZQUIERDA";
-		experientDTO.idDevice = 2L;
+		DemographicDataDTO dd = new DemographicDataDTO();
+		dd.name = "Profesion";
+		
+		experientDTO.demographicData = new ArrayList<DemographicDataDTO>();
+		experientDTO.demographicData.add(dd);
 		
 		try {
 			experimentService.register(experientDTO);
@@ -1034,7 +986,7 @@ public class ExperimentTest {
 	
 	@Test
 	/**
-	 * Se registra un experimento sin un dispositivo sin especificar como campo obligatorio
+	 * Se registra un experimento con un dato demográfico de tipo incorrecto
 	 * @throws InvestigatorException 
 	 */
 	public void test33RegisterExperimentERROR113() throws InvestigatorException, AttempsException, ForbiddenException {
@@ -1059,59 +1011,18 @@ public class ExperimentTest {
 		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("gonzalo@gmail.com").id;
 		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.FEMALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();;
-		experientDTO.idDevice = null;
+		DemographicDataDTO dd = new DemographicDataDTO();
+		dd.name = "Profesion";
+		dd.type = "DOUBLE";
+	
+		experientDTO.demographicData = new ArrayList<DemographicDataDTO>();
+		experientDTO.demographicData.add(dd);
 		
 		try {
 			experimentService.register(experientDTO);
 			Assert.fail("Debe lanzarse excepción.");
 		} catch (ExperimentException e) {
 			assertEquals("113", e.getMessage());
-		}
-	}
-	
-	@Test
-	/**
-	 * Se registra un experimento con un dispositivo registrado en el sistema
-	 * @throws InvestigatorException 
-	 */
-	public void test34RegisterExperimentERROR114() throws InvestigatorException, AttempsException, ForbiddenException {
-		
-		//REGISTRAMOS UN INVESTIGADOR
-		InvestigatorDTO dto = new InvestigatorDTO();
-		dto.name = "De Arriba";
-		dto.surname = "Garcia";
-		dto.mail = "dearriba@gmail.com";
-		dto.password = "123456789";
-		
-		investigatorService.registerInvestigator(dto);
-		
-		//INICIAMOS SESIÓN
-		AuthDTO authDTO = new AuthDTO();
-		authDTO.mail = "dearriba@gmail.com";
-		authDTO.password = "123456789";
-		authenticateUser.authenticateUser(authDTO);
-		
-		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
-		ExperimentDTO experientDTO = new ExperimentDTO();
-		experientDTO.title = "Experimento de personas entre 30 y 40 años";
-		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
-		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("dearriba@gmail.com").id;
-		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.FEMALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();;
-		experientDTO.idDevice = ID_NOT_EXIST;
-		
-		try {
-			experimentService.register(experientDTO);
-			Assert.fail("Debe lanzarse excepción.");
-		} catch (ExperimentException e) {
-			assertEquals("114", e.getMessage());
 		}
 	}
 	
@@ -1144,12 +1055,6 @@ public class ExperimentTest {
 		experientDTO.title = "Experimento de personas entre 30 y 40 años";
 		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("aitor@gmail.com").id;
-		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.FEMALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();;
-		experientDTO.idDevice = 1L;
 		
 		experimentService.register(experientDTO);
 		
@@ -1215,12 +1120,6 @@ public class ExperimentTest {
 		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("secun@gmail.com").id;
 		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.FEMALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();;
-		experientDTO.idDevice = 1L;
-		
 		experimentService.register(experientDTO);
 		
 		//REGISTRAMOS UN NUEVO INVESTIGADOR
@@ -1279,12 +1178,6 @@ public class ExperimentTest {
 		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("ruti@gmail.com").id;
 		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.FEMALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();;
-		experientDTO.idDevice = 1L;
-		
 		experimentService.register(experientDTO);
 		
 		//REGISTRAMOS UN NUEVO INVESTIGADOR
@@ -1342,12 +1235,6 @@ public class ExperimentTest {
 		experientDTO.title = "Experimento de personas entre 30 y 40 años";
 		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("aida@gmail.com").id;
-		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.FEMALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();;
-		experientDTO.idDevice = 1L;
 		
 		experimentService.register(experientDTO);
 		
@@ -1409,12 +1296,6 @@ public class ExperimentTest {
 		experientDTO.title = "Experimento de personas entre 30 y 40 años";
 		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("maria@gmail.com").id;
-		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.FEMALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();;
-		experientDTO.idDevice = 1L;
 		
 		experimentService.register(experientDTO);
 		
@@ -1478,12 +1359,6 @@ public class ExperimentTest {
 		experientDTO.title = "Experimento de personas entre 30 y 40 años";
 		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("jorge@gmail.com").id;
-		
-		Date hoy = new Date();
-		experientDTO.birthDate = hoy;
-		experientDTO.gender = Gender.FEMALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();;
-		experientDTO.idDevice = 1L;
 		
 		experimentService.register(experientDTO);
 		

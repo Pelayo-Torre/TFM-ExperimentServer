@@ -2,7 +2,6 @@ package service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -35,11 +34,8 @@ import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.PetitionException;
-import com.uniovi.es.model.types.Device;
-import com.uniovi.es.model.types.Gender;
-import com.uniovi.es.model.types.Laterality;
+import com.uniovi.es.model.PetitionNotRegistered;
 import com.uniovi.es.model.types.StatusPetition;
-import com.uniovi.es.persistence.DeviceDAO;
 import com.uniovi.es.utils.Identifier;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -60,9 +56,6 @@ public class PetitionTest {
 	private PetitionService petitionService;
 	
 	@Autowired
-	private DeviceDAO deviceDAO;
-	
-	@Autowired
 	private AuthenticationService authenticateUser;
 	
 	private static boolean primeraVez = true;
@@ -81,12 +74,6 @@ public class PetitionTest {
 			
 			//LO GUARDAMOS EN BASE DE DATOS
 			investigatorService.registerInvestigator(dto);
-			
-			Device d = new Device("MOUSE");
-			Device d1 = new Device("TOUCHPAD");
-			
-			deviceDAO.save(d);
-			deviceDAO.save(d1);
 			
 			//INICIAMOS SESIÓN
 			AuthDTO authDTO = new AuthDTO();
@@ -121,11 +108,6 @@ public class PetitionTest {
 		experientDTO.title = "Experimento en Langreo";
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
-		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
 	
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
@@ -133,7 +115,7 @@ public class PetitionTest {
 		//CREAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("juan@gmail.com").id;
+		petitionDTO.mail = investigatorService.getInvestigatorByMail("juan@gmail.com").mail;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -182,15 +164,18 @@ public class PetitionTest {
 		//CREAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = 1L;
-		petitionDTO.idInvestigator = ID_NOT_EXIST;
+		petitionDTO.mail = "ramonetee@gmail.com";
 		petitionDTO.manager = true;
 		
-		try {
-			petitionService.register(petitionDTO);
-			Assert.fail("Debe lanzarse excepción.");
-		} catch (InvestigatorException e) {
-			assertEquals("200", e.getMessage());
-		}
+		petitionService.register(petitionDTO);
+			
+		//RECUPERAMOS LAS PETICIONES NO REGISTRADAS Y COMPROBAMOS QUE EXISTE una 
+		PetitionNotRegistered p = petitionService.getPetitionNotRegistered(petitionDTO.mail, petitionDTO.idExperiment);
+		
+		assertNotNull(p);
+		assertEquals(true, p.getManager());
+		assertEquals(petitionDTO.mail, p.getMail());
+		assertEquals(petitionDTO.idExperiment, p.getExperiment().getId());
 	}
 	
 	@Test
@@ -224,18 +209,13 @@ public class PetitionTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("juanita@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-	
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
 		//CREAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("juanita@gmail.com").id;
+		petitionDTO.mail = investigatorService.getInvestigatorByMail("juanita@gmail.com").mail;
 		petitionDTO.manager = true;
 		
 		try {
@@ -290,18 +270,13 @@ public class PetitionTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("joselu@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-	
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
 		//CREAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
+		petitionDTO.mail = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").mail;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -353,18 +328,13 @@ public class PetitionTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("gracia@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-	
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
 		//CREAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
+		petitionDTO.mail = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").mail;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -423,18 +393,13 @@ public class PetitionTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("flora@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-	
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
 		//CREAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
+		petitionDTO.mail = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").mail;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -491,18 +456,13 @@ public class PetitionTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("gongartor@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-	
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
+		petitionDTO.mail = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").mail;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -555,18 +515,13 @@ public class PetitionTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("alberto@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-	
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
+		petitionDTO.mail = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").mail;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -613,18 +568,13 @@ public class PetitionTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("daniela@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-	
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
+		petitionDTO.mail = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").mail;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -677,18 +627,13 @@ public class PetitionTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("paola@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-	
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
+		petitionDTO.mail = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").mail;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -733,18 +678,13 @@ public class PetitionTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("coral@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-	
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
+		petitionDTO.mail = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").mail;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -804,18 +744,13 @@ public class PetitionTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("celsa@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-	
 		experimentService.register(experientDTO);
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
 		
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.idInvestigator = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").id;
+		petitionDTO.mail = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").mail;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS

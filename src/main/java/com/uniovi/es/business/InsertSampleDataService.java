@@ -9,9 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.uniovi.es.model.Investigator;
-import com.uniovi.es.model.types.Device;
 import com.uniovi.es.model.types.Role;
-import com.uniovi.es.persistence.DeviceDAO;
 import com.uniovi.es.persistence.InvestigatorDAO;
 
 @Service
@@ -21,19 +19,10 @@ public class InsertSampleDataService {
 	private InvestigatorDAO investigatorDAO;
 	
 	@Autowired
-	private DeviceDAO deviceDAO;
-	
-	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	//@PostConstruct
-	public void init() {
-		Device d = new Device("MOUSE");
-		Device d1 = new Device("TOUCHPAD");
-		
-		deviceDAO.save(d);
-		deviceDAO.save(d1);
-		
+	public void init() {		
 		Investigator investigator = new Investigator("admin@gmail.com");
 		investigator.setName("Administrador");
 		investigator.setPassword(bCryptPasswordEncoder.encode("admin**2021-"));

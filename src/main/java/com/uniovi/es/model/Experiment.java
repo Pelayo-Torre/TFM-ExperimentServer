@@ -14,7 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.uniovi.es.model.types.DemographicData;
 import com.uniovi.es.model.types.StatusExperiment;
 
 @Entity
@@ -42,8 +41,12 @@ public class Experiment implements Serializable {
 	@OneToMany(mappedBy = "experiment")
 	private Set<Note> notes = new HashSet<Note>();
 	
-	private DemographicData demographicData;
+	@OneToMany(mappedBy = "experiment")
+	private Set<PetitionNotRegistered> petitionsNotRegistered = new HashSet<PetitionNotRegistered>();
 	
+	@OneToMany(mappedBy = "experiment")
+	private Set<DemographicData> demographicData = new HashSet<DemographicData>();
+		
 	private Date creationDate;
 	
 	public Experiment() {
@@ -110,13 +113,21 @@ public class Experiment implements Serializable {
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
-	
-	public DemographicData getDemographicData() {
+		
+	public Set<DemographicData> getDemographicData() {
 		return demographicData;
 	}
 
-	public void setDemographicData(DemographicData demographicData) {
+	public void setDemographicData(Set<DemographicData> demographicData) {
 		this.demographicData = demographicData;
+	}
+
+	public Set<PetitionNotRegistered> getPetitionsNotRegistered() {
+		return petitionsNotRegistered;
+	}
+
+	public void setPetitionsNotRegistered(Set<PetitionNotRegistered> petitionsNotRegistered) {
+		this.petitionsNotRegistered = petitionsNotRegistered;
 	}
 
 	/**

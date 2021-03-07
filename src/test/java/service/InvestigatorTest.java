@@ -2,10 +2,8 @@ package service;
 
 import static org.junit.Assert.*;
 
-import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.MethodOrderer.Alphanumeric;
@@ -35,11 +33,7 @@ import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.PetitionException;
-import com.uniovi.es.model.types.Device;
-import com.uniovi.es.model.types.Gender;
-import com.uniovi.es.model.types.Laterality;
 import com.uniovi.es.model.types.StatusPetition;
-import com.uniovi.es.persistence.DeviceDAO;
 import com.uniovi.es.utils.Identifier;
 
 
@@ -63,26 +57,7 @@ public class InvestigatorTest {
 	@Autowired
 	private AuthenticationService authenticateUser;
 	
-	@Autowired
-	private DeviceDAO deviceDAO;
-	
 	private static final Long ID_NOT_EXIST = 4345245786396523496L;
-	
-	private static boolean primeraVez = true;
-	
-	@PostConstruct
-	public void init() throws InvestigatorException {
-		if(primeraVez) {
-					
-			Device d = new Device("MOUSE");
-			Device d1 = new Device("TOUCHPAD");
-			
-			deviceDAO.save(d);
-			deviceDAO.save(d1);
-			
-			primeraVez = false;
-		}		
-	}
 
 	@Test
 	/**
@@ -534,11 +509,6 @@ public class InvestigatorTest {
 		experientDTO.description = "Esto es para hacer una prueba";
 		experientDTO.idInvestigator = dto.id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-		
 		experimentService.register(experientDTO);
 		
 		//INICIAMOS SESIÓN
@@ -552,7 +522,7 @@ public class InvestigatorTest {
 		
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = 1L;
-		petitionDTO.idInvestigator = dto.id;
+		petitionDTO.mail = dto.mail;
 		petitionDTO.manager = true;
 		
 		petitionService.register(petitionDTO);

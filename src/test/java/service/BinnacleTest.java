@@ -2,7 +2,6 @@ package service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -35,10 +34,6 @@ import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.NoteException;
-import com.uniovi.es.model.types.Device;
-import com.uniovi.es.model.types.Gender;
-import com.uniovi.es.model.types.Laterality;
-import com.uniovi.es.persistence.DeviceDAO;
 import com.uniovi.es.utils.Identifier;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -57,9 +52,6 @@ public class BinnacleTest {
 	
 	@Autowired
 	private ExperimentService experimentService;
-	
-	@Autowired
-	private DeviceDAO deviceDAO;
 	
 	@Autowired
 	private AuthenticationService authenticateUser;
@@ -95,22 +87,11 @@ public class BinnacleTest {
 			authDTO.password = "123456789";
 			authenticateUser.authenticateUser(authDTO);
 			
-			Device d = new Device("MOUSE");
-			Device d1 = new Device("TOUCHPAD");
-			
-			deviceDAO.save(d);
-			deviceDAO.save(d1);
-			
 			//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
 			ExperimentDTO experientDTO = new ExperimentDTO();
 			experientDTO.title = "Experimento en Langreo";
 			experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 			experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("ramiro@gmail.com").id;
-			
-			experientDTO.birthDate = new Date();
-			experientDTO.gender = Gender.MALE.name();
-			experientDTO.laterality = Laterality.LEFT_HANDED.name();
-			experientDTO.idDevice = 1L;
 			
 			experimentService.register(experientDTO);
 			
@@ -242,11 +223,6 @@ public class BinnacleTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("mayte@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-		
 		experimentService.register(experientDTO);
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
@@ -326,12 +302,7 @@ public class BinnacleTest {
 		experientDTO.title = "Experimento en Langreo";
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("fausto@gmail.com").id;
-		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-		
+	
 		experimentService.register(experientDTO);
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
@@ -388,11 +359,6 @@ public class BinnacleTest {
 		experientDTO.title = "Experimento en Langreo";
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("gargamel@gmail.com").id;
-		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
 		
 		experimentService.register(experientDTO);
 		
@@ -452,11 +418,6 @@ public class BinnacleTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("josito@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-		
 		experimentService.register(experientDTO);
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
@@ -505,11 +466,6 @@ public class BinnacleTest {
 		experientDTO.title = "Experimento en Langreo";
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("repuchel@gmail.com").id;
-		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
 		
 		experimentService.register(experientDTO);
 		
@@ -626,11 +582,6 @@ public class BinnacleTest {
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("andrea@gmail.com").id;
 		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
-		
 		experimentService.register(experientDTO);
 		
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
@@ -700,11 +651,6 @@ public class BinnacleTest {
 		experientDTO.title = "Experimento en Langreo";
 		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("perotti@gmail.com").id;
-		
-		experientDTO.birthDate = new Date();
-		experientDTO.gender = Gender.MALE.name();
-		experientDTO.laterality = Laterality.LEFT_HANDED.name();
-		experientDTO.idDevice = 1L;
 		
 		experimentService.register(experientDTO);
 		

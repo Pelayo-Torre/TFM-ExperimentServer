@@ -7,6 +7,7 @@ import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.exceptions.PetitionException;
+import com.uniovi.es.model.PetitionNotRegistered;
 import com.uniovi.es.utils.Identifier;
 
 public interface PetitionService {
@@ -26,5 +27,7 @@ public interface PetitionService {
 	public List<PetitionDTO> getPetitionsSent();
 	
 	public void cancel(PetitionDTO dto) throws PetitionException, ForbiddenException;
+	
+	public PetitionNotRegistered getPetitionNotRegistered(String mail, Long idExperiment);
 
 }
