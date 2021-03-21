@@ -138,13 +138,13 @@ public class BinnacleTest {
 		NoteDTO noteDTO = new NoteDTO();
 		noteDTO.title = "Creación de experimento";
 		noteDTO.description = "Se ha creado el experimento para hacer pruebas sobre personas entre 12 y 16 años";
-		noteDTO.idExperiment = ID_NOT_EXIST;
+		noteDTO.idExperiment = null;
 				
 		try {
 			binnacleService.registerNote(noteDTO);
 			Assert.fail("Debe lanzarse excepción.");
-		} catch (ExperimentException e) {
-			assertEquals("100", e.getMessage());
+		} catch (NoteException e) {
+			assertEquals("404", e.getMessage());
 		}
 	}
 
@@ -790,4 +790,5 @@ public class BinnacleTest {
 			assertEquals("403", e.getMessage());
 		}
 	}
+
 }

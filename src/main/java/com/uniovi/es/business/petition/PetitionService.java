@@ -12,7 +12,7 @@ import com.uniovi.es.utils.Identifier;
 
 public interface PetitionService {
 	
-	public void register(PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException;
+	public void register(PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException, ForbiddenException;
 	
 	public void accept(Identifier id) throws PetitionException, ForbiddenException;
 	

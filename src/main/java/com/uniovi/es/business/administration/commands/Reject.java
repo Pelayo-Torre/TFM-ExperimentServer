@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.exceptions.AdministrationException;
 import com.uniovi.es.model.Request;
-import com.uniovi.es.model.types.StatusRequest;
 
 public class Reject implements RequestCommand{
 	
@@ -15,7 +14,7 @@ public class Reject implements RequestCommand{
 
 	@Override
 	public void execute(Request request) throws AdministrationException {
-		if(request.getStatus().equals(StatusRequest.PENDING)) {
+		if(request.isPending()) {
 			request.reject();
 			request.setAnswerDate(new Date());
 		}

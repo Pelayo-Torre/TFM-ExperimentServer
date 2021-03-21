@@ -59,7 +59,7 @@ public class AdministrationServiceImpl implements AdministrationService{
 		}
 		
 		logger.info("\t \t Se valida que el investigador tenga el rol de Evaluación");
-		if(!investigator.getRole().name().equals(Role.INVESTIGATOR_EVALUATION.name())) {
+		if(!investigator.isEvaluation()) {
 			logger.error("[ERROR - 500] -- Para el envío de una solicitud de aprobación de cuenta, el estado del investigador debe ser INVESTIGATOR_EVALUATION");
 			throw new AdministrationException("500");
 		}
@@ -88,8 +88,7 @@ public class AdministrationServiceImpl implements AdministrationService{
 		logger.info("\t \t Se comprueba que el investigador que acepta la petición tiene rol ADMINISTRATOR");
 		Investigator investigator = userInSession.getInvestigator();
 		
-		if(investigator == null || 
-				!investigator.getRole().name().equals(Role.ADMINISTRATOR.name())) {
+		if(investigator == null || !investigator.isAdministrator()) {
 			logger.error("[ERROR - 502] -- Una solicitud solo puede ser aprobada o rechazada por aquellos investigadores con rol ADMINISTRATOR");
 			throw new ForbiddenException("502");
 		}
@@ -120,8 +119,7 @@ public class AdministrationServiceImpl implements AdministrationService{
 		logger.info("\t \t Se comprueba que el investigador que rechaza la petición tiene rol ADMINISTRATOR");
 		Investigator investigator = userInSession.getInvestigator();
 		
-		if(investigator == null || 
-				!investigator.getRole().name().equals(Role.ADMINISTRATOR.name())) {
+		if(investigator == null || !investigator.isAdministrator()) {
 			logger.error("[ERROR - 502] -- Una solicitud solo puede ser aprobada o rechazada por aquellos investigadores con rol ADMINISTRATOR");
 			throw new ForbiddenException("502");
 		}
@@ -149,6 +147,11 @@ public class AdministrationServiceImpl implements AdministrationService{
 	public RequestDTO getDetail(Long id) throws AdministrationException {
 		logger.info("[INICIO] ADMINISTRATION SERVICE -- detail request");
 		
+		if(id == null) {
+			logger.error("[ERROR - 505] -- La solicitud especificada no se encuentra registrada en el sistema");
+			throw new AdministrationException("505");
+		}
+		
 		RequestDTO dto = DtoAssembler.toDto(getRequest(administrationDAO.findById(id)));
 		
 		logger.info("[FINAL] ADMINISTRATION SERVICE -- detail request");
@@ -165,8 +168,7 @@ public class AdministrationServiceImpl implements AdministrationService{
 		}
 		
 		Investigator sesion = userInSession.getInvestigator();
-		if(sesion == null || 
-				!sesion.getRole().name().equals(Role.ADMINISTRATOR.name())) {
+		if(sesion == null || !sesion.isAdministrator()) {
 			logger.error("[ERROR -- 507] - Solamente un Investigador con rol ADMINISTRATOR puede establecerle a otro investigador el rol ADMINISTRATOR");
 			throw new ForbiddenException("507");
 		}
@@ -176,13 +178,14 @@ public class AdministrationServiceImpl implements AdministrationService{
 		Investigator investigator = getInvestigator(optional);
 		
 		logger.info("\t \t Se comprueba el rol del investigador al que se le va a establecer el rol ADMINISTRATOR");
-		if(investigator.getRole().name().equals(Role.ADMINISTRATOR.name())) {
+		if(investigator.isAdministrator()) {
 			logger.error("[ERROR -- 506] - Para convertir un investigador en administrador, éste debe tener el rol INVESTIGATOR_EVALUATION o INVESTIGATOR_VALIDATED");
 			throw new AdministrationException("506");
 		}
 		
 		logger.info("\t \t Se procede a cambiar el rol al investigador y a registrarlo en base de datos");
-		investigator.setRole(Role.ADMINISTRATOR);
+		//investigator.setRole(Role.ADMINISTRATOR);
+		investigator.setToAdministrator();
 		investigatorDAO.save(investigator);
 		
 		//Se acepta la petición pendiente en caso de que investigador la tenga

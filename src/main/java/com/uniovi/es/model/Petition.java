@@ -139,6 +139,22 @@ public class Petition implements Serializable {
 	public void cancel() {
 		this.status = StatusPetition.CANCELLED;
 	}
+	
+	public boolean isAccepted() {
+		return this.status.name().equals(StatusPetition.ACCEPTED.name());
+	}
+	
+	public boolean isCancelled() {
+		return this.status.name().equals(StatusPetition.CANCELLED.name());
+	}
+	
+	public boolean isPending() {
+		return this.status.name().equals(StatusPetition.PENDING.name());
+	}
+	
+	public boolean isRejected() {
+		return this.status.name().equals(StatusPetition.REJECTED.name());
+	}
 
 	public Long getIdInvestigatorSend() {
 		return idInvestigatorSend;

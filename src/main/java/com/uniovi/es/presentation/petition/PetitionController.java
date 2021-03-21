@@ -17,8 +17,9 @@ public interface PetitionController {
 	 * @throws PetitionException, en caso de que la petición contenga datos incorrectos
 	 * @throws ExperimentException, en caso de que el experimento asociado a la peticición no exista
 	 * @throws InvestigatorException, en caso de que el investigador asociado a la petición no exista
+	 * @throws ForbiddenException , en caso de no tener los permisos necesarios
 	 */
-	public void register(PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException;
+	public void register(PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException, ForbiddenException;
 	
 	/**
 	 * Punto de entrada para marcar una petición como aceptada

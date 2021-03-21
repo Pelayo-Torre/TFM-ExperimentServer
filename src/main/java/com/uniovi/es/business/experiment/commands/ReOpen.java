@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.model.Experiment;
-import com.uniovi.es.model.types.StatusExperiment;
 
 public class ReOpen implements ExperimentCommand{
 	
@@ -13,7 +12,7 @@ public class ReOpen implements ExperimentCommand{
 
 	@Override
 	public void execute(Experiment experiment) throws ExperimentException {
-		if(experiment.getStatus().equals(StatusExperiment.CLOSED)) {
+		if(experiment.isClosed()) {
 			experiment.open();
 		}
 		else {

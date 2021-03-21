@@ -510,13 +510,7 @@ public class InvestigatorTest {
 		experientDTO.idInvestigator = dto.id;
 		
 		experimentService.register(experientDTO);
-		
-		//INICIAMOS SESIÓN
-		authDTO = new AuthDTO();
-		authDTO.mail = "luisa@gmail.com";
-		authDTO.password = "123456789";
-		authenticateUser.authenticateUser(authDTO);
-		
+				
 		//CREAMOS UNA PETICIÓN PARA ESE EXPERIMENTO CON OTRO INVESTIGADOR
 		dto = investigatorService.getInvestigatorByMail("luisa@gmail.com");
 		
@@ -526,6 +520,12 @@ public class InvestigatorTest {
 		petitionDTO.manager = true;
 		
 		petitionService.register(petitionDTO);
+				
+		//INICIAMOS SESIÓN
+		authDTO = new AuthDTO();
+		authDTO.mail = "luisa@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
 		
 		//COMPROBAMOS QUE EL INVESTIGADOR 3 TIENE 1 PETICIÓN PENDIENTE DE ACEPTAR
 		List<PetitionDTO> list = investigatorService.getPetitionsPendingByIdInvestigator(dto.id);

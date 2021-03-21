@@ -48,6 +48,11 @@ public class BinnacleServiceImpl implements BinnacleService{
 	public void registerNote(NoteDTO dto) throws NoteException, ExperimentException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE SERVICE -- register note");
 		
+		if(dto.idExperiment == null) {
+			logger.error("[ERROR -- 404] - El experimento asociado a la nota es un campo obligatorio.");
+			throw new NoteException("404");
+		}
+		
 		logger.info("\t \t Obteniendo el experimento a partir del ID: " + dto.idExperiment);
 		Optional<Experiment> optional = experimentDAO.findById(dto.idExperiment);
 		Experiment experiment = getExperiment(optional);
@@ -68,6 +73,11 @@ public class BinnacleServiceImpl implements BinnacleService{
 	@Override
 	public void updateNote(NoteDTO dto) throws NoteException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE SERVICE -- update note");
+		
+		if(dto.id == null) {
+			logger.error("[ERROR - 400] -- La nota especificada no se encuentra registrada en el sistema");
+			throw new NoteException("400");
+		}
 		
 		logger.info("\t \t Obteniendo la nota a partir del ID: " + dto.id);
 		Optional<Note> optional = binnacleDAO.findById(dto.id);
@@ -98,6 +108,11 @@ public class BinnacleServiceImpl implements BinnacleService{
 	@Override
 	public void deleteNote(Identifier id) throws NoteException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE SERVICE -- delete note");
+		
+		if(id == null || id.getId() == null) {
+			logger.error("[ERROR - 400] -- La nota especificada no se encuentra registrada en el sistema");
+			throw new NoteException("400");
+		}
 
 		logger.info("\t \t Obteniendo la nota a partir del ID: " + id.getId());
 		Optional<Note> optional = binnacleDAO.findById(id.getId());
@@ -116,6 +131,11 @@ public class BinnacleServiceImpl implements BinnacleService{
 	@Override
 	public NoteDTO detail(Long id) throws NoteException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE SERVICE -- detail note");
+		
+		if(id == null) {
+			logger.error("[ERROR - 400] -- La nota especificada no se encuentra registrada en el sistema");
+			throw new NoteException("400");
+		}
 
 		logger.info("\t \t Obteniendo la nota a partir del ID: " + id);
 		Optional<Note> optional = binnacleDAO.findById(id);

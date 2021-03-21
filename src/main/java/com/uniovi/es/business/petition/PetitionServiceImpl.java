@@ -60,8 +60,13 @@ public class PetitionServiceImpl implements PetitionService{
 	private MailSenderService mailSenderService;
 	
 	@Override
-	public void register(PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException {
+	public void register(PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException, ForbiddenException {
 		logger.info("[INICIO] PETITION SERVICE -- register petition");
+		
+		if(dto.mail == null || dto.mail.equals("")) {
+			logger.error("[ERROR -- 308] - En el registro de un petición, el correo electrónico es un campo obligatorio");
+			throw new PetitionException("308");
+		}
 				
 		logger.info("\t \t Obteniendo el investigador receptor a partir del mail: " + dto.mail);
 		Investigator investigator = investigatorDAO.findByMail(dto.mail);
@@ -69,6 +74,12 @@ public class PetitionServiceImpl implements PetitionService{
 		logger.info("\t \t Obteniendo el experimento a partir del ID: " + dto.idExperiment);
 		Optional<Experiment> optional2 = experimentDAO.findById(dto.idExperiment);
 		Experiment experiment = getExperiment(optional2);
+		
+		Investigator inSession = userInSession.getInvestigator();
+		if(inSession == null || petitionDAO.isManager(dto.idExperiment, inSession.getId()) == null) {
+			logger.error("[ERROR -- 309] - Una petición solo puede ser creada por un investigador gestor del experimento");
+			throw new ForbiddenException("309");
+		}
 		
 		//Si el investigador es == null quiere decir que no está registrado en la aplicación
 		if(investigator == null) {
@@ -181,14 +192,14 @@ public class PetitionServiceImpl implements PetitionService{
 		
 		//Si la petitición está en estado PENDING solo la pueda cancelar el emisor
 		Investigator investigator = userInSession.getInvestigator();
-		if(petition.getStatus().equals(StatusPetition.PENDING) && 
+		if(petition.isPending() && 
 				(investigator == null || investigator.getId() != petition.getIdInvestigatorSend())) {
 			logger.error("[ERROR -- 306] - Una petición solo puede ser cancelada por el investigador emisor de dicha petición si está en estado PENDING");
 			throw new ForbiddenException("306");
 		}
 		
 		//Si la petición está en estado ACEPTADA solo la pueden cancelar los investigadores asociados al experimento como gestores y el receptor
-		if(petition.getStatus().equals(StatusPetition.ACCEPTED) && 
+		if(petition.isAccepted() && 
 				(investigator == null || 
 				(petitionDAO.isManager(petition.getExperiment().getId(), investigator.getId()) == null
 				&& investigator.getId() != petition.getInvestigator().getId()))) {

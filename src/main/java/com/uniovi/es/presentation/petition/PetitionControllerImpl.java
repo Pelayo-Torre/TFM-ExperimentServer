@@ -32,7 +32,7 @@ public class PetitionControllerImpl implements PetitionController{
 
 	@Override
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public void register(@RequestBody PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException {
+	public void register(@RequestBody PetitionDTO dto) throws PetitionException, ExperimentException, InvestigatorException, ForbiddenException {
 		logger.info("[INICIO] PETITION CONTROLLER -- register petition");
 		
 		petitionService.register(dto);

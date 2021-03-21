@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.exceptions.PetitionException;
 import com.uniovi.es.model.Petition;
-import com.uniovi.es.model.types.StatusPetition;
 
 public class Cancel implements PetitionCommand{
 
@@ -15,7 +14,7 @@ public class Cancel implements PetitionCommand{
 	
 	@Override
 	public void execute(Petition petition) throws PetitionException {
-		if(petition.getStatus().equals(StatusPetition.ACCEPTED) || petition.getStatus().equals(StatusPetition.PENDING)) {
+		if(petition.isAccepted() || petition.isPending()) {
 			petition.cancel();
 			petition.setAnswerDate(new Date());
 		}

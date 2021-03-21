@@ -151,4 +151,20 @@ public class Experiment implements Serializable {
 		this.status = StatusExperiment.DELETED;
 	}
 	
+	public boolean isOpen() {
+		return this.status.name().equals(StatusExperiment.OPEN.name());
+	}
+	
+	public boolean isClosed() {
+		return this.status.name().equals(StatusExperiment.CLOSED.name());
+	}
+	
+	public boolean isDeleted() {
+		return this.status.name().equals(StatusExperiment.DELETED.name());
+	}
+	
+	public boolean isCreated() {
+		return this.status.name().equals(StatusExperiment.CREATED.name());
+	}
+	
 }

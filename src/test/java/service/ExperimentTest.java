@@ -426,6 +426,55 @@ public class ExperimentTest {
 	
 	@Test
 	/**
+	 * Se prueba la edición de un experimento de manera incorrecta (El estado del experimento es CREADO)
+	 * @throws ExperimentException el estado del experimento debe ser CREATED
+	 */
+	public void test18UpdateExperimentERROR114() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException{
+		
+		//REGISTRAMOS UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Remiro";
+		dto.surname = "Garcia";
+		dto.mail = "remiro@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "remiro@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Sama de Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 22 a 44 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("remiro@gmail.com").id;
+		
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		Long id = experiments.get(experiments.size()-1).id;
+		
+		//CAMBIAMOS EL ESTADO del experimento		
+		experimentService.open(new Identifier(id));
+		
+		//EDITAMOS UN EXPERIMENTO
+		experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Langreo";
+		experientDTO.description = "Experimento en Langreo para edades comprendidas entre los 50 y 60 años";
+		experientDTO.id = id;
+		
+		try {
+			experimentService.update(experientDTO);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (ExperimentException e) {
+			assertEquals("114", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
 	 * Se prueba el detalle de un experimento de manera incorrecta (Experimento no existe)
 	 * @throws ExperimentException experimento no existe
 	 */
@@ -1388,5 +1437,75 @@ public class ExperimentTest {
 		} catch(ForbiddenException e) {
 			assertEquals("117", e.getMessage());
 		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a obtener la lista de experimentos de un investigador
+	 * @throws InvestigatorException
+	 * @throws AttempsException
+	 * @throws ExperimentException
+	 */
+	public void test41ListExperimentsByInvestigator() throws InvestigatorException, AttempsException, ExperimentException, ForbiddenException {
+		//REGISTRAMOS UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Martin";
+		dto.surname = "Garcia";
+		dto.mail = "martin12@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "martin12@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento de personas entre 30 y 40 años";
+		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("martin12@gmail.com").id;
+		
+		experimentService.register(experientDTO);
+		
+		//Actualizamos los datos
+		List<ExperimentDTO> experiments = investigatorService.getExperimentsAcceptedByIdInvestigator(experientDTO.idInvestigator);
+		
+		assertNotNull(experiments);
+		assertEquals(1, experiments.size());
+		assertEquals("Experimento de personas entre 30 y 40 años", experiments.get(0).title);
+		assertEquals("Prueba en ordenadores con personas de 30 a 40 años", experiments.get(0).description);
+	}
+	
+	@Test
+	/**
+	 * Se prueba a obtener la lista de experimentos de un investigador
+	 * @throws InvestigatorException
+	 * @throws AttempsException
+	 * @throws ExperimentException
+	 */
+	public void test42ListExperimentsByInvestigatorWithOutExperiments() throws InvestigatorException, AttempsException, ExperimentException, ForbiddenException {
+		//REGISTRAMOS UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Presa";
+		dto.surname = "Garcia";
+		dto.mail = "presa@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "presa@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		List<ExperimentDTO> experiments = investigatorService.getExperimentsAcceptedByIdInvestigator(
+				investigatorService.getInvestigatorByMail("presa@gmail.com").id);
+		
+		assertNotNull(experiments);
+		assertEquals(0, experiments.size());
 	}
 }

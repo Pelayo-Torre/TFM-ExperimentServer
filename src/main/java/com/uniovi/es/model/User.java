@@ -1,7 +1,8 @@
 package com.uniovi.es.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,61 +10,191 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "TUser")
+@Table(name = "userdata")
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	@Column(nullable = false)
+//	private Long id;
 	
-	@Column(unique = true)
-	private String sessionID;
+	@Id
+	private String sessionId;
 		
-	private String ip;
-	private Date timeStamp;
+	private Boolean browserOnline, javaEnabled, dataCookiesEnabled;
+
+	private String timeOpened, pageon, referrer, browserName, browserEngine, browserVersion1a, browserVersion1b,
+			browserLanguage, browserPlatform, dataCookies1, dataCookies2, dataStorage;
+	
+	@Column(nullable = false)
+	private String remoteHost;
+	
+	@Column(nullable = false)
 	private String locale;
-	private Integer timezone;
+	
+	@Column(nullable = false)
+	private String remoteAddress;
+	
+	private Integer previousSites, sizeScreenW, sizeScreenH, sizeDocW, sizeDocH, sizeInW, sizeInH, sizeAvailW, sizeAvailH,
+			scrColorDepth, scrPixelDepth;
+	
+	@Column(nullable = false)
 	private Integer remotePort;
-	private Integer remoteHost;
+	
+	@Column(nullable = false)
+	private Integer timezone;
+	
+	@Column(nullable = false)
+	private Long timeStamp;
 	
 	@ManyToOne
 	private Experiment experiment;
 	
+	@OneToMany(mappedBy = "user")
+	private Set<Event> events = new HashSet<Event>();
+	
+	@OneToMany(mappedBy = "user")
+	private Set<ComponentData> components = new HashSet<ComponentData>();
+	
 	User() {}
 	
 	public User(String sessionID, Experiment experiment) {
-		this.sessionID = sessionID;
+		this.sessionId = sessionID;
 		Associations.UserExperiment.link(this, experiment);
 	}
 
-	public String getSessionID() {
-		return sessionID;
+	public String getSessionId() {
+		return sessionId;
 	}
 
-	public void setSessionID(String sessionID) {
-		this.sessionID = sessionID;
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 
-	public String getIp() {
-		return ip;
+	public boolean isBrowserOnline() {
+		return browserOnline;
 	}
 
-	public void setIp(String ip) {
-		this.ip = ip;
+	public void setBrowserOnline(boolean browserOnline) {
+		this.browserOnline = browserOnline;
 	}
 
-	public Date getTimeStamp() {
-		return timeStamp;
+	public boolean isJavaEnabled() {
+		return javaEnabled;
 	}
 
-	public void setTimeStamp(Date timeStamp) {
-		this.timeStamp = timeStamp;
+	public void setJavaEnabled(boolean javaEnabled) {
+		this.javaEnabled = javaEnabled;
+	}
+
+	public boolean isDataCookiesEnabled() {
+		return dataCookiesEnabled;
+	}
+
+	public void setDataCookiesEnabled(boolean dataCookiesEnabled) {
+		this.dataCookiesEnabled = dataCookiesEnabled;
+	}
+
+	public String getTimeOpened() {
+		return timeOpened;
+	}
+
+	public void setTimeOpened(String timeOpened) {
+		this.timeOpened = timeOpened;
+	}
+
+	public String getPageon() {
+		return pageon;
+	}
+
+	public void setPageon(String pageon) {
+		this.pageon = pageon;
+	}
+
+	public String getReferrer() {
+		return referrer;
+	}
+
+	public void setReferrer(String referrer) {
+		this.referrer = referrer;
+	}
+
+	public String getBrowserName() {
+		return browserName;
+	}
+
+	public void setBrowserName(String browserName) {
+		this.browserName = browserName;
+	}
+
+	public String getBrowserEngine() {
+		return browserEngine;
+	}
+
+	public void setBrowserEngine(String browserEngine) {
+		this.browserEngine = browserEngine;
+	}
+
+	public String getBrowserVersion1a() {
+		return browserVersion1a;
+	}
+
+	public void setBrowserVersion1a(String browserVersion1a) {
+		this.browserVersion1a = browserVersion1a;
+	}
+
+	public String getBrowserVersion1b() {
+		return browserVersion1b;
+	}
+
+	public void setBrowserVersion1b(String browserVersion1b) {
+		this.browserVersion1b = browserVersion1b;
+	}
+
+	public String getBrowserLanguage() {
+		return browserLanguage;
+	}
+
+	public void setBrowserLanguage(String browserLanguage) {
+		this.browserLanguage = browserLanguage;
+	}
+
+	public String getBrowserPlatform() {
+		return browserPlatform;
+	}
+
+	public void setBrowserPlatform(String browserPlatform) {
+		this.browserPlatform = browserPlatform;
+	}
+
+	public String getDataCookies1() {
+		return dataCookies1;
+	}
+
+	public void setDataCookies1(String dataCookies1) {
+		this.dataCookies1 = dataCookies1;
+	}
+
+	public String getDataCookies2() {
+		return dataCookies2;
+	}
+
+	public void setDataCookies2(String dataCookies2) {
+		this.dataCookies2 = dataCookies2;
+	}
+
+	public String getDataStorage() {
+		return dataStorage;
+	}
+
+	public void setDataStorage(String dataStorage) {
+		this.dataStorage = dataStorage;
 	}
 
 	public String getLocale() {
@@ -74,12 +205,108 @@ public class User implements Serializable {
 		this.locale = locale;
 	}
 
-	public Integer getTimezone() {
-		return timezone;
+	public String getRemoteAddress() {
+		return remoteAddress;
 	}
 
-	public void setTimezone(Integer timezone) {
-		this.timezone = timezone;
+	public void setRemoteAddress(String remoteAddress) {
+		this.remoteAddress = remoteAddress;
+	}
+
+	public String getRemoteHost() {
+		return remoteHost;
+	}
+
+	public void setRemoteHost(String remoteHost) {
+		this.remoteHost = remoteHost;
+	}
+
+	public Integer getPreviousSites() {
+		return previousSites;
+	}
+
+	public void setPreviousSites(Integer previousSites) {
+		this.previousSites = previousSites;
+	}
+
+	public Integer getSizeScreenW() {
+		return sizeScreenW;
+	}
+
+	public void setSizeScreenW(Integer sizeScreenW) {
+		this.sizeScreenW = sizeScreenW;
+	}
+
+	public Integer getSizeScreenH() {
+		return sizeScreenH;
+	}
+
+	public void setSizeScreenH(Integer sizeScreenH) {
+		this.sizeScreenH = sizeScreenH;
+	}
+
+	public Integer getSizeDocW() {
+		return sizeDocW;
+	}
+
+	public void setSizeDocW(Integer sizeDocW) {
+		this.sizeDocW = sizeDocW;
+	}
+
+	public Integer getSizeDocH() {
+		return sizeDocH;
+	}
+
+	public void setSizeDocH(Integer sizeDocH) {
+		this.sizeDocH = sizeDocH;
+	}
+
+	public Integer getSizeInW() {
+		return sizeInW;
+	}
+
+	public void setSizeInW(Integer sizeInW) {
+		this.sizeInW = sizeInW;
+	}
+
+	public Integer getSizeInH() {
+		return sizeInH;
+	}
+
+	public void setSizeInH(Integer sizeInH) {
+		this.sizeInH = sizeInH;
+	}
+
+	public Integer getSizeAvailW() {
+		return sizeAvailW;
+	}
+
+	public void setSizeAvailW(Integer sizeAvailW) {
+		this.sizeAvailW = sizeAvailW;
+	}
+
+	public Integer getSizeAvailH() {
+		return sizeAvailH;
+	}
+
+	public void setSizeAvailH(Integer sizeAvailH) {
+		this.sizeAvailH = sizeAvailH;
+	}
+
+	public Integer getScrColorDepth() {
+		return scrColorDepth;
+	}
+
+	public void setScrColorDepth(Integer scrColorDepth) {
+		this.scrColorDepth = scrColorDepth;
+	}
+
+	public Integer getScrPixelDepth() {
+		return scrPixelDepth;
+	}
+
+	public void setScrPixelDepth(Integer scrPixelDepth) {
+		this.scrPixelDepth = scrPixelDepth;
 	}
 
 	public Integer getRemotePort() {
@@ -90,16 +317,20 @@ public class User implements Serializable {
 		this.remotePort = remotePort;
 	}
 
-	public Integer getRemoteHost() {
-		return remoteHost;
+	public Integer getTimezone() {
+		return timezone;
 	}
 
-	public void setRemoteHost(Integer remoteHost) {
-		this.remoteHost = remoteHost;
+	public void setTimezone(Integer timezone) {
+		this.timezone = timezone;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(Long timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 
 	public Experiment getExperiment() {
@@ -109,8 +340,21 @@ public class User implements Serializable {
 	public void setExperiment(Experiment experiment) {
 		this.experiment = experiment;
 	}
-	
-	
-	
+
+	public Set<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(Set<Event> events) {
+		this.events = events;
+	}
+
+	public Set<ComponentData> getComponents() {
+		return components;
+	}
+
+	public void setComponents(Set<ComponentData> components) {
+		this.components = components;
+	}
 	
 }

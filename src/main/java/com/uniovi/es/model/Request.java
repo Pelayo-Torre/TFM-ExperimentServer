@@ -83,6 +83,18 @@ public class Request implements Serializable {
 	public void reject() {
 		this.status = StatusRequest.REJECTED;
 	}
+	
+	public boolean isAccepted() {
+		return this.status.name().equals(StatusRequest.ACCEPTED.name());
+	}
+	
+	public boolean isPending() {
+		return this.status.name().equals(StatusRequest.PENDING.name());
+	}
+	
+	public boolean isRejected() {
+		return this.status.name().equals(StatusRequest.REJECTED.name());
+	}
 
 	@Override
 	public String toString() {

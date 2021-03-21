@@ -75,7 +75,7 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		DtoAssembler.fillData(investigator, dto);
 		
 		investigator.setPassword(bCryptPasswordEncoder.encode(investigator.getPassword()));
-		investigator.setRole(Role.INVESTIGATOR_EVALUATION);
+		//investigator.setRole(Role.INVESTIGATOR_EVALUATION);
 		
 		logger.info("\t \t Registrando el investigador en base de datos");
 		investigatorDAO.save(investigator);

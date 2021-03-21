@@ -28,7 +28,7 @@ public class InsertSampleDataService {
 		investigator.setPassword(bCryptPasswordEncoder.encode("admin**2021-"));
 		investigator.setRegistrationDate(new Date());
 		investigator.setSurname("Administrador");
-		investigator.setRole(Role.ADMINISTRATOR);
+		investigator.setToAdministrator();
 		
 		investigatorDAO.save(investigator);
 	}

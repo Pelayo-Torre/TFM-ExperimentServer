@@ -47,6 +47,7 @@ public class Investigator implements Serializable {
 	public Investigator(String mail) {
 		this.mail = mail;
 		this.registrationDate = new Date();
+		this.role = Role.INVESTIGATOR_EVALUATION;
 	}
 	
 	Investigator() {}
@@ -119,4 +120,23 @@ public class Investigator implements Serializable {
 		this.requests = requests;
 	}
 		
+	public boolean isAdministrator() {
+		return this.role.name().equals(Role.ADMINISTRATOR.name());
+	}
+	
+	public boolean isEvaluation() {
+		return this.role.name().equals(Role.INVESTIGATOR_EVALUATION.name());
+	}
+	
+	public boolean isValidated() {
+		return this.role.name().equals(Role.INVESTIGATOR_VALIDATED.name());
+	}
+	
+	public void setToAdministrator() {
+		this.setRole(Role.ADMINISTRATOR);
+	}
+	
+	public void setToValidated() {
+		this.setRole(Role.INVESTIGATOR_VALIDATED);
+	}
 }

@@ -73,7 +73,7 @@ public class AdministrationTest {
 			dto.setName("Celia");
 			dto.setSurname("Garcia Torre");
 			dto.setPassword(bCryptPasswordEncoder.encode("123456789"));
-			dto.setRole(Role.ADMINISTRATOR); 
+			dto.setToAdministrator(); 
 			
 			//LO GUARDAMOS EN BASE DE DATOS
 			investigatorDAO.save(dto);
@@ -122,7 +122,7 @@ public class AdministrationTest {
 		investigator.setName("Escanciano");
 		investigator.setSurname("Garcia Torre");
 		investigator.setPassword(bCryptPasswordEncoder.encode("123456789"));
-		investigator.setRole(Role.INVESTIGATOR_VALIDATED); 
+		investigator.setToValidated();
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		investigatorDAO.save(investigator);

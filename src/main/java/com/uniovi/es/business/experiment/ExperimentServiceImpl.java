@@ -121,7 +121,13 @@ public class ExperimentServiceImpl implements ExperimentService{
 		Optional<Experiment> optional = experimentDAO.findById(dto.id);
 		Experiment experiment = getExperiment(optional);
 		
-		experimentValidator.validate(dto);
+		//Solo se puede modificar si el experimento está en estado CREADO
+		if(!experiment.isCreated()) {
+			logger.error("[ERROR - 114] -- Los datos del experimento solo pueden ser modificados en estado CREADO.");
+			throw new ExperimentException("114");
+		}
+		
+		experimentValidator.validate(dto);		
 		DtoAssembler.fillData(experiment, dto);
 		
 		logger.info("\t \t Actualizando cambios en base de datos");
