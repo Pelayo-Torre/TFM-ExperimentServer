@@ -18,7 +18,6 @@ public class Accept implements RequestCommand{
 			request.accept();
 			request.setAnswerDate(new Date());
 			request.getInvestigator().setToValidated();
-			//request.getInvestigator().setRole(Role.INVESTIGATOR_VALIDATED);
 		}
 		else {
 			logger.error("[ERROR - 504] -- La solicitud debe estar en estado PENDING para ser aceptada o rechazada");
