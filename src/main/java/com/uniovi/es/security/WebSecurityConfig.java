@@ -79,6 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/investigator/**", 
 						"/experiment/**", 
 						"/binnacle/**",
+						"/experimentdata/**",
 						"/petition/**")
 					.hasAnyAuthority("INVESTIGATOR_EVALUATION", "INVESTIGATOR_VALIDATED", "ADMINISTRATOR")
 				.antMatchers(
@@ -87,30 +88,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(
 						"/administration/**"
 				).hasAnyAuthority("ADMINISTRATOR")
-//				.antMatchers(
-//						"/association/validate/name/**",
-//						"/association/edit/**",
-//						"/association/detail",
-//						"/user/application/**",
-//						"/user/association/force/key",
-//						"/backup/admin/restore")
-//					.hasAuthority("ROLE_ADMIN_ASSOCIATION")
-//				.antMatchers(
-//						"/association/image")
-//					.hasAnyAuthority("ROLE_ADMIN_ASSOCIATION","ROLE_USER_APPLICATION")
-//				.antMatchers(
-//						"/association/**",
-//						"/user/admin/**",
-//						"/backup/restore")
-//					.hasAuthority("ROLE_ADMIN_PLATFORM")
-//				.antMatchers(
-//							"/backup")
-//					.hasAnyAuthority("ROLE_ADMIN_ASSOCIATION","ROLE_ADMIN_PLATFORM")
-//				.antMatchers(
-//						"/user/edit/**",
-//						"/user/change/password",
-//						"/user/validate/**")
-//					.hasAnyAuthority("ROLE_ADMIN_PLATFORM","ROLE_ADMIN_ASSOCIATION","ROLE_USER_APPLICATION")
 				.antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

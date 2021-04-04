@@ -31,6 +31,10 @@ public class Event implements Serializable {
 	@Column(nullable = false)
 	private Integer y;
 	
+	private String keyValueEvent;
+	
+	private Integer keyCodeEvent;
+	
 	@Id
 	@ManyToOne
 	private User user;
@@ -93,4 +97,20 @@ public class Event implements Serializable {
 		this.user = user;
 	}
 
+	public String getKeyValueEvent() {
+		return keyValueEvent;
+	}
+
+	public void setKeyValueEvent(String keyValueEvent) {
+		this.keyValueEvent = keyValueEvent;
+	}
+
+	public Integer getKeyCodeEvent() {
+		return keyCodeEvent;
+	}
+
+	public void setKeyCodeEvent(Integer keyCodeEvent) {
+		this.keyCodeEvent = keyCodeEvent;
+	}
+	
 }

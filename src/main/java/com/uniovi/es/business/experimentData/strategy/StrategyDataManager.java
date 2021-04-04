@@ -30,7 +30,7 @@ public class StrategyDataManager {
 	}
 	
 	public void addStrategyData(StrategyData strategy) {
-		if(hasStrategyData(strategy.getKey()))
+		if(!hasStrategyData(strategy.getKey()))
 			this.strategys.put(strategy.getKey(), strategy);
 	}
 	

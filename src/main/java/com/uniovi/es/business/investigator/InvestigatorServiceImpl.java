@@ -26,7 +26,6 @@ import com.uniovi.es.model.Petition;
 import com.uniovi.es.model.PetitionNotRegistered;
 import com.uniovi.es.model.Request;
 import com.uniovi.es.model.types.StatusExperiment;
-import com.uniovi.es.model.types.Role;
 import com.uniovi.es.model.types.StatusPetition;
 import com.uniovi.es.persistence.AdministrationDAO;
 import com.uniovi.es.persistence.ExperimentDAO;

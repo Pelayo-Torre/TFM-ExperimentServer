@@ -18,7 +18,6 @@ import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Request;
-import com.uniovi.es.model.types.Role;
 import com.uniovi.es.persistence.AdministrationDAO;
 import com.uniovi.es.persistence.InvestigatorDAO;
 import com.uniovi.es.utils.Identifier;

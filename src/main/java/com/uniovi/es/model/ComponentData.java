@@ -29,6 +29,10 @@ public class ComponentData implements Serializable {
 	@Id
 	private String componentId;
 	
+	private Integer typeId;
+	
+	private String componentAssociated;
+	
 	public ComponentData() {}
 
 	public Integer getX() {
@@ -94,7 +98,21 @@ public class ComponentData implements Serializable {
 	public void setComponentId(String componentId) {
 		this.componentId = componentId;
 	}
-	
-	
 
+	public Integer getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(Integer typeId) {
+		this.typeId = typeId;
+	}
+
+	public String getComponentAssociated() {
+		return componentAssociated;
+	}
+
+	public void setComponentAssociated(String componentAssociated) {
+		this.componentAssociated = componentAssociated;
+	}
+	
 }
