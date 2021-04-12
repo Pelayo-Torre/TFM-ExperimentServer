@@ -23,7 +23,6 @@ import com.uniovi.es.business.experimentData.strategy.strategys.selectionObjects
 import com.uniovi.es.business.experimentData.strategy.strategys.textFields.NumberCharactersDeleted;
 import com.uniovi.es.business.experimentData.strategy.strategys.textFields.NumberCharactersPerSecond;
 import com.uniovi.es.business.experimentData.strategy.strategys.textFields.NumberTimesArrowsLeftRight;
-import com.uniovi.es.business.experimentData.strategy.strategys.textFields.NumberTimesChangeCursorWithMouse;
 import com.uniovi.es.business.experimentData.strategy.strategys.textFields.NumberWordsPerSecond;
 import com.uniovi.es.utils.Constantes;
 
