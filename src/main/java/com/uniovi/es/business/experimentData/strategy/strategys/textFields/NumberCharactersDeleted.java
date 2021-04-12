@@ -39,7 +39,7 @@ public class NumberCharactersDeleted extends StrategyDataAbstract{
 		List<ComponentData> components = new ArrayList<ComponentData>();
 		
 		components.addAll(
-			ExperimentDataFactory.getSceneComponentDAO().getComponents(sceneID, sessionID, Constantes.COMPONENT_TEXT_FIELD)
+			ExperimentDataFactory.getSceneComponentDAO().getComponents(sceneID, sessionID, null, Constantes.COMPONENT_TEXT_FIELD)
 		);
 			
 		logger.info("\t \t Número de componentes: " + components.size());
@@ -53,7 +53,7 @@ public class NumberCharactersDeleted extends StrategyDataAbstract{
 			logger.info("\t \t Número de eventos: " + events.size());
 			
 			String cadena = "";
-			Integer puntero = -1;
+			Integer puntero = 0;
 			Integer charactersRemoved = 0;
 			
 			//Se reconstruye caracter a caracter, 
@@ -66,25 +66,25 @@ public class NumberCharactersDeleted extends StrategyDataAbstract{
 					}
 					else {
 						//Si no es de un caracter, puede ser que haya pulsado tecla eliminar
-						if(event.getKeyCodeEvent() == Constantes.EVENT_BACKSPACE && puntero != -1) {
+						if(event.getKeyCodeEvent() == Constantes.EVENT_BACKSPACE && puntero != 0) {
 							charactersRemoved++;
 							cadena = charRemoveAt(cadena, puntero);
 							puntero--;
 						}
 						//Si no es de un caracter, puede ser que haya pulsado tecla suprimir
-						else if(event.getKeyCodeEvent() == Constantes.EVENT_DELETE && puntero != cadena.length()-1) {
+						else if(event.getKeyCodeEvent() == Constantes.EVENT_DELETE && puntero != cadena.length()) {
 							charactersRemoved++;
 							cadena = charRemoveAt(cadena, puntero + 1);
 						}
 						//Si pulsa tecla de dirección derecha, se mueve el puntero
 						else if(event.getKeyCodeEvent() == Constantes.EVENT_ARROW_RIGHT) {
-							if(puntero != cadena.length()-1) {
+							if(puntero != cadena.length()) {
 								puntero++;
 							}
 						}
 						//Si pulsa tecla de dirección izquierda, se mueve el puntero
 						else if(event.getKeyCodeEvent() == Constantes.EVENT_ARROW_LEFT) {
-							if(puntero != -1) {
+							if(puntero != 0) {
 								puntero--;
 							}
 						}

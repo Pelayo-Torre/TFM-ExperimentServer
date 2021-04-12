@@ -1,5 +1,7 @@
 package com.uniovi.es.model;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.uniovi.es.model.types.DemographicDataType;
 
@@ -27,6 +30,15 @@ public class DemographicData implements Serializable {
 	
 	@ManyToOne
 	private Experiment experiment;
+	
+	@OneToMany(mappedBy = "demographicData")
+	private Set<DemographicDataDate> demographicDataDate = new HashSet<DemographicDataDate>(); 
+	
+	@OneToMany(mappedBy = "demographicData")
+	private Set<DemographicDataNumber> demographicDataNumber = new HashSet<DemographicDataNumber>(); 
+	
+	@OneToMany(mappedBy = "demographicData")
+	private Set<DemographicDataString> demographicDataString = new HashSet<DemographicDataString>(); 
 	
 	DemographicData() {}
 	
@@ -60,5 +72,42 @@ public class DemographicData implements Serializable {
 	public void setExperiment(Experiment experiment) {
 		this.experiment = experiment;
 	}
+
+	public Set<DemographicDataDate> getDemographicDataDate() {
+		return demographicDataDate;
+	}
+
+	public void setDemographicDataDate(Set<DemographicDataDate> demographicDataDate) {
+		this.demographicDataDate = demographicDataDate;
+	}
+
+	public Set<DemographicDataNumber> getDemographicDataNumber() {
+		return demographicDataNumber;
+	}
+
+	public void setDemographicDataNumber(Set<DemographicDataNumber> demographicDataNumber) {
+		this.demographicDataNumber = demographicDataNumber;
+	}
+
+	public Set<DemographicDataString> getDemographicDataString() {
+		return demographicDataString;
+	}
+
+	public void setDemographicDataString(Set<DemographicDataString> demographicDataString) {
+		this.demographicDataString = demographicDataString;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	@Override
+	public String toString() {
+		return "DemographicData [id=" + id + ", name=" + name + ", type=" + type + ", experiment=" + experiment
+				+ ", demographicDataDate=" + demographicDataDate + ", demographicDataNumber=" + demographicDataNumber
+				+ ", demographicDataString=" + demographicDataString + "]";
+	}
+	
+	
 		
 }

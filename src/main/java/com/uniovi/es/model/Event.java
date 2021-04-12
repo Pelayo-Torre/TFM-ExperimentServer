@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -14,7 +16,10 @@ public class Event implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Id
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
 	private String sceneId;
 	
 	@Column(nullable = false)
@@ -22,7 +27,7 @@ public class Event implements Serializable {
 	
 	@Column(nullable = false)
 	private String elementId;
-	@Id
+	
 	private Long timeStamp;
 	
 	@Column(nullable = false)
@@ -35,7 +40,6 @@ public class Event implements Serializable {
 	
 	private Integer keyCodeEvent;
 	
-	@Id
 	@ManyToOne
 	private User user;
 		
@@ -112,5 +116,14 @@ public class Event implements Serializable {
 	public void setKeyCodeEvent(Integer keyCodeEvent) {
 		this.keyCodeEvent = keyCodeEvent;
 	}
+
+	@Override
+	public String toString() {
+		return "Event [id=" + id + ", sceneId=" + sceneId + ", eventType=" + eventType + ", elementId=" + elementId
+				+ ", timeStamp=" + timeStamp + ", x=" + x + ", y=" + y + ", keyValueEvent=" + keyValueEvent
+				+ ", keyCodeEvent=" + keyCodeEvent + ", user=" + user + "]";
+	}
+	
+	
 	
 }

@@ -33,5 +33,9 @@ public class StrategyDataManager {
 		if(!hasStrategyData(strategy.getKey()))
 			this.strategys.put(strategy.getKey(), strategy);
 	}
-	
+
+	public Map<Integer, StrategyData> getStrategys() {
+		return strategys;
+	}
+		
 }

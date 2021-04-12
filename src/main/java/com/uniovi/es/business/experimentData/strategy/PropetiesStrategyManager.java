@@ -69,7 +69,7 @@ public class PropetiesStrategyManager {
 			logger.error("[ERROR] NO SE HA ENCONTRADO EL FICHERO DE PROPIEDADES: " + file);
 		}
 		
-		logger.debug("Read the connection properties: " + p);
+		logger.info("Read the connection properties: " + p);
 		
 		return p;
 	}

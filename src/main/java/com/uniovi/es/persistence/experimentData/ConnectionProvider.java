@@ -55,7 +55,7 @@ public class ConnectionProvider {
 		password = p.getProperty("spring.datasource.password");
 		driver = p.getProperty("spring.datasource.driverClassName");
 
-		logger.debug("Read the connection string: " + connectionString);
+		logger.info("Read the connection string: " + connectionString);
 	}
 	
 	public synchronized Connection getConnection() throws ClassNotFoundException, SQLException

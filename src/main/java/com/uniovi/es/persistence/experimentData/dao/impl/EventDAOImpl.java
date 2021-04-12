@@ -14,13 +14,14 @@ import org.slf4j.LoggerFactory;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ConnectionProvider;
 import com.uniovi.es.persistence.experimentData.dao.EventDAO;
+import com.uniovi.es.utils.Constantes;
 
 public class EventDAOImpl implements EventDAO{
 	
 	private static final Logger logger = LoggerFactory.getLogger(EventDAOImpl.class);
 	
 	@Override
-	public Event getInitialEvent(String sceneID, String sessionID, String componentID, Integer eventType) {
+	public Event getInitialEvent(String sceneID, String sessionID, String componentID, Integer eventType, Integer keyCodeEvent) {
 		logger.info("[INICIO] - EventDAOImpl - getInitialEvent");
 		logger.info("\t \t Parámetros de entrada: SceneID - " + sceneID + " SessionID - " 
 		+ sessionID + " EventType - " + eventType + " ComponentID - " + componentID);
@@ -38,6 +39,8 @@ public class EventDAOImpl implements EventDAO{
 				sb.append(" AND user_session_id = ? ");
 			if(eventType != null)
 				sb.append(" AND event_type = ? ");
+			if(keyCodeEvent != null)
+				sb.append(" AND key_code_event = ? ");
 			if(componentID != null)
 				sb.append(" AND element_id = ? ");
 			sb.append(" AND time_stamp IN ");
@@ -49,6 +52,8 @@ public class EventDAOImpl implements EventDAO{
 				sb.append(" 	AND user_session_id = ? ");
 			if(eventType != null)
 				sb.append(" 	AND event_type = ? ");
+			if(keyCodeEvent != null)
+				sb.append(" 	AND key_code_event = ? ");
 			if(componentID != null)
 				sb.append(" 	AND element_id = ? ");
 			sb.append(" ) ");
@@ -68,6 +73,10 @@ public class EventDAOImpl implements EventDAO{
 				count++;
 				stmt.setInt(count, eventType);
 			}
+			if(keyCodeEvent != null) {
+				count++;
+				stmt.setInt(count, keyCodeEvent);
+			}
 			if(componentID != null) {
 				count++;
 				stmt.setString(count, componentID);
@@ -84,6 +93,10 @@ public class EventDAOImpl implements EventDAO{
 			if(eventType != null) {
 				count++;
 				stmt.setInt(count, eventType);
+			}
+			if(keyCodeEvent != null) {
+				count++;
+				stmt.setInt(count, keyCodeEvent);
 			}
 			if(componentID != null) {
 				count++;
@@ -110,10 +123,10 @@ public class EventDAOImpl implements EventDAO{
 	}
 	
 	@Override
-	public Event getFinalEvent(String sceneID, String sessionID, String componentID, Integer eventType) {
+	public Event getFinalEvent(String sceneID, String sessionID, String componentID, Integer eventType, Integer keyCodeEvent) {
 		logger.info("[INICIO] - EventDAOImpl - getFinalEvent");
 		logger.info("\t \t Parámetros de entrada: SceneID - " + sceneID + " SessionID - " 
-		+ sessionID + " EventType - " + eventType + " ComponentID - " + componentID);
+		+ sessionID + " EventType - " + eventType + " ComponentID - " + componentID + " keyCodeEvent: " + keyCodeEvent);
 		
 		Connection con;
 		Event event = null;
@@ -128,6 +141,8 @@ public class EventDAOImpl implements EventDAO{
 				sb.append(" AND user_session_id = ? ");
 			if(eventType != null)
 				sb.append(" AND event_type = ? ");
+			if(keyCodeEvent != null)
+				sb.append(" AND key_code_event = ? ");
 			if(componentID != null)
 				sb.append(" AND element_id = ? ");
 			sb.append(" AND time_stamp IN ");
@@ -139,6 +154,8 @@ public class EventDAOImpl implements EventDAO{
 				sb.append(" 	AND user_session_id = ? ");
 			if(eventType != null)
 				sb.append(" 	AND event_type = ? ");
+			if(keyCodeEvent != null)
+				sb.append(" 	AND key_code_event = ? ");
 			if(componentID != null)
 				sb.append(" 	AND element_id = ? ");
 			sb.append(" ) ");
@@ -158,6 +175,10 @@ public class EventDAOImpl implements EventDAO{
 				count++;
 				stmt.setInt(count, eventType);
 			}
+			if(keyCodeEvent != null) {
+				count++;
+				stmt.setInt(count, keyCodeEvent);
+			}
 			if(componentID != null) {
 				count++;
 				stmt.setString(count, componentID);
@@ -174,6 +195,10 @@ public class EventDAOImpl implements EventDAO{
 			if(eventType != null) {
 				count++;
 				stmt.setInt(count, eventType);
+			}
+			if(keyCodeEvent != null) {
+				count++;
+				stmt.setInt(count, keyCodeEvent);
 			}
 			if(componentID != null) {
 				count++;
@@ -301,6 +326,186 @@ public class EventDAOImpl implements EventDAO{
 		return events;
 	}
 	
+	@Override
+	public Event getInitialEventOfUser(String sceneID, String sessionID) {
+		logger.info("[INICIO] - EventDAOImpl - getInitialEventOfUser");
+		logger.info("\t \t Parámetros de entrada: SceneID - " + sceneID + " SessionID - " + sessionID);
+		
+		Connection con;
+		Event event = null;
+		try {
+			con = ConnectionProvider.getInstance().getConnection();
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append("SELECT * FROM EVENT WHERE");
+			sb.append(" scene_id = ? ");
+			sb.append(" AND user_session_id = ? ");
+			sb.append(" AND event_type NOT IN ( " + Constantes.EVENT_INIT_TRACKING + ", " + Constantes.EVENT_TRACKIND_END + ") ");
+			sb.append(" AND time_stamp IN ");
+			sb.append(" (SELECT MIN(time_stamp) FROM EVENT WHERE ");
+			sb.append(" 	scene_id = ? ");
+			sb.append(" 	AND user_session_id = ? ");
+			sb.append(" 	AND event_type NOT IN ( " + Constantes.EVENT_INIT_TRACKING + ", " + Constantes.EVENT_TRACKIND_END + ") ");
+			sb.append(" ) ");
+			
+			PreparedStatement stmt = con.prepareStatement(sb.toString());
+			stmt.setString(1, sceneID);
+			stmt.setString(2, sessionID);
+			stmt.setString(3, sceneID);
+			stmt.setString(4, sessionID);
+			
+			logger.info("\t \t Query: " + stmt);
+			ResultSet result = stmt.executeQuery();
+			
+			while (result.next()) {
+				event = getEvent(result);
+			};
+						
+		} catch (ClassNotFoundException e) {
+			logger.error("[ERROR] - ClassNotFoundException " + e.toString());
+		} catch (SQLException e) {
+			logger.error("[ERROR] - SQLException " + e.toString());
+		} catch (IOException e) {
+			logger.error("[ERROR] - IOException " + e.toString());
+		}
+		
+		logger.info("[FINAL] - EventDAOImpl - getInitialEventOfUser");
+		return event;
+	}
+	
+	@Override
+	public Event getInitialEventOfSelectionObject(String sceneID, String sessionID, String associatedComponent,
+			Integer eventType, Integer keyCodeEvent) {
+		logger.info("[INICIO] - EventDAOImpl - getInitialEventOfSelectionObject");
+		logger.info("\t \t Parámetros de entrada: SceneID - " + sceneID + " SessionID - " + sessionID + 
+				" associatedComponent - " + associatedComponent + " eventType - " + eventType + " keyCodeEvent - " + keyCodeEvent );
+		
+		Connection con;
+		Event event = null;
+		try {
+			con = ConnectionProvider.getInstance().getConnection();
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append("SELECT * FROM EVENT WHERE ");
+			sb.append(" scene_id = ? ");
+			sb.append(" AND user_session_id = ? ");
+			sb.append(" AND element_id IN ( ");
+			sb.append(" 	SELECT component_id FROM scene_component  ");
+			sb.append(" 	WHERE user_session_id = ? AND scene_id = ? AND component_associated = ? ");
+			sb.append(" ) AND event_type = ? ");
+			if(keyCodeEvent != null)
+				sb.append(" 	AND key_code_event = ?  ");
+			sb.append(" AND time_stamp IN ( ");
+			sb.append(" 	SELECT MIN(time_stamp) FROM event  ");
+			sb.append(" 	WHERE scene_id = ? AND user_session_id = ? ");
+			sb.append(" 	AND element_id IN ( ");
+			sb.append(" 		SELECT component_id FROM scene_component ");
+			sb.append(" 		WHERE user_session_id = ? AND scene_id = ? AND component_associated = ?  ");
+			sb.append(" 	) AND event_type = ? ");
+			if(keyCodeEvent != null)
+				sb.append(" 	AND key_code_event = ?  ");
+			sb.append(" ) ");
+			
+			PreparedStatement stmt = con.prepareStatement(sb.toString());
+			
+			stmt.setString(1, sceneID);
+			stmt.setString(2, sessionID);
+			stmt.setString(3, sessionID);
+			stmt.setString(4, sceneID);
+			stmt.setString(5, associatedComponent);
+			stmt.setInt(6, eventType);
+			if(keyCodeEvent != null) {
+				stmt.setInt(7, keyCodeEvent);
+				stmt.setString(8, sceneID);
+				stmt.setString(9, sessionID);
+				stmt.setString(10, sessionID);
+				stmt.setString(11, sceneID);
+				stmt.setString(12, associatedComponent);
+				stmt.setInt(13, eventType);
+				stmt.setInt(14, keyCodeEvent);
+			}
+			else {
+				stmt.setString(7, sceneID);
+				stmt.setString(8, sessionID);
+				stmt.setString(9, sessionID);
+				stmt.setString(10, sceneID);
+				stmt.setString(11, associatedComponent);
+				stmt.setInt(12, eventType);
+			}
+			
+			logger.info("\t \t Query: " + stmt);
+			ResultSet result = stmt.executeQuery();
+			
+			while (result.next()) {
+				event = getEvent(result);
+			};
+						
+		} catch (ClassNotFoundException e) {
+			logger.error("[ERROR] - ClassNotFoundException " + e.toString());
+		} catch (SQLException e) {
+			logger.error("[ERROR] - SQLException " + e.toString());
+		} catch (IOException e) {
+			logger.error("[ERROR] - IOException " + e.toString());
+		}
+		
+		logger.info("[FINAL] - EventDAOImpl - getInitialEventOfSelectionObject");
+		return event;
+	}
+	
+	@Override
+	public List<Event> getEventOfSelectionObject(String sceneID, String sessionID, String associatedComponent,
+			Integer eventType, Integer keyCodeEvent) {
+		logger.info("[INICIO] - EventDAOImpl - getEventOfSelectionObject");
+		logger.info("\t \t Parámetros de entrada: SceneID - " + sceneID + " SessionID - " + sessionID + 
+				" associatedComponent - " + associatedComponent + " eventType - " + eventType + " keyCodeEvent - " + keyCodeEvent );
+		
+		Connection con;
+		List<Event> events = new ArrayList<Event>();
+		try {
+			con = ConnectionProvider.getInstance().getConnection();
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append("SELECT * FROM EVENT WHERE ");
+			sb.append(" scene_id = ? ");
+			sb.append(" AND user_session_id = ? ");
+			sb.append(" AND element_id IN ( ");
+			sb.append(" 	SELECT component_id FROM scene_component  ");
+			sb.append(" 	WHERE user_session_id = ? AND scene_id = ? AND component_associated = ? ");
+			sb.append(" ) AND event_type = ? ");
+			if(keyCodeEvent != null)
+				sb.append(" 	AND key_code_event = ?  ");
+			
+			PreparedStatement stmt = con.prepareStatement(sb.toString());
+			
+			stmt.setString(1, sceneID);
+			stmt.setString(2, sessionID);
+			stmt.setString(3, sessionID);
+			stmt.setString(4, sceneID);
+			stmt.setString(5, associatedComponent);
+			stmt.setInt(6, eventType);
+			if(keyCodeEvent != null) {
+				stmt.setInt(7, keyCodeEvent);
+			}
+			
+			logger.info("\t \t Query: " + stmt);
+			ResultSet result = stmt.executeQuery();
+			
+			while (result.next()) {
+				events.add(getEvent(result));
+			};
+						
+		} catch (ClassNotFoundException e) {
+			logger.error("[ERROR] - ClassNotFoundException " + e.toString());
+		} catch (SQLException e) {
+			logger.error("[ERROR] - SQLException " + e.toString());
+		} catch (IOException e) {
+			logger.error("[ERROR] - IOException " + e.toString());
+		}
+		
+		logger.info("[FINAL] - EventDAOImpl - getEventOfSelectionObject");
+		return events;
+	}
+	
 	private Event getEvent(ResultSet result) throws SQLException {
 		Event event = new Event();
 		event.setSceneId(result.getString("scene_id"));
@@ -313,5 +518,4 @@ public class EventDAOImpl implements EventDAO{
 		event.setKeyValueEvent(result.getString("key_value_event"));
 		return event;
 	}
-
 }

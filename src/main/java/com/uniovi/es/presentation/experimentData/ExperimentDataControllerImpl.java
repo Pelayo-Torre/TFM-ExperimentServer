@@ -7,13 +7,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uniovi.es.business.dto.CalculateDataDTO;
+import com.uniovi.es.business.dto.SceneDTO;
 import com.uniovi.es.business.dto.StrategyDataDTO;
+import com.uniovi.es.business.dto.UserDTO;
 import com.uniovi.es.business.experimentData.ExperimentDataService;
 import com.uniovi.es.exceptions.ForbiddenException;
 
@@ -37,6 +40,41 @@ public class ExperimentDataControllerImpl implements ExperimentDataController {
 		
 		logger.info("[FINAL] EXPERIMENT DATA CONTROLLER -- get data");
 		return map;
+	}
+
+	@Override
+	@RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
+	public List<UserDTO> getUsersByExperiment(@PathVariable Long id) throws ForbiddenException {
+		logger.info("[INICIO] EXPERIMENT DATA CONTROLLER -- getUsersByExperiment");
+		logger.info("\t \t PARÁMETROS DE ENTRADA: " + id);
+		
+		List<UserDTO> list = experimentDataService.getUsersByExperiment(id);
+		
+		logger.info("[FINAL] EXPERIMENT DATA CONTROLLER -- getUsersByExperiment");
+		return list;
+	}
+
+	@Override
+	@RequestMapping(value = "/strategys", method = RequestMethod.GET)
+	public List<StrategyDataDTO> getStrategys() {
+		logger.info("[INICIO] EXPERIMENT DATA CONTROLLER -- getStrategys");
+		
+		List<StrategyDataDTO> list = experimentDataService.getStrategys();
+		
+		logger.info("[FINAL] EXPERIMENT DATA CONTROLLER -- getStrategys");
+		return list;
+	}
+
+	@Override
+	@RequestMapping(value = "/scenes/{id}", method = RequestMethod.GET)
+	public List<SceneDTO> getScenesByExperiment(@PathVariable Long id) throws ForbiddenException {
+		logger.info("[INICIO] EXPERIMENT DATA CONTROLLER -- getScenesByExperiment");
+		logger.info("\t \t PARÁMETROS DE ENTRADA: " + id);
+		
+		List<SceneDTO> scenes = experimentDataService.getScenesByExperiment(id);
+		
+		logger.info("[INICIO] EXPERIMENT DATA CONTROLLER -- getScenesByExperiment");
+		return scenes;
 	}
 	
 }

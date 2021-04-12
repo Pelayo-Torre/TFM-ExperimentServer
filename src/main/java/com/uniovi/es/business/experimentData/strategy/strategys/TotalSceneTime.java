@@ -36,10 +36,10 @@ public class TotalSceneTime extends StrategyDataAbstract{
 		logger.info("\t \t Parámetros de entrada: SceneID - " + sceneID + " SessionID - " + sessionID);
 		
 		//Obtenemos el primer y último evento de escena
-		Event initial = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, null, null);
-		Event last = ExperimentDataFactory.getEventDAO().getFinalEvent(sceneID, sessionID, null, null);
+		Event initial = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, null, null, null);
+		Event last = ExperimentDataFactory.getEventDAO().getFinalEvent(sceneID, sessionID, null, null, null);
 		
-		Long result = null;
+		Long result = 0L;
 		
 		if(initial != null && last != null) {
 			result = new Timestamp(last.getTimeStamp()).getTime() - new Timestamp(initial.getTimeStamp()).getTime();

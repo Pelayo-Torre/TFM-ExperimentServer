@@ -6,7 +6,6 @@ import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyDataAbstract;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
-import com.uniovi.es.utils.Constantes;
 
 /**
  * Calcula el tiempo de reacción del usuario desde que carga la escena y se produce el 1º evento.
@@ -33,16 +32,14 @@ public class ReactionTime extends StrategyDataAbstract{
 	public Object calculate(String sceneID, String sessionID) {
 		logger.info("[INICIAL] - ReactionTime - calculate");
 		logger.info("\t \t Parámetros de entrada: SceneID - " + sceneID + " SessionID - " + sessionID);
-				
-		logger.info("kkkkkkkkkkkkkkkkkkkkkkkk " + getPropertyName());
+						
+		Event initial = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, null, null, null);
+		Event initialUser = ExperimentDataFactory.getEventDAO().getInitialEventOfUser(sceneID, sessionID);
 		
-		Event initial = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, null, null);
-		Event mouse = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, null, Constantes.EVENT_ON_MOUSE_MOVE);
+		Long result = 0L;
 		
-		Long result = null;
-		
-		if(initial != null && mouse != null) {
-			result = new Timestamp(mouse.getTimeStamp()).getTime() - new Timestamp(initial.getTimeStamp()).getTime();
+		if(initial != null && initialUser != null) {
+			result = new Timestamp(initialUser.getTimeStamp()).getTime() - new Timestamp(initial.getTimeStamp()).getTime();
 		}
 		
 		logger.info("\t \t Resultado obtenido: " + result);

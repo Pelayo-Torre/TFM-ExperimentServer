@@ -20,9 +20,10 @@ public class SceneComponentDAOImpl implements SceneComponentDAO{
 	private static final Logger logger = LoggerFactory.getLogger(SceneComponentDAOImpl.class);
 
 	@Override
-	public List<ComponentData> getComponents(String sceneID, String sessionID, Integer typeId) {
+	public List<ComponentData> getComponents(String sceneID, String sessionID, String componentIDAssociated, Integer...typeId) {
 		logger.info("[INICIO] - SceneComponentDAOImpl - getComponentsOfScene");
-		logger.info("\t \t Parámetros de entrada: SceneID - " + sceneID + " SessionID - " + sessionID + " TypeID - " + typeId);
+		logger.info("\t \t Parámetros de entrada: SceneID - " + sceneID + " SessionID - " + sessionID + " TypeID - " + typeId + 
+				" componentIDAssociated - " + componentIDAssociated);
 		
 		Connection con;
 		List<ComponentData> components = new ArrayList<ComponentData>();
@@ -35,8 +36,27 @@ public class SceneComponentDAOImpl implements SceneComponentDAO{
 				sb.append(" AND scene_id = ? ");
 			if(sessionID != null)
 				sb.append(" AND user_session_id = ? ");
-			if(typeId != null)
-				sb.append(" AND type_id = ? ");
+			if(componentIDAssociated != null)
+				sb.append(" AND component_associated = ? ");
+			if(typeId != null && typeId.length > 0) {
+				sb.append(" AND type_id IN ( ");
+				if(typeId.length == 1){
+					sb.append(" ?) ");
+				}
+				else {
+					for(int i=0; i<typeId.length; i++) {
+						if(i == 0) {
+							sb.append(" ? ");
+						}
+						else if( i == typeId.length -1) {
+							sb.append(", ?) ");
+						}
+						else {
+							sb.append(", ? ");
+						}
+					}
+				}
+			}
 			
 			PreparedStatement stmt = con.prepareStatement(sb.toString());
 			
@@ -50,9 +70,15 @@ public class SceneComponentDAOImpl implements SceneComponentDAO{
 				count++;
 				stmt.setString(count, sessionID);
 			}
-			if(typeId != null) {
+			if(componentIDAssociated != null) {
 				count++;
-				stmt.setInt(count, typeId);
+				stmt.setString(count, componentIDAssociated);
+			}
+			if(typeId != null && typeId.length > 0) {
+				for(int i=0; i<typeId.length; i++) {
+					count++;
+					stmt.setInt(count, typeId[i]);
+				}
 			}
 			
 			logger.info("\t \t Query: " + stmt);
@@ -73,6 +99,41 @@ public class SceneComponentDAOImpl implements SceneComponentDAO{
 		logger.info("[FINAL] - SceneComponentDAOImpl - getComponentsOfScene");
 		return components;
 	}
+	
+	@Override
+	public List<String> getScenes(Long idExperiment) {
+		logger.info("[INICIO] - SceneComponentDAOImpl - getScenes");
+		logger.info("\t \t Parámetros de entrada: ID experiment - " + idExperiment);
+		
+		Connection con;
+		List<String> scenes = new ArrayList<String>();
+		try {
+			con = ConnectionProvider.getInstance().getConnection();
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append("SELECT DISTINCT e.scene_id FROM userdata u, event e WHERE u.session_id = e.user_session_id and u.experiment_id = ? ");
+			
+			PreparedStatement stmt = con.prepareStatement(sb.toString());
+			stmt.setLong(1, idExperiment);
+			
+			logger.info("\t \t Query: " + stmt);
+			ResultSet result = stmt.executeQuery();
+			
+			while (result.next()) {
+				scenes.add(result.getString("scene_id"));
+			};
+						
+		} catch (ClassNotFoundException e) {
+			logger.error("[ERROR] - ClassNotFoundException " + e.toString());
+		} catch (SQLException e) {
+			logger.error("[ERROR] - SQLException " + e.toString());
+		} catch (IOException e) {
+			logger.error("[ERROR] - IOException " + e.toString());
+		}
+		
+		logger.info("[FINAL] - SceneComponentDAOImpl - getScenes");
+		return scenes;
+	}
 
 	private ComponentData getComponent(ResultSet result) throws SQLException {
 		ComponentData component = new ComponentData();
@@ -89,5 +150,7 @@ public class SceneComponentDAOImpl implements SceneComponentDAO{
 		
 		return component;
 	}
+
+	
 
 }

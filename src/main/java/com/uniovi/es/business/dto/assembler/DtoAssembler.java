@@ -10,6 +10,8 @@ import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.NoteDTO;
 import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.business.dto.RequestDTO;
+import com.uniovi.es.business.dto.SceneDTO;
+import com.uniovi.es.business.dto.UserDTO;
 import com.uniovi.es.model.DemographicData;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
@@ -17,6 +19,7 @@ import com.uniovi.es.model.Note;
 import com.uniovi.es.model.Petition;
 import com.uniovi.es.model.PetitionNotRegistered;
 import com.uniovi.es.model.Request;
+import com.uniovi.es.model.User;
 import com.uniovi.es.model.types.DemographicDataType;
 
 public class DtoAssembler {
@@ -241,6 +244,75 @@ public class DtoAssembler {
 		}
 		
 		return listDtos;
+	}
+	
+	public static UserDTO toDTO(User user) {
+		UserDTO dto = new UserDTO();
+		
+		dto.browserEngine = user.getBrowserEngine();
+		dto.browserLanguage = user.getBrowserLanguage();
+		dto.browserName = user.getBrowserName();
+		dto.browserPlatform = user.getBrowserPlatform();
+		dto.browserOnline = user.getBrowserOnline();
+		dto.browserVersion1a = user.getBrowserVersion1a();
+		dto.browserVersion1b = user.getBrowserVersion1b();
+		dto.dataCookies1 = user.getDataCookies1();
+		dto.dataCookies2 = user.getDataCookies2();
+		dto.dataCookiesEnabled = user.getDataCookiesEnabled();
+		dto.dataStorage = user.getDataStorage();
+		dto.idExperiment = user.getExperiment().getId();
+		dto.javaEnabled = user.getJavaEnabled();
+		dto.locale = user.getLocale();
+		dto.pageon = user.getPageon();
+		dto.previousSites = user.getPreviousSites();
+		dto.referrer = user.getReferrer();
+		dto.remoteAddress = user.getRemoteAddress();
+		dto.remoteHost = user.getRemoteHost();
+		dto.remotePort = user.getRemotePort();
+		dto.scrColorDepth = user.getScrColorDepth();
+		dto.scrPixelDepth = user.getScrPixelDepth();
+		dto.sessionId = user.getSessionId();
+		dto.sizeAvailH = user.getSizeAvailH();
+		dto.sizeAvailW = user.getSizeAvailW();
+		dto.sizeDocH = user.getSizeDocH();
+		dto.sizeDocW = user.getSizeDocW();
+		dto.sizeInH = user.getSizeInH();
+		dto.sizeInW = user.getSizeInW();
+		dto.sizeScreenH = user.getSizeScreenH();
+		dto.sizeScreenW = user.getSizeScreenW();
+		dto.timeOpened = user.getTimeOpened();
+		dto.timeStamp = user.getTimeStamp();
+		dto.timezone = user.getTimezone();
+		
+		return dto;
+	}
+	
+	public static List<UserDTO> toListUserDTO(List<User> list){
+		List<UserDTO> listDtos = new ArrayList<UserDTO>();
+		
+		for(User user : list) {
+			listDtos.add(toDTO(user));
+		}
+		
+		return listDtos;
+	}
+	
+	public static List<SceneDTO> toListSceneDTO(List<String> list){
+		List<SceneDTO> listDtos = new ArrayList<SceneDTO>();
+		
+		for(String scene : list) {
+			listDtos.add(toDTO(scene));
+		}
+		
+		return listDtos;
+	}
+
+	private static SceneDTO toDTO(String scene) {
+		SceneDTO dto = new SceneDTO();
+		
+		dto.scene = scene;
+		
+		return dto;
 	}
 
 }

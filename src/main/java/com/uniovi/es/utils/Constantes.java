@@ -6,10 +6,10 @@ public class Constantes {
 	public final static Integer STRATEGY_REACTION_TIME = 2;
 	
 	//Objetos de selección
-	public final static Integer STRATEGY_REACTION_TIME_COMBO = 3;
-	public final static Integer STRATEGY_OFFERED_OPTIONS_COMBO = 4;
-	public final static Integer STRATEGY_REACTION_TIME_NUMBER_OPTIONS_COMBO = 5;
-	public final static Integer STRATEGY_NUMBER_TIMES_CHANGED_COMBO = 6;
+	public final static Integer STRATEGY_REACTION_TIME_SELECTION_OBJECT = 3;
+	public final static Integer STRATEGY_OFFERED_OPTIONS_SELECTION_OBJECT = 4;
+	public final static Integer STRATEGY_REACTION_TIME_NUMBER_OPTIONS_SELECTION_OBJECT = 5;
+	public final static Integer STRATEGY_NUMBER_TIMES_CHANGED_SELECTION_OBJECT = 6;
 	
 	//TextFields
 	public final static Integer STRATEGY_NUMBER_CHARACTERS_PER_SECOND = 7;
@@ -47,11 +47,14 @@ public class Constantes {
 	public final static Integer EVENT_KEY_UP = 15;
 	public final static Integer EVENT_FOCUS = 16;
 	public final static Integer EVENT_BLUR = 17;
+	public final static Integer EVENT_ON_CHANGE_SELECTION_OBJECT = 18;
+	public final static Integer EVENT_ON_CLICK_SELECTION_OBJECT = 19;
 	public final static Integer EVENT_INIT_TRACKING = 100;
 	public final static Integer EVENT_TRACKIND_END = 200;
 	
 	//EVENTOS DE TECLADO
 	public final static Integer EVENT_BACKSPACE = 8;
+	public final static Integer EVENT_ENTER = 13;
 	public final static Integer EVENT_ARROW_LEFT = 37;
 	public final static Integer EVENT_ARROW_UP = 38;
 	public final static Integer EVENT_ARROW_RIGHT = 39;
@@ -61,4 +64,8 @@ public class Constantes {
 	//TIPOS DE COMPONENTES
 	public final static Integer COMPONENT_TEXT_FIELD = 1;
 	public final static Integer COMPONENT_COMBOBOX = 2;
+	public final static Integer COMPONENT_OPTION = 3;
+	public final static Integer COMPONENT_RADIO_BUTTON = 4;
+	public final static Integer COMPONENT_CHECK_BOX = 5;
+	//public final static Integer COMPONENT_ = 6;
 }

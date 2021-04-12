@@ -350,5 +350,48 @@ public class User implements Serializable {
 	public void setComponents(Set<ComponentData> components) {
 		this.components = components;
 	}
+
+	public Boolean getBrowserOnline() {
+		return browserOnline;
+	}
+
+	public void setBrowserOnline(Boolean browserOnline) {
+		this.browserOnline = browserOnline;
+	}
+
+	public Boolean getJavaEnabled() {
+		return javaEnabled;
+	}
+
+	public void setJavaEnabled(Boolean javaEnabled) {
+		this.javaEnabled = javaEnabled;
+	}
+
+	public Boolean getDataCookiesEnabled() {
+		return dataCookiesEnabled;
+	}
+
+	public void setDataCookiesEnabled(Boolean dataCookiesEnabled) {
+		this.dataCookiesEnabled = dataCookiesEnabled;
+	}
+
+	@Override
+	public String toString() {
+		return "User [sessionId=" + sessionId + ", browserOnline=" + browserOnline + ", javaEnabled=" + javaEnabled
+				+ ", dataCookiesEnabled=" + dataCookiesEnabled + ", timeOpened=" + timeOpened + ", pageon=" + pageon
+				+ ", referrer=" + referrer + ", browserName=" + browserName + ", browserEngine=" + browserEngine
+				+ ", browserVersion1a=" + browserVersion1a + ", browserVersion1b=" + browserVersion1b
+				+ ", browserLanguage=" + browserLanguage + ", browserPlatform=" + browserPlatform + ", dataCookies1="
+				+ dataCookies1 + ", dataCookies2=" + dataCookies2 + ", dataStorage=" + dataStorage + ", remoteHost="
+				+ remoteHost + ", locale=" + locale + ", remoteAddress=" + remoteAddress + ", previousSites="
+				+ previousSites + ", sizeScreenW=" + sizeScreenW + ", sizeScreenH=" + sizeScreenH + ", sizeDocW="
+				+ sizeDocW + ", sizeDocH=" + sizeDocH + ", sizeInW=" + sizeInW + ", sizeInH=" + sizeInH
+				+ ", sizeAvailW=" + sizeAvailW + ", sizeAvailH=" + sizeAvailH + ", scrColorDepth=" + scrColorDepth
+				+ ", scrPixelDepth=" + scrPixelDepth + ", remotePort=" + remotePort + ", timezone=" + timezone
+				+ ", timeStamp=" + timeStamp + ", experiment=" + experiment + ", events=" + events + ", components="
+				+ components + "]";
+	}
+	
+	
 	
 }

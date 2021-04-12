@@ -36,7 +36,7 @@ public class NumberTimesArrowsLeftRight extends StrategyDataAbstract{
 		
 		List<ComponentData> components = new ArrayList<ComponentData>();
 		components.addAll(
-			ExperimentDataFactory.getSceneComponentDAO().getComponents(sceneID, sessionID, Constantes.COMPONENT_TEXT_FIELD)
+			ExperimentDataFactory.getSceneComponentDAO().getComponents(sceneID, sessionID, null, Constantes.COMPONENT_TEXT_FIELD)
 		);
 		
 		logger.info("\t \t Número de componentes: " + components.size());

@@ -6,6 +6,8 @@ import com.uniovi.es.model.ComponentData;
 
 public interface SceneComponentDAO {
 	
-	public List<ComponentData> getComponents(String sceneID, String sessionID, Integer typeId); 
-
+	public List<ComponentData> getComponents(String sceneID, String sessionID, String componentIDAssociated, Integer...typeId); 
+	
+	public List<String> getScenes(Long idExperiment);
+	
 }

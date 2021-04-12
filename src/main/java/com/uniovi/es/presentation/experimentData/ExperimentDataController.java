@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.uniovi.es.business.dto.CalculateDataDTO;
+import com.uniovi.es.business.dto.SceneDTO;
 import com.uniovi.es.business.dto.StrategyDataDTO;
+import com.uniovi.es.business.dto.UserDTO;
 import com.uniovi.es.exceptions.ForbiddenException;
 
 public interface ExperimentDataController {
@@ -15,5 +17,27 @@ public interface ExperimentDataController {
 	 * @return Map con (ID Strategy, resultado Strategy)
 	 */
 	public Map<String, List<StrategyDataDTO>> getData(CalculateDataDTO data) throws ForbiddenException;
+	
+	/**
+	 * Devuelve la lista de usuarios que participaron en un experimento
+	 * @param idExperiment identificador del experimento del que se desea ver los usuarios
+	 * @return la lista de usuarios
+	 * @throws ForbiddenException en caso de que el investigador no tenga permisos para ver los usuarios
+	 */
+	public List<UserDTO> getUsersByExperiment(Long idExperiment) throws ForbiddenException;
+	
+	/**
+	 * Devuelve la lista de estrategias existentes para realizar los cálculos necesarios
+	 * @return lista de strategys
+	 */
+	public List<StrategyDataDTO> getStrategys();
+	
+	/**
+	 * Devuelve la lista de escenas registradas en un experimento
+	 * @param idExperiment identificador del experimento
+	 * @return lista de escenas
+	 * @throws ForbiddenException en caso de que el investigador no tenga permisos para ver las escenas
+	 */
+	public List<SceneDTO> getScenesByExperiment(Long idExperiment) throws ForbiddenException;
 	
 }

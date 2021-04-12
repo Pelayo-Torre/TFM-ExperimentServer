@@ -20,9 +20,11 @@ public class ComponentData implements Serializable {
 	@Column(nullable = false)
 	private Long timeStamp;
 	
+	@Id
 	@Column(nullable = false)
 	private String sceneId;
 	
+	@Id
 	@ManyToOne
 	private User user;
 	

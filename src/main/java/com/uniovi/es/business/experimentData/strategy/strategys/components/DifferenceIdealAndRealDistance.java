@@ -1,9 +1,14 @@
 package com.uniovi.es.business.experimentData.strategy.strategys.components;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyData;
 
 public class DifferenceIdealAndRealDistance implements StrategyData {
+	
+	public static final Logger logger = LoggerFactory.getLogger(DifferenceIdealAndRealDistance.class);
 	
 	private StrategyData strategy1;
 	private StrategyData strategy2;
@@ -27,10 +32,15 @@ public class DifferenceIdealAndRealDistance implements StrategyData {
 
 	@Override
 	public Object calculate(String sceneID, String sessionID) {
+		logger.info("[INICIAL] - DifferenceIdealAndRealDistance - calculate");
+		
 		Double result1 = (Double) this.strategy1.calculate(sceneID, sessionID);
 		Double result2 = (Double) this.strategy2.calculate(sceneID, sessionID);
 		
-		Double distance = null;
+		logger.info("\t \t Resultado strategy1: " + result1);
+		logger.info("\t \t Resultado strategy2: " + result2);
+		
+		Double distance = 0.0;
 		
 		if(result1 != null && result2 != null && result2 != 0.0) {
 			distance = result1 - result2;
@@ -39,7 +49,8 @@ public class DifferenceIdealAndRealDistance implements StrategyData {
 			return distance;
 		}
 		
-		return null;
+		logger.info("[FINAL] - DifferenceIdealAndRealDistance - calculate");
+		return distance;
 	}
 
 	@Override

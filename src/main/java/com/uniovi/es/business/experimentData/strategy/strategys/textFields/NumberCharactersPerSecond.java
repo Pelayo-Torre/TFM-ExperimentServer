@@ -47,7 +47,7 @@ public class NumberCharactersPerSecond extends StrategyDataAbstract{
 		List<ComponentData> components = new ArrayList<ComponentData>();
 		
 		components.addAll(
-			ExperimentDataFactory.getSceneComponentDAO().getComponents(sceneID, sessionID, Constantes.COMPONENT_TEXT_FIELD)
+			ExperimentDataFactory.getSceneComponentDAO().getComponents(sceneID, sessionID, null, Constantes.COMPONENT_TEXT_FIELD)
 		);
 				
 		logger.info("\t \t Número de componentes: " + components.size());
@@ -55,8 +55,8 @@ public class NumberCharactersPerSecond extends StrategyDataAbstract{
 		for(ComponentData component : components) {
 			logger.info("\t \t Obtenemos los últimos eventos de captura de foco y pérdida de foco sobre el componente: " + component.getComponentId());
 			
-			Event initial = ExperimentDataFactory.getEventDAO().getFinalEvent(sceneID, sessionID, component.getComponentId(), Constantes.EVENT_FOCUS);
-			Event last = ExperimentDataFactory.getEventDAO().getFinalEvent(sceneID, sessionID, component.getComponentId(), Constantes.EVENT_BLUR);
+			Event initial = ExperimentDataFactory.getEventDAO().getFinalEvent(sceneID, sessionID, component.getComponentId(), Constantes.EVENT_FOCUS, null);
+			Event last = ExperimentDataFactory.getEventDAO().getFinalEvent(sceneID, sessionID, component.getComponentId(), Constantes.EVENT_BLUR, null);
 			
 			if(initial != null && last != null) {
 				logger.info("\t \t Eventos de captura y pérdida de foco encontrados. Captura: " + initial + " Pérdida: " + last);
@@ -81,7 +81,9 @@ public class NumberCharactersPerSecond extends StrategyDataAbstract{
 					//El número de carcateres por segundo es total de caracteres escritos / tiempo entre evento inicial y final
 					Long time = (new Timestamp(last.getTimeStamp()).getTime() - new Timestamp(initial.getTimeStamp()).getTime());
 					Double charactersPerSecond = (characters / ( time.doubleValue() / 1000 ));
-					result.put(component.getComponentId(), charactersPerSecond);
+					
+					result.put(component.getComponentId(), (double)Math.round(charactersPerSecond * 100d) / 100d);
+					
 					logger.info("\t \t Resultado componente " + component.getComponentId() + ": " + charactersPerSecond);
 				}
 				else {

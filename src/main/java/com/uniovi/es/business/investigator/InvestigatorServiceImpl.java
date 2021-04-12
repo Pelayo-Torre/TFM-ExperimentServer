@@ -64,7 +64,7 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 
 	@Override
 	public void registerInvestigator(InvestigatorDTO dto) throws InvestigatorException {
-		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- register INVESTIGATOR ");
+		logger.info("[INICIO] INVESTIGATOR-SERVICE -- register INVESTIGATOR ");
 		
 		investigatorValidator.validate(dto);
 		investigatorValidator.validateExistenceOfMail(dto.mail);
@@ -82,7 +82,7 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		//Una vez se haya registrado correctamente, se procede a comprobar si el investigador tenía petiones no registradas
 		generatePetitions(dto);
 		
-		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- register INVESTIGATOR ");
+		logger.info("[FINAL] INVESTIGATOR-SERVICE -- register INVESTIGATOR ");
 	}
 
 	/**
@@ -127,19 +127,19 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 
 	@Override
 	public InvestigatorDTO getDetail(Long id) throws InvestigatorException{
-		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- detail INVESTIGATOR ");
+		logger.info("[INICIO] INVESTIGATOR-SERVICE -- detail INVESTIGATOR ");
 		
 		logger.info("\t \t Obteniendo el investigador a partir del ID: " + id);
 		Optional<Investigator> optional = investigatorDAO.findById(id);
 		Investigator investigator = getInvestigator(optional);
 		
-		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- detail INVESTIGATOR ");
+		logger.info("[FINAL] INVESTIGATOR-SERVICE -- detail INVESTIGATOR ");
 		return DtoAssembler.toDTO(investigator);
 	}
 
 	@Override
 	public void updateInvestigator(InvestigatorDTO dto) throws InvestigatorException, ForbiddenException {
-		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- update INVESTIGATOR ");
+		logger.info("[INICIO] INVESTIGATOR-SERVICE -- update INVESTIGATOR ");
 		
 		Investigator investigatorInSession = userInSession.getInvestigator();
 		if(investigatorInSession == null || investigatorInSession.getId() != dto.id) {
@@ -167,12 +167,12 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		logger.info("\t \t Registrando el investigador en base de datos");
 		investigatorDAO.save(investigator);
 		
-		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- update INVESTIGATOR ");
+		logger.info("[FINAL] INVESTIGATOR-SERVICE -- update INVESTIGATOR ");
 	}
 	
 	@Override
 	public List<ExperimentDTO> getExperimentsAcceptedByIdInvestigator(Long idInvestigator) throws InvestigatorException, ForbiddenException {
-		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- getExperimentsAcceptedByIdInvestigator INVESTIGATOR ");
+		logger.info("[INICIO] INVESTIGATOR-SERVICE -- getExperimentsAcceptedByIdInvestigator INVESTIGATOR ");
 		
 		Investigator investigatorInSession = userInSession.getInvestigator();
 		if(investigatorInSession == null || investigatorInSession.getId() != idInvestigator) {
@@ -184,13 +184,13 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		List<Experiment> experiments = investigatorDAO.findExperimentsByIdInvestigator(idInvestigator, 
 				StatusPetition.ACCEPTED, StatusExperiment.DELETED);
 		
-		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- getExperimentsAcceptedByIdInvestigator INVESTIGATOR ");
+		logger.info("[FINAL] INVESTIGATOR-SERVICE -- getExperimentsAcceptedByIdInvestigator INVESTIGATOR ");
 		return DtoAssembler.toList(experiments);
 	}
 	
 	@Override
 	public List<PetitionDTO> getPetitionsPendingByIdInvestigator(Long idInvestigator) throws InvestigatorException, ForbiddenException {
-		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- getPetitionsPendingByIdInvestigator INVESTIGATOR ");
+		logger.info("[INICIO] INVESTIGATOR-SERVICE -- getPetitionsPendingByIdInvestigator INVESTIGATOR ");
 		
 		Investigator investigatorInSession = userInSession.getInvestigator();
 		if(investigatorInSession == null || investigatorInSession.getId() != idInvestigator) {
@@ -201,24 +201,24 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		logger.info("\t \t Obteniendo las peticiones del investigador: " + idInvestigator);
 		List<Petition> petitions = investigatorDAO.findPetitionsByIdInvestigator(idInvestigator, StatusPetition.PENDING);
 		
-		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- getPetitionsPendingByIdInvestigator INVESTIGATOR ");
+		logger.info("[FINAL] INVESTIGATOR-SERVICE -- getPetitionsPendingByIdInvestigator INVESTIGATOR ");
 		return DtoAssembler.toListPetitions(petitions);
 	}
 
 	@Override
 	public List<InvestigatorDTO> getListInvestigators() {
-		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- all investigators ");
+		logger.info("[INICIO] INVESTIGATOR-SERVICE -- all investigators ");
 
 		List<Investigator> list = new ArrayList<Investigator>();
 		investigatorDAO.findAll().forEach(list::add);;
 		
-		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- all investigators ");
+		logger.info("[FINAL] INVESTIGATOR-SERVICE -- all investigators ");
 		return DtoAssembler.toListInvestigators(list);
 	}
 	
 	@Override
 	public InvestigatorDTO getInvestigatorByMail(String mail) throws InvestigatorException  {
-		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- investigator by mail ");
+		logger.info("[INICIO] INVESTIGATOR-SERVICE -- investigator by mail ");
 		
 		if(mail == null) {
 			logger.error("[ERROR - 203] -- El mail es un campo obligatorio");
@@ -227,7 +227,7 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 		
 		Investigator investigator = investigatorDAO.findByMail(mail.toLowerCase());
 		
-		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- investigator by mail ");
+		logger.info("[FINAL] INVESTIGATOR-SERVICE -- investigator by mail ");
 		
 		if(investigator == null)
 			return null;
@@ -236,7 +236,7 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 	
 	@Override
 	public InvestigatorDTO getInvestigatorInSession() {
-		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- investigator in session ");
+		logger.info("[INICIO] INVESTIGATOR-SERVICE -- investigator in session ");
 		
 		Investigator investigator = userInSession.getInvestigator();
 		InvestigatorDTO dto = DtoAssembler.toDTO(investigator);
@@ -250,18 +250,18 @@ public class InvestigatorServiceImpl implements InvestigatorService{
 			dto.requestPending = false;
 		}
 		
-		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- investigator in session ");
+		logger.info("[FINAL] INVESTIGATOR-SERVICE -- investigator in session ");
 		return dto;
 	}
 
 	@Override
 	public List<InvestigatorDTO> getInvestigatorsNotAdministrator() {
-		logger.debug("[INICIO] INVESTIGATOR-SERVICE -- investigators not administrator");
+		logger.info("[INICIO] INVESTIGATOR-SERVICE -- investigators not administrator");
 		
 		List<Investigator> list = new ArrayList<Investigator>();
 		investigatorDAO.getInvestigatorsNotAdministrator().forEach(list::add);;
 		
-		logger.debug("[FINAL] INVESTIGATOR-SERVICE -- investigators not administrator");
+		logger.info("[FINAL] INVESTIGATOR-SERVICE -- investigators not administrator");
 		return DtoAssembler.toListInvestigators(list);
 	}
 	
