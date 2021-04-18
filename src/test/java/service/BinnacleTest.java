@@ -63,6 +63,7 @@ public class BinnacleTest {
 	@PostConstruct
 	public void init() throws InvestigatorException, AttempsException, ExperimentException, ForbiddenException {
 		if(primeraVez) {
+			
 			//COMENZAMOS CREANDO UN INVESTIGADOR Y UN EXPERIMENTO
 			InvestigatorDTO dto = new InvestigatorDTO();
 			dto.name = "Ramiro";

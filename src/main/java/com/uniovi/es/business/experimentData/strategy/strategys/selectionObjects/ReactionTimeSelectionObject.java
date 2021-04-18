@@ -51,7 +51,7 @@ public class ReactionTimeSelectionObject extends StrategyDataAbstract{
 		logger.info("\t \t Primer evento de escena: " + initial);
 		
 		for(ComponentData component : components) {
-			logger.info("\t \t Componente: " + component);
+			logger.info("\t \t Componente: " + component.getComponentId());
 			Long time = 0L;
 			if(component.getTypeId() == Constantes.COMPONENT_COMBOBOX) {
 				time = calculateComboBox(sceneID, sessionID, component);
@@ -59,6 +59,7 @@ public class ReactionTimeSelectionObject extends StrategyDataAbstract{
 			else {
 				time = calculateOtherSelectionObject(sceneID, sessionID, component, initial);
 			}
+			
 			logger.info("\t \t tiempo de reacción: " + time);
 			result.put(component.getComponentId(), time);
 		}

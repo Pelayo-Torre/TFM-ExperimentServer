@@ -38,7 +38,7 @@ public class MouseAccuraccy extends StrategyDataAbstract{
 		if(components.size() > 0) {
 			logger.info("\t \t Número de componentes obtenidos: " + components.size());
 			for(ComponentData component : components) {
-				logger.info("\t \t Se obtiene el evento del click sobre el Componente: " + component);
+				logger.info("\t \t Se obtiene el evento del click sobre el Componente: " + component.getComponentId());
 				
 				Event initialClickComponent = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
 						component.getComponentId(), Constantes.EVENT_ON_CLICK, null);
@@ -59,8 +59,8 @@ public class MouseAccuraccy extends StrategyDataAbstract{
 							component.getX(), component.getY());
 				}
 				
-				result.put(component.getComponentId(), accuraccy);
-				logger.info("\t \t Precisión obtenida: ");
+				result.put(component.getComponentId(), (double)Math.round(accuraccy * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
+				logger.info("\t \t Precisión obtenida: " + accuraccy);
 			}
 		}
 		

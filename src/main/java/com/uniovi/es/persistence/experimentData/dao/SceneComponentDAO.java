@@ -10,4 +10,6 @@ public interface SceneComponentDAO {
 	
 	public List<String> getScenes(Long idExperiment);
 	
+	public void insertComponent(ComponentData component);
+	
 }

@@ -44,7 +44,7 @@ public class MouseMovementTime extends StrategyDataAbstract{
 		if(components.size() > 0) {
 			logger.info("\t \t Número de componentes obtenidos: " + components.size());
 			for(ComponentData component : components) {
-				logger.info("\t \t Se obtiene la lista de eventos entre el 1º evento de movimiento y el de click sobre el Componente: " + component);
+				logger.info("\t \t Se obtiene la lista de eventos entre el 1º evento de movimiento y el de click sobre el Componente: " + component.getComponentId());
 				
 				Event initialMouse = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
 						null, Constantes.EVENT_ON_MOUSE_MOVE, null);
@@ -58,12 +58,26 @@ public class MouseMovementTime extends StrategyDataAbstract{
 				
 				Long time = 0L;
 				if(initialMouse != null) {
-					if(initialClickComponent != null || initialDoubleClickComponent != null) {
-						if(initialClickComponent != null) {
+					if(initialClickComponent != null && initialDoubleClickComponent != null) {
+						if(initialClickComponent.getTimeStamp() < initialDoubleClickComponent.getTimeStamp()) {
+							logger.info("\t \t Se calcula el tiempo desde el inicial hasta el evento de un click");
 							time = new Timestamp(initialClickComponent.getTimeStamp()).getTime() - 
 									new Timestamp(initialMouse.getTimeStamp()).getTime();
 						}
 						else {
+							logger.info("\t \t Se calcula el tiempo desde el inicial hasta el evento de doble click");
+							time = new Timestamp(initialDoubleClickComponent.getTimeStamp()).getTime() - 
+									new Timestamp(initialMouse.getTimeStamp()).getTime();
+						}
+					}
+					else {
+						if(initialClickComponent != null) {
+							logger.info("\t \t Se calcula el tiempo desde el inicial hasta el evento de un click");
+							time = new Timestamp(initialClickComponent.getTimeStamp()).getTime() - 
+									new Timestamp(initialMouse.getTimeStamp()).getTime();
+						}
+						else if(initialDoubleClickComponent != null){
+							logger.info("\t \t Se calcula el tiempo desde el inicial hasta el evento de doble click");
 							time = new Timestamp(initialDoubleClickComponent.getTimeStamp()).getTime() - 
 									new Timestamp(initialMouse.getTimeStamp()).getTime();
 						}

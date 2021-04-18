@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyData;
+import com.uniovi.es.utils.Constantes;
 
 /**
  * Calcula la velocidad del ratón sobre la distancia real desde el 1º evento de movimiento de ratón hasta el click del componente
@@ -52,21 +53,30 @@ public class MouseSpeedRealDistance implements StrategyData{
 		Map<String, Double> distances = (Map<String, Double>) StrategyDistance.calculate(sceneID, sessionID);
 		
 		if(times != null && distances != null) {
-			for (Map.Entry<String, Double> entry : distances.entrySet()) {
-				Long time = times.get(entry.getKey());
-				if(time == null)
-					time = 0L;
-				time = time / 1000; //Paso a segundos
-				logger.info("\t \t Tiempo: " + time);
-				Double distance = entry.getValue();
-				if(distance == null)
-					distance = 0.0;
-				logger.info("\t \t Distancia: " + distance);
-				//Velocidad en píxeles/segundo
-				Double speed = distance / time.longValue();
-				logger.info("\t \t Velocidad: " + speed);
-				result.put(entry.getKey(), (double)Math.round(speed * 10000d) / 10000d);
-			}
+			distances.forEach((key, value) -> {
+				logger.info("\t \t Componente: " + key);
+				if(times.containsKey(key)) {
+					Double distance = value;
+					if(distance == null) 
+						distance = 0.0;
+					logger.info("\t \t Distancia: " + distance);
+					Long time = times.get(key);
+					if(time == null || time == 0L) {
+						time = 0L;
+						logger.info("\t \t Tiempo: " + time);
+						result.put(key, 0.0);
+					}
+					else {
+						time = time / 1000; //Paso a segundos
+						logger.info("\t \t Tiempo: " + time);
+						result.put(key, (double)Math.round((distance / time) * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
+					}
+				}
+				else {
+					logger.info("\t \t Tiempo no encontrado");
+					result.put(key, 0.0);
+				}
+			});
 		}
 		
 		logger.info("[FINAL] - MouseSpeedRealDistance - calculate");

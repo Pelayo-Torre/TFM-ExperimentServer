@@ -17,4 +17,6 @@ public interface EventDAO {
 	public Event getInitialEventOfSelectionObject(String sceneID, String sessionID, String associatedComponent, Integer eventType, Integer keyCodeEvent);
 
 	public List<Event> getEventOfSelectionObject(String sceneID, String sessionID, String associatedComponent, Integer eventType, Integer keyCodeEvent);
+
+	public void insertEvent(Event event);
 }

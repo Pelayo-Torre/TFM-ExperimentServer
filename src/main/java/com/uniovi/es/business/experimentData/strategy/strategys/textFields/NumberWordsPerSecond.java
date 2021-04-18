@@ -111,7 +111,7 @@ public class NumberWordsPerSecond extends StrategyDataAbstract{
 					Long time = (new Timestamp(last.getTimeStamp()).getTime() - new Timestamp(initial.getTimeStamp()).getTime());
 					Double wordsPerSecond = (words.length / ( time.doubleValue() / 1000 ));
 					
-					result.put(component.getComponentId(), (double)Math.round(wordsPerSecond * 100d) / 100d);
+					result.put(component.getComponentId(), (double)Math.round(wordsPerSecond * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
 					logger.info("\t \t Resultado componente " + component.getComponentId() + ": " + words);
 				}
 				else {

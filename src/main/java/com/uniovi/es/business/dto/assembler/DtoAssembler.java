@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.uniovi.es.business.dto.DemographicDataDTO;
 import com.uniovi.es.business.dto.DemographicDataTypeDTO;
+import com.uniovi.es.business.dto.DemographicDataValueDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.NoteDTO;
@@ -13,6 +14,9 @@ import com.uniovi.es.business.dto.RequestDTO;
 import com.uniovi.es.business.dto.SceneDTO;
 import com.uniovi.es.business.dto.UserDTO;
 import com.uniovi.es.model.DemographicData;
+import com.uniovi.es.model.DemographicDataDate;
+import com.uniovi.es.model.DemographicDataNumber;
+import com.uniovi.es.model.DemographicDataString;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Note;
@@ -60,7 +64,63 @@ public class DtoAssembler {
 		
 		dto.name = dd.getName();
 		dto.type = dd.getType().name();
+		dto.id = dd.getId();
+		dto.idExperiment = dd.getExperiment().getId();
+		dto.values = toListDTO(dd);
 		
+		return dto;
+	}
+	
+	public static List<DemographicDataDTO> toListDemographicData(List<DemographicData> list){
+		List<DemographicDataDTO> listDTO = new ArrayList<DemographicDataDTO>();
+		
+		for(DemographicData dd: list) {
+			listDTO.add(toDTO(dd));
+		}
+		
+		return listDTO;
+	}
+	
+	private static List<DemographicDataValueDTO> toListDTO(DemographicData dd) {
+		
+		List<DemographicDataValueDTO> values = new ArrayList<DemographicDataValueDTO>();
+		
+		for(DemographicDataNumber number : dd.getDemographicDataNumber()) {
+			values.add(toDTO(number));
+		}
+		
+		for(DemographicDataDate date : dd.getDemographicDataDate()) {
+			values.add(toDTO(date));
+		}
+		
+		for(DemographicDataString string : dd.getDemographicDataString()) {
+			values.add(toDTO(string));
+		}
+		
+		return values;
+	}
+	
+	private static DemographicDataValueDTO toDTO(DemographicDataNumber dd) {
+		DemographicDataValueDTO dto = new DemographicDataValueDTO();
+		dto.numberValue = dd.getValue();
+		dto.user = dd.getUser().getSessionId();
+		dto.id = dd.getId();
+		return dto;
+	}
+	
+	private static DemographicDataValueDTO toDTO(DemographicDataDate dd) {
+		DemographicDataValueDTO dto = new DemographicDataValueDTO();
+		dto.dateValue = dd.getValue();
+		dto.user = dd.getUser().getSessionId();
+		dto.id = dd.getId();
+		return dto;
+	}
+	
+	private static DemographicDataValueDTO toDTO(DemographicDataString dd) {
+		DemographicDataValueDTO dto = new DemographicDataValueDTO();
+		dto.stringValue = dd.getValue();
+		dto.user = dd.getUser().getSessionId();
+		dto.id = dd.getId();
 		return dto;
 	}
 

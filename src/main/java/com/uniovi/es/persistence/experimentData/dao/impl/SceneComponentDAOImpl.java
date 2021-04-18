@@ -135,6 +135,48 @@ public class SceneComponentDAOImpl implements SceneComponentDAO{
 		return scenes;
 	}
 
+	@Override
+	public void insertComponent(ComponentData component) {
+		logger.debug("[INICIO] - SceneComponentDAOImpl - insertComponent");
+		
+		Connection con;
+		try {
+			con = ConnectionProvider.getInstance().getConnection();
+			
+			PreparedStatement stmt = con.prepareStatement(
+					"insert into scene_component (user_session_Id, scene_Id, time_Stamp, x, y, xf,yf,component_Id,type_id,component_associated) values(?,?,?,?,?,?,?,?,?,?)");
+
+			stmt.setString(1, component.getUser().getSessionId());
+			stmt.setString(2, component.getSceneId());
+			stmt.setLong(3, component.getTimeStamp());
+			stmt.setInt(4, component.getX());
+			stmt.setInt(5, component.getY());
+			stmt.setInt(6, component.getxF());
+			stmt.setInt(7, component.getyF());
+			stmt.setString(8, component.getComponentId());
+			if(component.getTypeId() != null) {
+				stmt.setInt(9, component.getTypeId());
+			}
+			else {
+				stmt.setObject(9, component.getTypeId());
+			}
+			stmt.setString(10, component.getComponentAssociated());
+				
+			logger.debug("\tInserting " + component.getUser().getSessionId() + ": " + component);
+			
+			stmt.executeUpdate();
+			con.close();
+			
+		} catch (ClassNotFoundException e) {
+			logger.error("[ERROR] - ClassNotFoundException " + e.toString());
+		} catch (SQLException e) {
+			logger.error("[ERROR] - SQLException " + e.toString());
+		} catch (IOException e) {
+			logger.error("[ERROR] - IOException " + e.toString());
+		}
+		logger.debug("[FINAL] - SceneComponentDAOImpl - insertComponent");
+	}
+	
 	private ComponentData getComponent(ResultSet result) throws SQLException {
 		ComponentData component = new ComponentData();
 		
@@ -150,7 +192,5 @@ public class SceneComponentDAOImpl implements SceneComponentDAO{
 		
 		return component;
 	}
-
-	
 
 }

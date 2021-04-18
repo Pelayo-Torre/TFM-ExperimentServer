@@ -58,8 +58,15 @@ public class User implements Serializable {
 	
 	User() {}
 	
-	public User(String sessionID, Experiment experiment) {
+	public User(String sessionID, Experiment experiment, Integer remotePort, 
+			Integer timezone, Long timeStamp, String remoteHost, String locale, String remoteAddress) {
 		this.sessionId = sessionID;
+		this.remotePort = remotePort;
+		this.timezone = timezone;
+		this.timeStamp = timeStamp;
+		this.remoteHost = remoteHost;
+		this.locale = locale;
+		this.remoteAddress = remoteAddress;
 		Associations.UserExperiment.link(this, experiment);
 	}
 

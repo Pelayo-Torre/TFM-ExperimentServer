@@ -54,7 +54,6 @@ public class ExperimentTest {
 	
 	@Autowired
 	private AuthenticationService authenticateUser;
-		
 	
 	@Test
 	/**

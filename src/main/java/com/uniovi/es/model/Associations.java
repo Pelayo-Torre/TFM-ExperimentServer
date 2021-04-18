@@ -78,6 +78,34 @@ public class Associations {
 		
 	}
 	
+	public static class UserEvent{
+		
+		public static void link(User user, Event event) {
+			event.setUser(user);
+			user.getEvents().add(event);
+		}
+		
+		public static void unlink(User user, Event event) {
+			user.getEvents().remove(event);
+			event.setUser(null);
+		}
+		
+	}
+	
+	public static class UserComponentData {
+		
+		public static void link(User user, ComponentData component) {
+			component.setUser(user);
+			user.getComponents().add(component);
+		}
+		
+		public static void unlink(User user, ComponentData component) {
+			user.getComponents().remove(component);
+			component.setUser(null);
+		}
+		
+	}
+	
 	public static class NoteExperiment{
 		
 		public static void link(Note note, Experiment experiment) {

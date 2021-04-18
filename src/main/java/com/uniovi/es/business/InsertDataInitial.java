@@ -4,6 +4,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import com.uniovi.es.business.experimentData.strategy.StrategyDataManager;
+import com.uniovi.es.business.experimentData.strategy.strategys.NumberErrorClicks;
 import com.uniovi.es.business.experimentData.strategy.strategys.ReactionTime;
 import com.uniovi.es.business.experimentData.strategy.strategys.TotalSceneTime;
 import com.uniovi.es.business.experimentData.strategy.strategys.components.DifferenceIdealAndRealDistance;
@@ -14,7 +15,6 @@ import com.uniovi.es.business.experimentData.strategy.strategys.components.Mouse
 import com.uniovi.es.business.experimentData.strategy.strategys.components.MouseMovementTime;
 import com.uniovi.es.business.experimentData.strategy.strategys.components.MouseSpeedIdealDistance;
 import com.uniovi.es.business.experimentData.strategy.strategys.components.MouseSpeedRealDistance;
-import com.uniovi.es.business.experimentData.strategy.strategys.components.NumberErrorClicks;
 import com.uniovi.es.business.experimentData.strategy.strategys.components.RealDistanceBetweenMouseAndComponent;
 import com.uniovi.es.business.experimentData.strategy.strategys.selectionObjects.NumberTimesChangedSelectionObject;
 import com.uniovi.es.business.experimentData.strategy.strategys.selectionObjects.OfferedOptionsSelectionObject;
@@ -65,7 +65,7 @@ public class InsertDataInitial {
 		
 		StrategyDataManager.getInstance().addStrategyData(idbmc);
 		StrategyDataManager.getInstance().addStrategyData(rdbmc);
-		StrategyDataManager.getInstance().addStrategyData(new DifferenceIdealAndRealDistance(Constantes.STRATEGY_DIFFERENCE_IDEAL_AND_REAL_DISTANCE, idbmc, rdbmc));
+		StrategyDataManager.getInstance().addStrategyData(new DifferenceIdealAndRealDistance(Constantes.STRATEGY_DIFFERENCE_IDEAL_AND_REAL_DISTANCE, rdbmc, idbmc));
 		
 		MouseMovementTime mmt = new MouseMovementTime(Constantes.STRATEGY_MOUSE_MOVEMENT_TIME);
 		StrategyDataManager.getInstance().addStrategyData(mmt);

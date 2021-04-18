@@ -10,7 +10,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	service.ExperimentTest.class,
 	service.PetitionTest.class,
 	service.BinnacleTest.class,
-	service.AdministrationTest.class
+	service.AdministrationTest.class,
+	service.ExperimentDataTest.class
 })
 public class AllTest {
 

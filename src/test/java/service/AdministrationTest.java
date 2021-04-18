@@ -68,6 +68,7 @@ public class AdministrationTest {
 	@PostConstruct
 	public void init() throws InvestigatorException, AttempsException {
 		if(primeraVez) {
+			
 			//REGISTRAMOS EL INVESTIGADOR ADMINISTRADOR
 			Investigator dto = new Investigator("celia@gmail.com");
 			dto.setName("Celia");

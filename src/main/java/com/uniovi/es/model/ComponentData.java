@@ -36,6 +36,20 @@ public class ComponentData implements Serializable {
 	private String componentAssociated;
 	
 	public ComponentData() {}
+	
+	public ComponentData(String componentId, String sceneId, User user, Long timeStamp,
+			Integer x, Integer y, Integer xF, Integer yF, Integer typeId, String componentAssociated) {
+		this.componentId = componentId;
+		this.sceneId = sceneId;
+		this.timeStamp = timeStamp;
+		this.x = x;
+		this.y = y;
+		this.xF = xF;
+		this.yF = yF;
+		this.typeId = typeId;
+		this.componentAssociated = componentAssociated;
+		Associations.UserComponentData.link(user, this);
+	}
 
 	public Integer getX() {
 		return x;
@@ -116,5 +130,12 @@ public class ComponentData implements Serializable {
 	public void setComponentAssociated(String componentAssociated) {
 		this.componentAssociated = componentAssociated;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "ComponentData [x=" + x + ", y=" + y + ", xF=" + xF + ", yF=" + yF + ", timeStamp=" + timeStamp
+				+ ", sceneId=" + sceneId + ", user=" + user.getSessionId() + ", componentId=" + componentId + ", typeId=" + typeId
+				+ ", componentAssociated=" + componentAssociated + "]";
+	}
+		
 }

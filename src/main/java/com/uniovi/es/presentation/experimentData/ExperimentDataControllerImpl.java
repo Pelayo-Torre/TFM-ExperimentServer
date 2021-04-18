@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uniovi.es.business.dto.CalculateDataDTO;
+import com.uniovi.es.business.dto.DemographicDataDTO;
 import com.uniovi.es.business.dto.SceneDTO;
 import com.uniovi.es.business.dto.StrategyDataDTO;
 import com.uniovi.es.business.dto.UserDTO;
@@ -75,6 +76,18 @@ public class ExperimentDataControllerImpl implements ExperimentDataController {
 		
 		logger.info("[INICIO] EXPERIMENT DATA CONTROLLER -- getScenesByExperiment");
 		return scenes;
+	}
+
+	@Override
+	@RequestMapping(value = "/demographicdata/{idExperiment}", method = RequestMethod.GET)
+	public List<DemographicDataDTO> getDemographicData(@PathVariable Long idExperiment) throws ForbiddenException {
+		logger.info("[INICIO] EXPERIMENT DATA CONTROLLER -- getDemographicData");
+		logger.info("\t \t PARÁMETROS DE ENTRADA: " + idExperiment);
+		
+		List<DemographicDataDTO> list = experimentDataService.getDemographicData(idExperiment);
+		
+		logger.info("[INICIO] EXPERIMENT DATA CONTROLLER -- getDemographicData");
+		return list;
 	}
 	
 }

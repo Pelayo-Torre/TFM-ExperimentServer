@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.uniovi.es.business.dto.CalculateDataDTO;
+import com.uniovi.es.business.dto.DemographicDataDTO;
 import com.uniovi.es.business.dto.SceneDTO;
 import com.uniovi.es.business.dto.StrategyDataDTO;
 import com.uniovi.es.business.dto.UserDTO;
@@ -39,5 +40,12 @@ public interface ExperimentDataController {
 	 * @throws ForbiddenException en caso de que el investigador no tenga permisos para ver las escenas
 	 */
 	public List<SceneDTO> getScenesByExperiment(Long idExperiment) throws ForbiddenException;
+	
+	/**
+	 * Devuelve la lista de datos demográficos a partir de un experimento
+	 * @param idExperiment identificador del experimento
+	 * @return la lista de datos demográficos
+	 */
+	public List<DemographicDataDTO> getDemographicData(Long idExperiment) throws ForbiddenException;
 	
 }

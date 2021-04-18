@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.uniovi.es.business.authentication.UserInSession;
 import com.uniovi.es.business.dto.CalculateDataDTO;
+import com.uniovi.es.business.dto.DemographicDataDTO;
 import com.uniovi.es.business.dto.SceneDTO;
 import com.uniovi.es.business.dto.StrategyDataDTO;
 import com.uniovi.es.business.dto.UserDTO;
@@ -19,7 +20,9 @@ import com.uniovi.es.business.dto.assembler.DtoAssembler;
 import com.uniovi.es.business.experimentData.strategy.StrategyData;
 import com.uniovi.es.business.experimentData.strategy.StrategyDataManager;
 import com.uniovi.es.exceptions.ForbiddenException;
+import com.uniovi.es.model.DemographicData;
 import com.uniovi.es.model.User;
+import com.uniovi.es.persistence.DemographicDataDAO;
 import com.uniovi.es.persistence.PetitionDAO;
 import com.uniovi.es.persistence.UserDAO;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
@@ -34,6 +37,9 @@ public class ExperimentDataServiceImpl implements ExperimentDataService{
 	
 	@Autowired
 	private UserDAO userDAO;
+	
+	@Autowired
+	private DemographicDataDAO demographicDataDAO;
 	
 	@Autowired
 	private UserInSession userInSession;
@@ -143,7 +149,22 @@ public class ExperimentDataServiceImpl implements ExperimentDataService{
 		logger.info("[FINAL] EXPERIMENT DATA SERVICE -- getScenesByExperiment");
 		return DtoAssembler.toListSceneDTO(list);
 	}
-
 	
+	@Override
+	public List<DemographicDataDTO> getDemographicData(Long idExperiment) throws ForbiddenException {
+		logger.info("[INICIO] EXPERIMENT DATA SERVICE -- getDemographicData");
+		
+		//Se valida que el investigador esté asociado al experimento
+		if(idExperiment == null || 
+				petitionDAO.isInvestigatorAssociatedExperiment(userInSession.getInvestigator().getId(), idExperiment) == null) {
+			logger.error("[ERROR -- 116] - Un experimento solo puede ser gestionado por sus investigadores gestores");
+			throw new ForbiddenException("116");
+		}
+		
+		List<DemographicData> list = demographicDataDAO.getDemographicData(idExperiment);
+		
+		logger.info("[FINAL] EXPERIMENT DATA SERVICE -- getDemographicData");
+		return DtoAssembler.toListDemographicData(list);
+	}
 
 }

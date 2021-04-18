@@ -506,6 +506,45 @@ public class EventDAOImpl implements EventDAO{
 		return events;
 	}
 	
+	@Override
+	public void insertEvent(Event event) {
+		logger.info("[INICIO] - EventDAOImpl - insertEvent");
+		logger.info("\t \t Parámetros de entrada: " + event);
+		
+		Connection con = null;
+		try {
+			con = ConnectionProvider.getInstance().getConnection();
+			
+			PreparedStatement stmt = con.prepareStatement(
+					"insert into event (user_session_id, scene_id, time_stamp, x, y, event_type, element_id, key_value_event, key_code_event) values(?,?,?,?,?,?,?,?,?)");				
+				
+				stmt.setString(1, event.getUser().getSessionId());
+				stmt.setString(2, event.getSceneId());
+				stmt.setLong(3, event.getTimeStamp());
+				stmt.setInt(4, event.getX());
+				stmt.setInt(5, event.getY());
+				stmt.setInt(6, event.getEventType());
+				stmt.setString(7, event.getElementId());
+				stmt.setString(8, event.getKeyValueEvent());
+				stmt.setInt(9, event.getKeyCodeEvent());
+			
+			logger.debug("\tQuery: " + stmt);
+			int i = stmt.executeUpdate();
+			logger.debug("\tRegistros insertados: " + i);
+
+			con.close();
+
+		} catch (ClassNotFoundException e) {
+			logger.error("[ERROR] - ClassNotFoundException " + e.toString());
+		} catch (SQLException e) {
+			logger.error("[ERROR] - SQLException " + e.toString());
+		} catch (IOException e) {
+			logger.error("[ERROR] - IOException " + e.toString());
+		}
+		
+		logger.info("[FINAL] - EventDAOImpl - insertEvent");
+	}
+	
 	private Event getEvent(ResultSet result) throws SQLException {
 		Event event = new Event();
 		event.setSceneId(result.getString("scene_id"));
@@ -518,4 +557,6 @@ public class EventDAOImpl implements EventDAO{
 		event.setKeyValueEvent(result.getString("key_value_event"));
 		return event;
 	}
+
+	
 }

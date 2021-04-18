@@ -58,7 +58,7 @@ public class InvestigatorTest {
 	private AuthenticationService authenticateUser;
 	
 	private static final Long ID_NOT_EXIST = 4345245786396523496L;
-
+	
 	@Test
 	/**
 	 * Registro de un investigador sin errores

@@ -82,7 +82,7 @@ public class NumberCharactersPerSecond extends StrategyDataAbstract{
 					Long time = (new Timestamp(last.getTimeStamp()).getTime() - new Timestamp(initial.getTimeStamp()).getTime());
 					Double charactersPerSecond = (characters / ( time.doubleValue() / 1000 ));
 					
-					result.put(component.getComponentId(), (double)Math.round(charactersPerSecond * 100d) / 100d);
+					result.put(component.getComponentId(), (double)Math.round(charactersPerSecond * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
 					
 					logger.info("\t \t Resultado componente " + component.getComponentId() + ": " + charactersPerSecond);
 				}

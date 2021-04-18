@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.uniovi.es.business.dto.CalculateDataDTO;
+import com.uniovi.es.business.dto.DemographicDataDTO;
 import com.uniovi.es.business.dto.SceneDTO;
 import com.uniovi.es.business.dto.StrategyDataDTO;
 import com.uniovi.es.business.dto.UserDTO;
@@ -22,4 +23,6 @@ public interface ExperimentDataService {
 	
 	public List<StrategyDataDTO> getStrategys();
 	
+	public List<DemographicDataDTO> getDemographicData(Long idExperiment) throws ForbiddenException;
+		
 }

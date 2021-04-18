@@ -2,6 +2,8 @@ package com.uniovi.es.utils;
 
 public class Constantes {
 	
+	public final static Double NUMBER_DECIMALS = 1000000d;
+	
 	public final static Integer STRATEGY_TOTAL_SCENE_TIME = 1;
 	public final static Integer STRATEGY_REACTION_TIME = 2;
 	

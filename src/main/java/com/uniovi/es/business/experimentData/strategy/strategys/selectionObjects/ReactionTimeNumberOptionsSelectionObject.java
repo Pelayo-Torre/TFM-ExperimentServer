@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyData;
+import com.uniovi.es.utils.Constantes;
 
 /**
  * Calcula el tiempo de reacción sobre el número de opciones ofertadas 
@@ -62,7 +63,7 @@ public class ReactionTimeNumberOptionsSelectionObject implements StrategyData {
 				if(numberOptions != 0.0)
 					timeOptions = time / numberOptions.doubleValue();
 				logger.info("\t \t Tiempo/Opciones: " + timeOptions);
-				result.put(entry.getKey(), (double)Math.round(timeOptions * 100d) / 100d);
+				result.put(entry.getKey(), (double)Math.round(timeOptions * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
 			}
 		}		
 		logger.info("[FINAL] - ReactionTimeNumberOptionsSelectionObject - calculate");

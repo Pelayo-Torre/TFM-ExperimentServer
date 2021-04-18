@@ -39,7 +39,7 @@ public class RealDistanceBetweenMouseAndComponent extends StrategyDataAbstract{
 		if(components.size() > 0) {
 			logger.info("\t \t Número de componentes obtenidos: " + components.size());
 			for(ComponentData component : components) {
-				logger.info("\t \t Se obtiene la lista de eventos entre el 1º evento de movimiento y el de click sobre el Componente: " + component);
+				logger.info("\t \t Se obtiene la lista de eventos entre el 1º evento de movimiento y el de click sobre el Componente: " + component.getComponentId());
 				
 				Event initialMouse = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
 						null, Constantes.EVENT_ON_MOUSE_MOVE, null);
@@ -53,9 +53,9 @@ public class RealDistanceBetweenMouseAndComponent extends StrategyDataAbstract{
 				
 				Double distance = 0.00;
 				if(initialMouse != null) {
-					if(initialClickComponent != null || initialDoubleClickComponent != null) {
-						List<Event> events = new ArrayList<Event>();
-						if(initialClickComponent != null) {
+					List<Event> events = new ArrayList<Event>();
+					if(initialClickComponent != null && initialDoubleClickComponent != null) {
+						if(initialClickComponent.getTimeStamp() < initialDoubleClickComponent.getTimeStamp()) {
 							logger.info("\t \t Se obtiene la lista de eventos desde el inicial hasta el evento de un click");
 							events = ExperimentDataFactory.getEventDAO().getEvents(sceneID, sessionID, 
 									null, initialMouse.getTimeStamp(), initialClickComponent.getTimeStamp(), null, Constantes.EVENT_ON_MOUSE_MOVE);
@@ -65,24 +65,42 @@ public class RealDistanceBetweenMouseAndComponent extends StrategyDataAbstract{
 							events = ExperimentDataFactory.getEventDAO().getEvents(sceneID, sessionID, 
 									null, initialMouse.getTimeStamp(), initialDoubleClickComponent.getTimeStamp(), null, Constantes.EVENT_ON_MOUSE_MOVE);
 						}
-						logger.info("\t \t Número de eventos obtenidos: " + events.size());
-						//Se calculan las distancias
-						if(events.size() > 0) {
-							for(int i=0; i<events.size(); i++) {
-								if(i+1 != events.size()) {
-									double d = distance(events.get(i).getX(), events.get(i).getY(),
-											events.get(i+1).getX(), events.get(i+1).getY());
-									distance += d;
-								}
-							}
-							logger.info("\t \t Distancia: " + distance);
+					}
+					else {
+						if(initialClickComponent != null) {
+							logger.info("\t \t Se obtiene la lista de eventos desde el inicial hasta el evento de un click");
+							events = ExperimentDataFactory.getEventDAO().getEvents(sceneID, sessionID, 
+									null, initialMouse.getTimeStamp(), initialClickComponent.getTimeStamp(), null, Constantes.EVENT_ON_MOUSE_MOVE);
+						}
+						else if(initialDoubleClickComponent != null) {
+							logger.info("\t \t Se obtiene la lista de eventos desde el inicial hasta el evento de doble click");
+							events = ExperimentDataFactory.getEventDAO().getEvents(sceneID, sessionID, 
+									null, initialMouse.getTimeStamp(), initialDoubleClickComponent.getTimeStamp(), null, Constantes.EVENT_ON_MOUSE_MOVE);
 						}
 					}
+					distance = calculateDistance(events);
 				}
-				result.put(component.getComponentId(), distance);
+				result.put(component.getComponentId(),  (double)Math.round(distance * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
 			}
 		}
 		logger.info("[FINAL] - RealDistanceBetweenMouseAndComponent - calculate");
 		return result;
+	}
+
+	private Double calculateDistance(List<Event> events) {
+		Double distance = 0.0;
+		logger.info("\t \t Número de eventos obtenidos: " + events.size());
+		//Se calculan las distancias
+		if(events.size() > 0) {
+			for(int i=0; i<events.size(); i++) {
+				if(i+1 != events.size()) {
+					double d = distance(events.get(i).getX(), events.get(i).getY(),
+							events.get(i+1).getX(), events.get(i+1).getY());
+					distance += d;
+				}
+			}
+			logger.info("\t \t Distancia: " + distance);
+		}
+		return distance;
 	}
 }

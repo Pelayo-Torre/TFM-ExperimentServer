@@ -45,7 +45,7 @@ public class NumberTimesChangedSelectionObject extends StrategyDataAbstract{
 		logger.info("\t \t Lista de componentes obtenidos: " + components.size());
 		
 		for(ComponentData component: components) {
-			logger.info("\t \t Componente: " + component);
+			logger.info("\t \t Componente: " + component.getComponentId());
 			
 			List<Event> events = ExperimentDataFactory.getEventDAO().getEventOfSelectionObject(sceneID, sessionID,
 					component.getComponentId(), Constantes.EVENT_ON_CHANGE_SELECTION_OBJECT, null);

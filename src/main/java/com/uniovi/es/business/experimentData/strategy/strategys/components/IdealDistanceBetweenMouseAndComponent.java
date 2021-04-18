@@ -28,7 +28,6 @@ public class IdealDistanceBetweenMouseAndComponent extends StrategyDataAbstract{
 		return PropetiesStrategyManager.getInstance().getAbbreviationStrategysProperties().getProperty("ideal_distance_between_mouse_and_component");
 	}
 
-
 	@Override
 	public Object calculate(String sceneID, String sessionID) {
 		logger.info("[INICIO] - IdealDistanceBetweenMouseAndComponent - calculate");
@@ -61,18 +60,33 @@ public class IdealDistanceBetweenMouseAndComponent extends StrategyDataAbstract{
 			
 			Double distance = 0.00;
 			if(initialMouse != null) {
-				if(initialClickComponent != null || initialDoubleClickComponent != null) {
-					if(initialClickComponent != null) {
+				if(initialClickComponent != null && initialDoubleClickComponent != null) {
+					//Nos quedamos con el de menor timeStamp
+					if(initialClickComponent.getTimeStamp() < initialDoubleClickComponent.getTimeStamp()) {
+						logger.info("\t \t Se calcula la distance desde el inicial hasta el evento de un click");
 						distance = distance(initialMouse.getX(), initialMouse.getY(), 
 								initialClickComponent.getX(), initialClickComponent.getY());
 					}
 					else {
+						logger.info("\t \t Se calcula la distance desde el inicial hasta el evento de doble click");
+						distance = distance(initialMouse.getX(), initialMouse.getY(), 
+								initialDoubleClickComponent.getX(), initialDoubleClickComponent.getY());
+					}
+				}
+				else {
+					if(initialClickComponent != null) {
+						logger.info("\t \t Se calcula la distance desde el inicial hasta el evento de un click");
+						distance = distance(initialMouse.getX(), initialMouse.getY(), 
+								initialClickComponent.getX(), initialClickComponent.getY());
+					}
+					else if(initialDoubleClickComponent != null) {
+						logger.info("\t \t Se calcula la distance desde el inicial hasta el evento de doble click");
 						distance = distance(initialMouse.getX(), initialMouse.getY(), 
 								initialDoubleClickComponent.getX(), initialDoubleClickComponent.getY());
 					}
 				}
 			}
-			result.put(component.getComponentId(), (double)Math.round(distance * 100d) / 100d);
+			result.put(component.getComponentId(), (double)Math.round(distance * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
 			logger.info("\t \t Resultado distancia con componente " + component.getComponentId() + ": " + distance);			
 		}
 		

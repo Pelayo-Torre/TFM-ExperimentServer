@@ -44,6 +44,22 @@ public class Event implements Serializable {
 	private User user;
 		
 	public Event() {}
+		
+	public Event(String sceneId, Integer eventType, String elementId, Long timeStamp, Integer x, Integer y,
+			String keyValueEvent, Integer keyCodeEvent, User user) {
+		super();
+		this.sceneId = sceneId;
+		this.eventType = eventType;
+		this.elementId = elementId;
+		this.timeStamp = timeStamp;
+		this.x = x;
+		this.y = y;
+		this.keyValueEvent = keyValueEvent;
+		this.keyCodeEvent = keyCodeEvent;
+		Associations.UserEvent.link(user, this);
+	}
+
+
 
 	public String getSceneId() {
 		return sceneId;
@@ -121,9 +137,7 @@ public class Event implements Serializable {
 	public String toString() {
 		return "Event [id=" + id + ", sceneId=" + sceneId + ", eventType=" + eventType + ", elementId=" + elementId
 				+ ", timeStamp=" + timeStamp + ", x=" + x + ", y=" + y + ", keyValueEvent=" + keyValueEvent
-				+ ", keyCodeEvent=" + keyCodeEvent + ", user=" + user + "]";
+				+ ", keyCodeEvent=" + keyCodeEvent + "]";
 	}
-	
-	
 	
 }

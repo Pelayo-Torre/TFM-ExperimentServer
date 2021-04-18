@@ -1,10 +1,14 @@
 package com.uniovi.es.business.experimentData.strategy.strategys.components;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyData;
+import com.uniovi.es.utils.Constantes;
 
 public class DifferenceIdealAndRealDistance implements StrategyData {
 	
@@ -34,23 +38,30 @@ public class DifferenceIdealAndRealDistance implements StrategyData {
 	public Object calculate(String sceneID, String sessionID) {
 		logger.info("[INICIAL] - DifferenceIdealAndRealDistance - calculate");
 		
-		Double result1 = (Double) this.strategy1.calculate(sceneID, sessionID);
-		Double result2 = (Double) this.strategy2.calculate(sceneID, sessionID);
+		@SuppressWarnings("unchecked")
+		Map<String, Double> real = (Map<String, Double>) this.strategy1.calculate(sceneID, sessionID);
+		@SuppressWarnings("unchecked")
+		Map<String, Double> ideal = (Map<String, Double>) this.strategy2.calculate(sceneID, sessionID);
 		
-		logger.info("\t \t Resultado strategy1: " + result1);
-		logger.info("\t \t Resultado strategy2: " + result2);
+		logger.info("\t \t Resultado strategy1: " + real);
+		logger.info("\t \t Resultado strategy2: " + ideal);
 		
-		Double distance = 0.0;
+		Map<String, Double> result = new HashMap<String, Double>();
 		
-		if(result1 != null && result2 != null && result2 != 0.0) {
-			distance = result1 - result2;
-			if(distance < 0.0)
-				return distance * (-1);
-			return distance;
+		if(real != null && ideal != null) {
+			real.forEach((key, value) -> {
+				if(ideal.containsKey(key)) {
+					Double value2 = ideal.get(key);
+					result.put(key, (double)Math.round((value - value2) * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
+				}
+				else {
+					result.put(key, (double)Math.round(value * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
+				}
+			});
 		}
 		
 		logger.info("[FINAL] - DifferenceIdealAndRealDistance - calculate");
-		return distance;
+		return result;
 	}
 
 	@Override
