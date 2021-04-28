@@ -10,6 +10,12 @@ import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyData;
 import com.uniovi.es.utils.Constantes;
 
+/**
+ * Calcula la diferencia de las distancias ideal y real calculadas en las estrategias correspondientes.
+ * Se implementa el patrón composite.
+ * @author pelayo
+ *
+ */
 public class DifferenceIdealAndRealDistance implements StrategyData {
 	
 	public static final Logger logger = LoggerFactory.getLogger(DifferenceIdealAndRealDistance.class);
@@ -59,7 +65,6 @@ public class DifferenceIdealAndRealDistance implements StrategyData {
 				}
 			});
 		}
-		
 		logger.info("[FINAL] - DifferenceIdealAndRealDistance - calculate");
 		return result;
 	}

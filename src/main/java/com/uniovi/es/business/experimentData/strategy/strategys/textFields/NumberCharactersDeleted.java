@@ -12,6 +12,13 @@ import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
 
+/**
+ * Estrategia que se encarga de calcular el número de caracteres eliminados en un componente de tipo texto.
+ * Para ellos construye la cadena de texto generada a partir de los eventos y se queda con los eventos
+ * de teclado de tipo SUPRIMIR o ELIMINAR. 
+ * @author pelayo
+ *
+ */
 public class NumberCharactersDeleted extends StrategyDataAbstract{
 
 	public NumberCharactersDeleted(Integer key) {
@@ -93,7 +100,10 @@ public class NumberCharactersDeleted extends StrategyDataAbstract{
 				logger.info("\t \t Datos - CADENA: " + cadena + " PUNTERO: " + puntero + " ELIMINADOS: " + charactersRemoved);
 			}
 			result.put(component.getComponentId(), charactersRemoved);
+			events = null;
 		}
+		
+		components = null;
 		
 		logger.info("[FINAL] - NumberCharactersDeleted - calculate");
 		return result;

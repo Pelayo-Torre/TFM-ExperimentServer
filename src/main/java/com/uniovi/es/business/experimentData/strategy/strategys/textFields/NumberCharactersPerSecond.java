@@ -90,13 +90,17 @@ public class NumberCharactersPerSecond extends StrategyDataAbstract{
 					logger.info("\t \t No se han encontrado eventos entre el inicial y final");
 					result.put(component.getComponentId(), 0.0);
 				}
+				
+				initial = null;
+				last = null;
+				events = null;
 			}
 			else {
 				logger.info("\t \t Eventos de captura y pérdida de foco no encontrados. Captura: " + initial + " Pérdida: " + last);
 				result.put(component.getComponentId(), 0.0);
 			}
 		}
-		
+		components = null;
 		logger.info("[FINAL] - NumberCharactersDeleted - calculate");
 		return result;
 	}

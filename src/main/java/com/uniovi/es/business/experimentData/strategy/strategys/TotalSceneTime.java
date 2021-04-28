@@ -47,6 +47,10 @@ public class TotalSceneTime extends StrategyDataAbstract{
 		
 		logger.info("\t \t Resultado obtenido: " + result);
 		
+		//Se descartan los eventos
+		initial = null;
+		last = null;
+		
 		logger.info("[FINAL] - TotalSceneTime - calculate");
 		return result;
 	}

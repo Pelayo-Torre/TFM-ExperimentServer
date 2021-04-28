@@ -13,6 +13,13 @@ import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
 
+/**
+ * Calcula el tiempo de reacción en componentes de selección.
+ * Para comboboxes, se calcula el tiempo desde que se cargan las opciones hasta que se pulsa en alguna de ellas.
+ * Para radio botones y checkboxes se calcula el tiempo desde el primer evento hasta que se interactúa con alguna de sus opciones
+ * @author pelayo
+ *
+ */
 public class ReactionTimeSelectionObject extends StrategyDataAbstract{
 
 	public ReactionTimeSelectionObject(Integer key) {
@@ -63,7 +70,8 @@ public class ReactionTimeSelectionObject extends StrategyDataAbstract{
 			logger.info("\t \t tiempo de reacción: " + time);
 			result.put(component.getComponentId(), time);
 		}
-		
+		components = null;
+		initial = null;
 		return result;
 	}
 
@@ -73,7 +81,7 @@ public class ReactionTimeSelectionObject extends StrategyDataAbstract{
 	 * @param sessionID Identificador de la sesión
 	 * @param component componente
 	 * @param time tiempo
-	 * @return
+	 * @return el tiempo de reacción
 	 */
 	private Long calculateComboBox(String sceneID, String sessionID, ComponentData component) {
 		//Si es un combo, el primer evento es del click sobre el combo para cargar las opciones
@@ -145,7 +153,6 @@ public class ReactionTimeSelectionObject extends StrategyDataAbstract{
 		else if(eventMouse == null && eventKeyPress != null) {
 			return new Timestamp(eventKeyPress.getTimeStamp()).getTime() - new Timestamp(initial.getTimeStamp()).getTime();
 		}
-		
 		return 0L;
 	}
 

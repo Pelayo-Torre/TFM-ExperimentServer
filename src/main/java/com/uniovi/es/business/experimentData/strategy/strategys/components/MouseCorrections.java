@@ -12,6 +12,11 @@ import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
 
+/**
+ * Calcula el número de correcciones del ratón desde su posición inicial hasta el click sobre el componente
+ * @author pelayo
+ *
+ */
 public class MouseCorrections extends StrategyDataAbstract{
 
 	public MouseCorrections(Integer key) {
@@ -37,59 +42,62 @@ public class MouseCorrections extends StrategyDataAbstract{
 		
 		List<ComponentData> components = ExperimentDataFactory.getSceneComponentDAO().getComponents(sceneID, sessionID, null);
 		
-		if(components.size() > 0) {
-			logger.info("\t \t Número de componentes obtenidos: " + components.size());
-			for(ComponentData component : components) {
-				logger.info("\t \t Se obtiene la lista de eventos entre el 1º evento de movimiento y el de click sobre el Componente: " + component.getComponentId());
-				
-				Event initialMouse = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
-						null, Constantes.EVENT_ON_MOUSE_MOVE, null);
-				Event initialClickComponent = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
-						component.getComponentId(), Constantes.EVENT_ON_CLICK, null);
-				Event initialDoubleClickComponent = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
-						component.getComponentId(), Constantes.EVENT_ON_DOUBLE_CLICK, null);
-				
-				logger.info("\t \t Eventos obtenidos: INITIAL: " + initialMouse 
-						+ "  INITIAL-CLICK-COMPONENT: " + initialClickComponent + "  INITIAL-DOUBLE-CLICK-COMPONENT: " + initialDoubleClickComponent);
-				
-				Integer corrections = 0;
-				if(initialMouse != null) {
-					List<Event> events = new ArrayList<Event>();
-					if(initialClickComponent != null && initialDoubleClickComponent != null) {
-						if(initialClickComponent.getTimeStamp() < initialDoubleClickComponent.getTimeStamp()) {
-							logger.info("\t \t Se obtiene la lista de eventos desde el inicial hasta el evento de un click");
-							events = ExperimentDataFactory.getEventDAO().getEvents(sceneID, sessionID, 
-									null, initialMouse.getTimeStamp(), initialClickComponent.getTimeStamp(), null, Constantes.EVENT_ON_MOUSE_MOVE);
-						
-						}
-						else {
-							logger.info("\t \t Se obtiene la lista de eventos desde el inicial hasta el evento de doble click");
-							events = ExperimentDataFactory.getEventDAO().getEvents(sceneID, sessionID, 
-									null, initialMouse.getTimeStamp(), initialDoubleClickComponent.getTimeStamp(), null, Constantes.EVENT_ON_MOUSE_MOVE);
-						}
+		logger.info("\t \t Número de componentes obtenidos: " + components.size());
+		for(ComponentData component : components) {
+			logger.info("\t \t Se obtiene la lista de eventos entre el 1º evento de movimiento y el de click sobre el Componente: " + component.getComponentId());
+			
+			Event initialMouse = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
+					null, Constantes.EVENT_ON_MOUSE_MOVE, null);
+			Event initialClickComponent = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
+					component.getComponentId(), Constantes.EVENT_ON_CLICK, null);
+			Event initialDoubleClickComponent = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
+					component.getComponentId(), Constantes.EVENT_ON_DOUBLE_CLICK, null);
+			
+			logger.info("\t \t Eventos obtenidos: INITIAL: " + initialMouse 
+					+ "  INITIAL-CLICK-COMPONENT: " + initialClickComponent + "  INITIAL-DOUBLE-CLICK-COMPONENT: " + initialDoubleClickComponent);
+			
+			Integer corrections = 0;
+			if(initialMouse != null) {
+				List<Event> events = new ArrayList<Event>();
+				if(initialClickComponent != null && initialDoubleClickComponent != null) {
+					if(initialClickComponent.getTimeStamp() < initialDoubleClickComponent.getTimeStamp()) {
+						logger.info("\t \t Se obtiene la lista de eventos desde el inicial hasta el evento de un click");
+						events = ExperimentDataFactory.getEventDAO().getEvents(sceneID, sessionID, 
+								null, initialMouse.getTimeStamp(), initialClickComponent.getTimeStamp(), null, Constantes.EVENT_ON_MOUSE_MOVE);
+					
 					}
 					else {
-						if(initialClickComponent != null) {
-							logger.info("\t \t Se obtiene la lista de eventos desde el inicial hasta el evento de un click");
-							events = ExperimentDataFactory.getEventDAO().getEvents(sceneID, sessionID, 
-									null, initialMouse.getTimeStamp(), initialClickComponent.getTimeStamp(), null, Constantes.EVENT_ON_MOUSE_MOVE);
-						
-						}
-						else if(initialDoubleClickComponent != null){
-							logger.info("\t \t Se obtiene la lista de eventos desde el inicial hasta el evento de doble click");
-							events = ExperimentDataFactory.getEventDAO().getEvents(sceneID, sessionID, 
-									null, initialMouse.getTimeStamp(), initialDoubleClickComponent.getTimeStamp(), null, Constantes.EVENT_ON_MOUSE_MOVE);
-						}
+						logger.info("\t \t Se obtiene la lista de eventos desde el inicial hasta el evento de doble click");
+						events = ExperimentDataFactory.getEventDAO().getEvents(sceneID, sessionID, 
+								null, initialMouse.getTimeStamp(), initialDoubleClickComponent.getTimeStamp(), null, Constantes.EVENT_ON_MOUSE_MOVE);
 					}
-					logger.info("\t \t Número de eventos obtenidos: " + events.size());
-					corrections = calculate(events);
-					logger.info("\t \t Correcciones para el componente " + component.getComponentId() + ": " + corrections);
 				}
-				
-				result.put(component.getComponentId(), corrections);
+				else {
+					if(initialClickComponent != null) {
+						logger.info("\t \t Se obtiene la lista de eventos desde el inicial hasta el evento de un click");
+						events = ExperimentDataFactory.getEventDAO().getEvents(sceneID, sessionID, 
+								null, initialMouse.getTimeStamp(), initialClickComponent.getTimeStamp(), null, Constantes.EVENT_ON_MOUSE_MOVE);
+					
+					}
+					else if(initialDoubleClickComponent != null){
+						logger.info("\t \t Se obtiene la lista de eventos desde el inicial hasta el evento de doble click");
+						events = ExperimentDataFactory.getEventDAO().getEvents(sceneID, sessionID, 
+								null, initialMouse.getTimeStamp(), initialDoubleClickComponent.getTimeStamp(), null, Constantes.EVENT_ON_MOUSE_MOVE);
+					}
+				}
+				logger.info("\t \t Número de eventos obtenidos: " + events.size());
+				corrections = calculate(events);
+				logger.info("\t \t Correcciones para el componente " + component.getComponentId() + ": " + corrections);
+				events = null;
 			}
-		}		
-		
+			
+			result.put(component.getComponentId(), corrections);
+			initialMouse = null;
+			initialClickComponent = null;
+			initialDoubleClickComponent = null;
+		}
+				
+		components = null;
 		logger.info("[FINAL] - MouseCorrections - calculate");
 		return result;
 	}

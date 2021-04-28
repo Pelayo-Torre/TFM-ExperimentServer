@@ -44,6 +44,10 @@ public class ReactionTime extends StrategyDataAbstract{
 		
 		logger.info("\t \t Resultado obtenido: " + result);
 		
+		//Se descartan los eventos
+		initial = null;
+		initialUser = null;
+				
 		logger.info("[FINAL] - ReactionTime - calculate");
 		return result;
 	}

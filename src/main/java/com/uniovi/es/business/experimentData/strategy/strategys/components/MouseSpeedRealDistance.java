@@ -12,9 +12,9 @@ import com.uniovi.es.utils.Constantes;
 
 /**
  * Calcula la velocidad del ratón sobre la distancia real desde el 1º evento de movimiento de ratón hasta el click del componente
- * Esta estrategia se calcula a partir de las estrategias de distancia real y tiempo de movimiento del ratón
+ * Esta estrategia se calcula a partir de las estrategias de distancia real y tiempo de movimiento del ratón.
+ * Patrón composite
  * @author pelayo
- *
  */
 public class MouseSpeedRealDistance implements StrategyData{
 	

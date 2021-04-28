@@ -61,8 +61,9 @@ public class OfferedOptionsSelectionObject extends StrategyDataAbstract{
 				numberOptions = options.size();
 			}
 			result.put(component.getComponentId(), numberOptions);
+			options = null;
 		}
-		
+		components = null;
 		logger.info("[FINAL] - OfferedOptionsSelectionObject - calculate");
 		return result;
 	}

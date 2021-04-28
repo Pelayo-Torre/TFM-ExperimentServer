@@ -11,6 +11,11 @@ import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
 
+/**
+ * Esrategia que calcula la precisión (distancia) del click sobre un componente
+ * @author pelayo
+ *
+ */
 public class MouseAccuraccy extends StrategyDataAbstract{
 
 	public MouseAccuraccy(Integer key) {
@@ -35,35 +40,36 @@ public class MouseAccuraccy extends StrategyDataAbstract{
 		Map<String, Double> result = new HashMap<String, Double>();
 		List<ComponentData> components = ExperimentDataFactory.getSceneComponentDAO().getComponents(sceneID, sessionID, null);
 		
-		if(components.size() > 0) {
-			logger.info("\t \t Número de componentes obtenidos: " + components.size());
-			for(ComponentData component : components) {
-				logger.info("\t \t Se obtiene el evento del click sobre el Componente: " + component.getComponentId());
-				
-				Event initialClickComponent = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
-						component.getComponentId(), Constantes.EVENT_ON_CLICK, null);
-				Event initialDoubleClickComponent = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
-						component.getComponentId(), Constantes.EVENT_ON_DOUBLE_CLICK, null);
-				
-				logger.info("\t \t Eventos obtenidos: INITIAL-CLICK-COMPONENT: " + initialClickComponent + 
-						"  INITIAL-DOUBLE-CLICK-COMPONENT: " + initialDoubleClickComponent);
-				
-				Double accuraccy = 0.0;
-				
-				if(initialClickComponent != null) {
-					accuraccy = distance(initialClickComponent.getX(), initialClickComponent.getY(), 
-							component.getX(), component.getY());
-				}
-				else if(initialDoubleClickComponent != null) {
-					accuraccy = distance(initialDoubleClickComponent.getX(), initialDoubleClickComponent.getY(), 
-							component.getX(), component.getY());
-				}
-				
-				result.put(component.getComponentId(), (double)Math.round(accuraccy * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
-				logger.info("\t \t Precisión obtenida: " + accuraccy);
+		logger.info("\t \t Número de componentes obtenidos: " + components.size());
+		for(ComponentData component : components) {
+			logger.info("\t \t Se obtiene el evento del click sobre el Componente: " + component.getComponentId());
+			
+			Event initialClickComponent = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
+					component.getComponentId(), Constantes.EVENT_ON_CLICK, null);
+			Event initialDoubleClickComponent = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
+					component.getComponentId(), Constantes.EVENT_ON_DOUBLE_CLICK, null);
+			
+			logger.info("\t \t Eventos obtenidos: INITIAL-CLICK-COMPONENT: " + initialClickComponent + 
+					"  INITIAL-DOUBLE-CLICK-COMPONENT: " + initialDoubleClickComponent);
+			
+			Double accuraccy = 0.0;
+			
+			if(initialClickComponent != null) {
+				accuraccy = distance(initialClickComponent.getX(), initialClickComponent.getY(), 
+						component.getX(), component.getY());
 			}
+			else if(initialDoubleClickComponent != null) {
+				accuraccy = distance(initialDoubleClickComponent.getX(), initialDoubleClickComponent.getY(), 
+						component.getX(), component.getY());
+			}
+			
+			result.put(component.getComponentId(), (double)Math.round(accuraccy * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
+			logger.info("\t \t Precisión obtenida: " + accuraccy);
+			initialClickComponent = null;
+			initialDoubleClickComponent = null;
 		}
 		
+		components = null;
 		logger.info("[FINAL] - MouseAccuraccy - calculate");
 		return result;
 	}

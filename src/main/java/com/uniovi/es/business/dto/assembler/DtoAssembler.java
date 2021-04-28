@@ -6,6 +6,7 @@ import java.util.List;
 import com.uniovi.es.business.dto.DemographicDataDTO;
 import com.uniovi.es.business.dto.DemographicDataTypeDTO;
 import com.uniovi.es.business.dto.DemographicDataValueDTO;
+import com.uniovi.es.business.dto.EventDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.dto.NoteDTO;
@@ -17,6 +18,7 @@ import com.uniovi.es.model.DemographicData;
 import com.uniovi.es.model.DemographicDataDate;
 import com.uniovi.es.model.DemographicDataNumber;
 import com.uniovi.es.model.DemographicDataString;
+import com.uniovi.es.model.Event;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Note;
@@ -373,6 +375,29 @@ public class DtoAssembler {
 		dto.scene = scene;
 		
 		return dto;
+	}
+	
+	public static EventDTO toDTO(Event event) {
+		EventDTO dto = new EventDTO();
+		
+		dto.eventType = event.getEventType();
+		dto.keyCodeEvent = event.getKeyCodeEvent();
+		dto.keyValueEvent = event.getKeyValueEvent();
+		dto.scene = event.getSceneId();
+		dto.timeStamp = event.getTimeStamp();
+		dto.x = event.getX();
+		dto.y = event.getY();
+		dto.elementId = event.getElementId();
+		
+		return dto;
+	}
+	
+	public static List<EventDTO> toListEvents(List<Event> events){
+		List<EventDTO> dtos = new ArrayList<EventDTO>();
+		
+		events.forEach(event -> dtos.add(toDTO(event)) );
+		
+		return dtos;
 	}
 
 }

@@ -66,6 +66,8 @@ public class ReactionTimeNumberOptionsSelectionObject implements StrategyData {
 				result.put(entry.getKey(), (double)Math.round(timeOptions * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
 			}
 		}		
+		times = null;
+		options = null;
 		logger.info("[FINAL] - ReactionTimeNumberOptionsSelectionObject - calculate");
 		return result;
 	}

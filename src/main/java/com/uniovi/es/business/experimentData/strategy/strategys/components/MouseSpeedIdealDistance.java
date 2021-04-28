@@ -10,6 +10,12 @@ import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyData;
 import com.uniovi.es.utils.Constantes;
 
+/**
+ * Calcula la velocidad del ratón en función de la distancia ideal.
+ * Patrón composite
+ * @author pelay
+ *
+ */
 public class MouseSpeedIdealDistance implements StrategyData {
 	
 	public static final Logger logger = LoggerFactory.getLogger(MouseSpeedIdealDistance.class);

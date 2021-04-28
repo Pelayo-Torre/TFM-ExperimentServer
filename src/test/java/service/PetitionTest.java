@@ -711,7 +711,7 @@ public class PetitionTest {
 	 * @throws PetitionException
 	 */
 	public void test24ResponseCancelAcceptedPetitionSecurity() throws PetitionException, InvestigatorException, ExperimentException, AttempsException, ForbiddenException {
-		//COMENZAMOS CREANDO UN NUEVO INVESTIGADOR
+		//COMENZAMOS CREANDO DOS INVESTIGADORES
 		InvestigatorDTO dto = new InvestigatorDTO();
 		dto.name = "Coral";
 		dto.surname = "Torre";
@@ -720,6 +720,15 @@ public class PetitionTest {
 		
 		//LO GUARDAMOS EN BASE DE DATOS
 		investigatorService.registerInvestigator(dto);
+		
+		InvestigatorDTO dto2 = new InvestigatorDTO();
+		dto2.name = "Julián";
+		dto2.surname = "Torre";
+		dto2.mail = "juliantorrw3@gmail.com";
+		dto2.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto2);
 		
 		AuthDTO authDTO = new AuthDTO();
 		authDTO.mail = "coral@gmail.com";
@@ -738,7 +747,7 @@ public class PetitionTest {
 		//REGISTRAMOS LA PETICIÓN
 		PetitionDTO petitionDTO = new PetitionDTO();
 		petitionDTO.idExperiment = experiments.get(experiments.size() - 1).id;
-		petitionDTO.mail = investigatorService.getInvestigatorByMail("pelayo1234@gmail.com").mail;
+		petitionDTO.mail = investigatorService.getInvestigatorByMail("juliantorrw3@gmail.com").mail;
 		petitionDTO.manager = true;
 		
 		//LA GUARDAMOS EN BASE DE DATOS
@@ -751,7 +760,7 @@ public class PetitionTest {
 		
 		//INICIAMOS SESIÓN
 		authDTO = new AuthDTO();
-		authDTO.mail = "pelayo1234@gmail.com";
+		authDTO.mail = "juliantorrw3@gmail.com";
 		authDTO.password = "123456789";
 		authenticateUser.authenticateUser(authDTO);
 		

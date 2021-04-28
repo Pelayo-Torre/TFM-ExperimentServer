@@ -1,24 +1,34 @@
 package com.uniovi.es.presentation.experimentData;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uniovi.es.business.dto.CalculateDataDTO;
 import com.uniovi.es.business.dto.DemographicDataDTO;
+import com.uniovi.es.business.dto.EventDTO;
+import com.uniovi.es.business.dto.FilterDTO;
 import com.uniovi.es.business.dto.SceneDTO;
 import com.uniovi.es.business.dto.StrategyDataDTO;
 import com.uniovi.es.business.dto.UserDTO;
 import com.uniovi.es.business.experimentData.ExperimentDataService;
+import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.ForbiddenException;
 
 @RestController
@@ -88,6 +98,47 @@ public class ExperimentDataControllerImpl implements ExperimentDataController {
 		
 		logger.info("[INICIO] EXPERIMENT DATA CONTROLLER -- getDemographicData");
 		return list;
+	}
+
+	@Override
+	@RequestMapping(value = "/file/{idExperiment}", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<Resource> generateScriptJS(@PathVariable Long idExperiment) throws ForbiddenException, IOException, ExperimentException {
+		logger.info("[INICIO] EXPERIMENT DATA CONTROLLER -- generateScriptJS");
+		logger.info("\t \t PARÁMETROS DE ENTRADA: " + idExperiment);
+		
+		Resource file = experimentDataService.generateScriptJS(idExperiment);
+        Path path = file.getFile().toPath();
+		
+		logger.info("[FINAL] EXPERIMENT DATA CONTROLLER -- generateScriptJS");
+		return  ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(path))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
+	}
+
+	@Override
+	@RequestMapping(value = "/events/{user}/{scene}/{idExperiment}", method = RequestMethod.GET)
+	public List<EventDTO> getEventsOfUseSceneAndExperiment(@PathVariable String user, @PathVariable String scene, @PathVariable Long idExperiment)
+			throws ForbiddenException {
+		logger.info("[INICIO] EXPERIMENT DATA CONTROLLER -- getEventsOfUseSceneAndExperiment");
+		logger.info("\t \t PARÁMETROS DE ENTRADA: experimento: " + idExperiment + " user: " + user + " scene: " + scene);
+		
+		List<EventDTO> events = experimentDataService.getEventsOfUseSceneAndExperiment(user, scene, idExperiment);
+		
+		logger.info("[FINAL] EXPERIMENT DATA CONTROLLER -- getEventsOfUseSceneAndExperiment");
+		return events;
+	}
+
+	@Override
+	@RequestMapping(value = "/filters", method = RequestMethod.GET)
+	public List<FilterDTO> getFilters() {
+		logger.info("[INICIO] EXPERIMENT DATA CONTROLLER -- getFilters");
+		
+		List<FilterDTO> filters = experimentDataService.getFilters();
+		
+		logger.info("[FINAL] EXPERIMENT DATA CONTROLLER -- getFilters");
+		return filters;
 	}
 	
 }

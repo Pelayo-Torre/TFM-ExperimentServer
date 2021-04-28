@@ -13,6 +13,12 @@ import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
 
+/**
+ * Estrategia que calcula el número de palabraas por segundo escritas en un componente de texto
+ * Para ello, reconstruye la palabra a partir de los eventos de teclado y hace un split final por signos de puntuación
+ * @author pelayo
+ *
+ */
 public class NumberWordsPerSecond extends StrategyDataAbstract{
 	
 	private static final String REGEX_EXPRESSION = "[^a-zA-Z0-9]+";
@@ -113,17 +119,23 @@ public class NumberWordsPerSecond extends StrategyDataAbstract{
 					
 					result.put(component.getComponentId(), (double)Math.round(wordsPerSecond * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
 					logger.info("\t \t Resultado componente " + component.getComponentId() + ": " + words);
+					
+					words = null;
 				}
 				else {
 					logger.info("\t \t No se han encontrado eventos entre el inicial y final");
 					result.put(component.getComponentId(), 0.00);
-				}				
+				}	
+				
+				events = null;
 			}
 			else {
 				logger.info("\t \t Eventos de captura y pérdida de foco no encontrados. Captura: " + initial + " Pérdida: " + last);
 				result.put(component.getComponentId(), 0.00);
 			}
 		}
+		
+		components = null;
 		
 		logger.info("[FINAL] - NumberWordsPerSecond - calculate");
 		return result;

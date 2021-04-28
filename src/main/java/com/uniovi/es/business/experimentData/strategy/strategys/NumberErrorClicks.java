@@ -8,6 +8,12 @@ import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
 
+/**
+ * Estrategia que se encarga de calcular el número de clicks "erróneos", es decir, clicks que no se han
+ * producido en ninguni de los componentes registrados
+ * @author pelayo
+ *
+ */
 public class NumberErrorClicks extends StrategyDataAbstract{
 
 	public NumberErrorClicks(Integer key) {
@@ -37,6 +43,9 @@ public class NumberErrorClicks extends StrategyDataAbstract{
 			result = events.size();
 		
 		logger.info("\t \t Número de eventos de click erróneos obtenidos: " + result);
+		
+		//Se descartan los eventos
+		events = null;
 		
 		logger.info("[FINAL] - NumberErrorClicks - calculate");
 		return result;

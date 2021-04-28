@@ -11,6 +11,11 @@ import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
 
+/**
+ * Se calcula el nº de veces que se han pulsado las teclas de desplazamkiento de derecha e izquierda en componentes de texto
+ * @author pelayo
+ *
+ */
 public class NumberTimesArrowsLeftRight extends StrategyDataAbstract{
 
 	public NumberTimesArrowsLeftRight(Integer key) {

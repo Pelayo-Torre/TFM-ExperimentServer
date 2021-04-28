@@ -12,6 +12,11 @@ import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
 
+/**
+ * Estrategia que calcula la distancia ideal entre la posición inicial del ratón y un componente.
+ * @author pelayo
+ *
+ */
 public class IdealDistanceBetweenMouseAndComponent extends StrategyDataAbstract{
 
 	public IdealDistanceBetweenMouseAndComponent(Integer key) {
@@ -87,9 +92,12 @@ public class IdealDistanceBetweenMouseAndComponent extends StrategyDataAbstract{
 				}
 			}
 			result.put(component.getComponentId(), (double)Math.round(distance * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
-			logger.info("\t \t Resultado distancia con componente " + component.getComponentId() + ": " + distance);			
+			logger.info("\t \t Resultado distancia con componente " + component.getComponentId() + ": " + distance);	
+			initialMouse = null;
+			initialClickComponent = null;
+			initialDoubleClickComponent = null;
 		}
-		
+		components = null;
 		logger.info("[FINAL] - IdealDistanceBetweenMouseAndComponent - calculate");
 		return result;
 	}

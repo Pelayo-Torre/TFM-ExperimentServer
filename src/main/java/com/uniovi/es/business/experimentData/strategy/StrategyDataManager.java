@@ -11,13 +11,16 @@ import java.util.Map;
  */
 public class StrategyDataManager {
 
-	private static StrategyDataManager instance = new StrategyDataManager();
+	private static StrategyDataManager instance;
 	
 	private Map<Integer, StrategyData> strategys = new HashMap<Integer, StrategyData>();
 	
 	private StrategyDataManager() {}
 	
 	public static StrategyDataManager getInstance() {
+		if(instance == null) {
+			instance = new StrategyDataManager();
+		}
 		return instance;
 	}
 	

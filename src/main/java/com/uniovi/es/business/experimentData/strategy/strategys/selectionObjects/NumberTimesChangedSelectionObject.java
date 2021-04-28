@@ -12,6 +12,12 @@ import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
 
+/**
+ * Estrategia que calcula el número de veces que se cambió de opinión en los componentes de selección 
+ * radio botones y check boxes.
+ * @author pelayo
+ *
+ */
 public class NumberTimesChangedSelectionObject extends StrategyDataAbstract{
 
 	public NumberTimesChangedSelectionObject(Integer key) {
@@ -54,8 +60,9 @@ public class NumberTimesChangedSelectionObject extends StrategyDataAbstract{
 			//Se obtiene el número de eventos -1 , ya que el primer onChange es el de la 1º selección
 			result.put(component.getComponentId(), (events.size() - 1 >= 0)?events.size() - 1:0);
 			
+			events = null;			
 		}
-		
+		components = null;		
 		logger.info("[FINAL] - NumberTimesChangedSelectionObject - calculate");
 		return result;
 	}
