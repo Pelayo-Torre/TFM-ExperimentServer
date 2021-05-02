@@ -12,6 +12,7 @@ import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Se calcula el nº de caracteres por segundo tecleados en componentes de escritura.
@@ -22,8 +23,9 @@ import com.uniovi.es.utils.Constantes;
  */
 public class NumberCharactersPerSecond extends StrategyDataAbstract{
 
-	public NumberCharactersPerSecond(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_NUMBER_CHARACTERS_PER_SECOND;
 	}
 	
 	@Override

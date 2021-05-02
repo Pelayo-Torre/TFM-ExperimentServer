@@ -12,6 +12,7 @@ import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Calcula el tiempo de reacción en componentes de selección.
@@ -22,8 +23,9 @@ import com.uniovi.es.utils.Constantes;
  */
 public class ReactionTimeSelectionObject extends StrategyDataAbstract{
 
-	public ReactionTimeSelectionObject(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_REACTION_TIME_SELECTION_OBJECT;
 	}
 	
 	@Override

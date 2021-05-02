@@ -11,6 +11,7 @@ import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Estrategia que calcula la distancia ideal entre la posición inicial del ratón y un componente.
@@ -19,8 +20,9 @@ import com.uniovi.es.utils.Constantes;
  */
 public class IdealDistanceBetweenMouseAndComponent extends StrategyDataAbstract{
 
-	public IdealDistanceBetweenMouseAndComponent(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_IDEAL_DISTANCE_BETWEEN_MOUSE_AND_COMPONENT;
 	}
 	
 	@Override

@@ -1,20 +1,27 @@
 package com.uniovi.es.business.experimentData.filter.filters;
 
-import com.uniovi.es.business.experimentData.filter.FilterDataAbstract;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.uniovi.es.business.experimentData.filter.FilterData;
 import com.uniovi.es.business.experimentData.filter.PropertiesFilterManager;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesFilters;
 
-public class FilterFullScene extends FilterDataAbstract{
+public class FilterFullScene implements FilterData{
 
-	public FilterFullScene(Integer key) {
-		super(key);
-	}
+	public static final Logger logger = LoggerFactory.getLogger(FilterFullScene.class);
 	
 	@Override
 	public String getName() {
 		return PropertiesFilterManager.getInstance().getNameStrategysProperties().getProperty("filter_full_scene");
+	}
+	
+	@Override
+	public Integer getKey() {
+		return ConstantesFilters.FILTER_FULL_SCENE;
 	}
 
 	@Override
@@ -40,9 +47,4 @@ public class FilterFullScene extends FilterDataAbstract{
 		logger.info("[FINAL] - FilterFullScene - isValid");
 		return true;
 	}
-
-	
-	
-	
-
 }

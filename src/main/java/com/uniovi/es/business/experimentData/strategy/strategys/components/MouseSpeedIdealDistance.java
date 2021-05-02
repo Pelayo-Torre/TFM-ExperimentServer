@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyData;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Calcula la velocidad del ratón en función de la distancia ideal.
@@ -22,12 +23,15 @@ public class MouseSpeedIdealDistance implements StrategyData {
 
 	private StrategyData strategyTime;	//Strategia de tiempo total
 	private StrategyData strategyDistance; //Strategia de la distancia ideal
-	private Integer key;
 
-	public MouseSpeedIdealDistance(Integer key, StrategyData strategyTime, StrategyData strategyDistance) {
+	public MouseSpeedIdealDistance(StrategyData strategyTime, StrategyData strategyDistance) {
 		this.strategyTime = strategyTime;
 		this.strategyDistance = strategyDistance;
-		this.key = key;
+	}
+	
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_MOUSE_SPEED_IDEAL_DISTANCE;
 	}
 	
 	@Override
@@ -81,11 +85,6 @@ public class MouseSpeedIdealDistance implements StrategyData {
 		
 		logger.info("[FINAL] - MouseSpeedIdealDistance - calculate");
 		return result;
-	}
-
-	@Override
-	public Integer getKey() {
-		return key;
 	}
 
 }

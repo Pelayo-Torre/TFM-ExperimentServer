@@ -10,6 +10,7 @@ import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Esrategia que calcula la precisión (distancia) del click sobre un componente
@@ -18,8 +19,9 @@ import com.uniovi.es.utils.Constantes;
  */
 public class MouseAccuraccy extends StrategyDataAbstract{
 
-	public MouseAccuraccy(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_MOUSE_ACCURACY;
 	}
 	
 	@Override

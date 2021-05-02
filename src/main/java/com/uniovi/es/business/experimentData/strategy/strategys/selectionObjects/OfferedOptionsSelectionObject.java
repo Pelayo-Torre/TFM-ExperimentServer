@@ -10,6 +10,7 @@ import com.uniovi.es.business.experimentData.strategy.StrategyDataAbstract;
 import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Calcula el número de opciones ofrecidas por un elemento de selección. 
@@ -22,8 +23,9 @@ import com.uniovi.es.utils.Constantes;
  */
 public class OfferedOptionsSelectionObject extends StrategyDataAbstract{
 
-	public OfferedOptionsSelectionObject(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_OFFERED_OPTIONS_SELECTION_OBJECT;
 	}
 
 	@Override

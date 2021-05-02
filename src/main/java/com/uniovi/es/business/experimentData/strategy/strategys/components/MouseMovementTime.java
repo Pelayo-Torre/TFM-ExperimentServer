@@ -11,6 +11,7 @@ import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Calcula el tiempo de movimiento del ratón desde el primer evento hasta el click sobre el componente
@@ -19,8 +20,9 @@ import com.uniovi.es.utils.Constantes;
  */
 public class MouseMovementTime extends StrategyDataAbstract{
 
-	public MouseMovementTime(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_MOUSE_MOVEMENT_TIME;
 	}
 	
 	@Override

@@ -11,6 +11,7 @@ import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Estrategia que calcula el número de veces que se cambió de opinión en los componentes de selección 
@@ -20,8 +21,9 @@ import com.uniovi.es.utils.Constantes;
  */
 public class NumberTimesChangedSelectionObject extends StrategyDataAbstract{
 
-	public NumberTimesChangedSelectionObject(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_NUMBER_TIMES_CHANGED_SELECTION_OBJECT;
 	}
 	
 	@Override

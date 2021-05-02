@@ -7,6 +7,7 @@ import com.uniovi.es.business.experimentData.strategy.StrategyDataAbstract;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Estrategia que se encarga de calcular el número de clicks "erróneos", es decir, clicks que no se han
@@ -16,8 +17,9 @@ import com.uniovi.es.utils.Constantes;
  */
 public class NumberErrorClicks extends StrategyDataAbstract{
 
-	public NumberErrorClicks(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_NUMBER_ERROR_CLICKS;
 	}
 	
 	@Override

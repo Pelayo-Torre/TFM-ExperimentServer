@@ -3,6 +3,7 @@ package com.uniovi.es.business.experimentData.filter;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
  * Esta clase implemementa el patrón de diseño Singleton. 
  * Es la clase encargada de gestionar los diferentes filtros de datos de un experimento
@@ -22,6 +23,10 @@ public class FilterDataManager {
 			instance = new FilterDataManager();
 		}
 		return instance;
+	}
+	
+	public FilterData getFilterData(Integer key) {
+		return this.filters.get(key);
 	}
 	
 	public boolean hasFilterData(Integer key) {

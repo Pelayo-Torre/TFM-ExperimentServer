@@ -11,6 +11,7 @@ import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Calcula el número de correcciones del ratón desde su posición inicial hasta el click sobre el componente
@@ -19,8 +20,9 @@ import com.uniovi.es.utils.Constantes;
  */
 public class MouseCorrections extends StrategyDataAbstract{
 
-	public MouseCorrections(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_MOUSE_CORRECTIONS;
 	}
 
 	@Override

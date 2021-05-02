@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyData;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Calcula la velocidad del ratón sobre la distancia real desde el 1º evento de movimiento de ratón hasta el click del componente
@@ -22,12 +23,15 @@ public class MouseSpeedRealDistance implements StrategyData{
 
 	private StrategyData strategyTime;	//Strategia de tiempo total
 	private StrategyData StrategyDistance; //Strategia de la distancia real
-	private Integer key;
 
-	public MouseSpeedRealDistance(Integer key, StrategyData strategyTime, StrategyData StrategyDistance) {
+	public MouseSpeedRealDistance(StrategyData strategyTime, StrategyData StrategyDistance) {
 		this.strategyTime = strategyTime;
 		this.StrategyDistance = StrategyDistance;
-		this.key = key;
+	}
+	
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_MOUSE_SPEED_REAL_DISTANCE;
 	}
 	
 	@Override
@@ -82,11 +86,5 @@ public class MouseSpeedRealDistance implements StrategyData{
 		logger.info("[FINAL] - MouseSpeedRealDistance - calculate");
 		return result;
 	}
-
-	@Override
-	public Integer getKey() {
-		return key;
-	}
-
 
 }

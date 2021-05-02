@@ -12,6 +12,7 @@ import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Estrategia que calcula el número de palabraas por segundo escritas en un componente de texto
@@ -23,8 +24,9 @@ public class NumberWordsPerSecond extends StrategyDataAbstract{
 	
 	private static final String REGEX_EXPRESSION = "[^a-zA-Z0-9]+";
 
-	public NumberWordsPerSecond(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_NUMBER_WORDS_PER_SECOND;
 	}
 	
 	@Override

@@ -47,6 +47,14 @@ public class User implements Serializable {
 	@Column(nullable = false)
 	private Long timeStamp;
 	
+	//Campos obtenidos a partir de un servicio web 
+	private String continent;
+	private String country;
+	private String regionName;
+	private String city;
+	//Indica si el usuario ya ha sido procesado por los servicios web de toma de datos
+	private boolean processed;
+	
 	@ManyToOne
 	private Experiment experiment;
 	
@@ -381,6 +389,46 @@ public class User implements Serializable {
 	public void setDataCookiesEnabled(Boolean dataCookiesEnabled) {
 		this.dataCookiesEnabled = dataCookiesEnabled;
 	}
+	
+	public String getContinent() {
+		return continent;
+	}
+
+	public void setContinent(String continent) {
+		this.continent = continent;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public boolean isProcessed() {
+		return processed;
+	}
+
+	public void setProcessed(boolean processed) {
+		this.processed = processed;
+	}
 
 	@Override
 	public String toString() {
@@ -395,10 +443,9 @@ public class User implements Serializable {
 				+ sizeDocW + ", sizeDocH=" + sizeDocH + ", sizeInW=" + sizeInW + ", sizeInH=" + sizeInH
 				+ ", sizeAvailW=" + sizeAvailW + ", sizeAvailH=" + sizeAvailH + ", scrColorDepth=" + scrColorDepth
 				+ ", scrPixelDepth=" + scrPixelDepth + ", remotePort=" + remotePort + ", timezone=" + timezone
-				+ ", timeStamp=" + timeStamp + ", experiment=" + experiment + ", events=" + events + ", components="
-				+ components + "]";
+				+ ", timeStamp=" + timeStamp + ", continent=" + continent + ", country=" + country + ", regionName="
+				+ regionName + ", city=" + city + ", processed=" + processed + ", experiment=" + experiment
+				+ ", events=" + events + ", components=" + components + "]";
 	}
-	
-	
 	
 }

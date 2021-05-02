@@ -100,35 +100,55 @@ public class ExperimentDataServiceImpl implements ExperimentDataService{
 
 		if(data != null && data.users != null) {
 			for(String sessionID : data.users) {
-					
+				boolean valid = true;
 				List<StrategyDataDTO> strategysCalculated = new ArrayList<StrategyDataDTO>();
 								
 				if(data != null && data.sceneID != null && sessionID != null && data.strategys != null) {
 					logger.info("\t \t Número total de strategys a ejecutar: " + data.strategys.size());
 										
-					for(Integer strategy : data.strategys) {
-						
-						logger.info("\t \t Ejecutando estrategia con identificador: " + strategy);
-						StrategyData sd = StrategyDataManager.getInstance().getStrategyData(strategy);
-						
-						StrategyDataDTO sdata = new StrategyDataDTO();
-						sdata.identifier = strategy;
-						sdata.sessionId = sessionID;
-						sdata.sceneId = data.sceneID;
-						
-						if(sd != null) {
-							logger.info("\t \t Calculando datos estrategia con identificador: " + strategy);
-							sdata.name = sd.getPropertyName();
-							sdata.result = sd.calculate(data.sceneID, sessionID);
-							sdata.abbreviation = sd.getPropertyAbbreviation();
+					if(data.filters != null && data.filters.size() > 0) {
+						logger.info("\t \t Número de filtros a aplicar: " + data.filters.size());
+						for(Integer filter : data.filters) {
+							FilterData f = FilterDataManager.getInstance().getFilterData(filter);
+							if(f != null) {
+								valid = f.isValid(data.sceneID, sessionID);
+								logger.info("\t \t Resultado de la validación " + f.getName() + ": " + valid);
+								if(!valid)
+									break;
+							}
+							else {
+								logger.info("\t \t Filtro con identificador: " + filter + " no existente en el sistema");
+							}
 						}
-						else {
-							logger.info("\t \t Estrategia con identificador: " + strategy + " no existente en el sistema");
-						}
-						strategysCalculated.add(sdata);
 					}
+					
+					if(valid) {
+						for(Integer strategy : data.strategys) {
+							
+							logger.info("\t \t Ejecutando estrategia con identificador: " + strategy);
+							StrategyData sd = StrategyDataManager.getInstance().getStrategyData(strategy);
+							
+							StrategyDataDTO sdata = new StrategyDataDTO();
+							sdata.identifier = strategy;
+							sdata.sessionId = sessionID;
+							sdata.sceneId = data.sceneID;
+							
+							if(sd != null) {
+								logger.info("\t \t Calculando datos estrategia con identificador: " + strategy);
+								sdata.name = sd.getPropertyName();
+								sdata.result = sd.calculate(data.sceneID, sessionID);
+								sdata.abbreviation = sd.getPropertyAbbreviation();
+							}
+							else {
+								logger.info("\t \t Estrategia con identificador: " + strategy + " no existente en el sistema");
+							}
+							strategysCalculated.add(sdata);
+						}
+					}
+					
 				}
-				datos.put(sessionID, strategysCalculated);
+				if(valid)
+					datos.put(sessionID, strategysCalculated);
 			}
 		}		
 		logger.info("[FINAL] EXPERIMENT DATA SERVICE -- getData");

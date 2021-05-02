@@ -13,18 +13,7 @@ import org.slf4j.LoggerFactory;
 public abstract class StrategyDataAbstract implements StrategyData{
 	
 	public static final Logger logger = LoggerFactory.getLogger(StrategyDataAbstract.class);
-	
-	private Integer key;
-	
-	public StrategyDataAbstract(Integer key) {
-		this.key = key;
-	}
-	
-	@Override
-	public Integer getKey() {
-		return key;
-	}
-	
+		
 	/**
 	 * Elimina un caracter en una posición de la cadena que se le pasa por parámetro
 	 * @param str cadena de texto

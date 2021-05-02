@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyData;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Calcula la diferencia de las distancias ideal y real calculadas en las estrategias correspondientes.
@@ -22,12 +23,15 @@ public class DifferenceIdealAndRealDistance implements StrategyData {
 	
 	private StrategyData strategy1;
 	private StrategyData strategy2;
-	private Integer key;
 
-	public DifferenceIdealAndRealDistance(Integer key, StrategyData strategy1, StrategyData strategy2) {
+	public DifferenceIdealAndRealDistance(StrategyData strategy1, StrategyData strategy2) {
 		this.strategy1 = strategy1;
 		this.strategy2 = strategy2;
-		this.key = key;
+	}
+	
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_DIFFERENCE_IDEAL_AND_REAL_DISTANCE;
 	}
 	
 	@Override
@@ -69,9 +73,5 @@ public class DifferenceIdealAndRealDistance implements StrategyData {
 		return result;
 	}
 
-	@Override
-	public Integer getKey() {
-		return key;
-	}
 
 }

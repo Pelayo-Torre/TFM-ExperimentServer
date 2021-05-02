@@ -11,6 +11,7 @@ import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Calcula la distancia real entre la posición del ratón y el componente.
@@ -19,8 +20,9 @@ import com.uniovi.es.utils.Constantes;
  */
 public class RealDistanceBetweenMouseAndComponent extends StrategyDataAbstract{
 
-	public RealDistanceBetweenMouseAndComponent(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_REAL_DISTANCE_BETWEEN_MOUSE_AND_COMPONENT;
 	}
 	
 	@Override

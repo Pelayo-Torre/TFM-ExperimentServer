@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.business.experimentData.filter.FilterData;
 import com.uniovi.es.business.experimentData.filter.PropertiesFilterManager;
+import com.uniovi.es.utils.ConstantesFilters;
 
 /**
  * Clase que implementa el patrón composite para aplicar al menos un filtro.
@@ -15,17 +16,15 @@ public class FilterAny implements FilterData{
 	
 	public static final Logger logger = LoggerFactory.getLogger(FilterAny.class);
 	
-	private Integer key;
 	private FilterData [] filters;
 	
-	public FilterAny(Integer key, FilterData...filterDatas) {
-		this.key = key;
+	public FilterAny(FilterData...filterDatas) {
 		this.filters = filterDatas;
 	}
 
 	@Override
 	public Integer getKey() {
-		return key;
+		return ConstantesFilters.FILTER_ANY;
 	}
 	
 	@Override

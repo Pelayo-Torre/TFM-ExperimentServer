@@ -6,6 +6,7 @@ import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyDataAbstract;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Calcula el tiempo total que el usuario se encuentra en una escena
@@ -14,9 +15,10 @@ import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
  *
  */
 public class TotalSceneTime extends StrategyDataAbstract{
-		
-	public TotalSceneTime(Integer key) {
-		super(key);
+	
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_TOTAL_SCENE_TIME;
 	}
 	
 	@Override

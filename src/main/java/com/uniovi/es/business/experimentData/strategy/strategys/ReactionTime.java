@@ -6,6 +6,7 @@ import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyDataAbstract;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Calcula el tiempo de reacción del usuario desde que carga la escena y se produce el 1º evento.
@@ -14,8 +15,9 @@ import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
  */
 public class ReactionTime extends StrategyDataAbstract{
 	
-	public ReactionTime(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_REACTION_TIME;
 	}
 	
 	@Override

@@ -11,6 +11,7 @@ import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Estrategia que se encarga de calcular el número de caracteres eliminados en un componente de tipo texto.
@@ -21,8 +22,9 @@ import com.uniovi.es.utils.Constantes;
  */
 public class NumberCharactersDeleted extends StrategyDataAbstract{
 
-	public NumberCharactersDeleted(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_NUMBER_CHARACTERS_DELETED;
 	}
 
 	@Override

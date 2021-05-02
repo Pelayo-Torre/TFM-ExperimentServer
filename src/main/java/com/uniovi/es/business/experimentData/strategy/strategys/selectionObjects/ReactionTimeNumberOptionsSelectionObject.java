@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyData;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Calcula el tiempo de reacción sobre el número de opciones ofertadas 
@@ -21,12 +22,10 @@ public class ReactionTimeNumberOptionsSelectionObject implements StrategyData {
 	
 	private StrategyData strategyReactionTime;
 	private StrategyData strategyOfferedOptions;
-	private Integer key;
 
-	public ReactionTimeNumberOptionsSelectionObject(Integer key, StrategyData strategyReactionTime, StrategyData strategyOfferedOptions) {
+	public ReactionTimeNumberOptionsSelectionObject(StrategyData strategyReactionTime, StrategyData strategyOfferedOptions) {
 		this.strategyReactionTime = strategyReactionTime;
 		this.strategyOfferedOptions = strategyOfferedOptions;
-		this.key = key;
 	}
 	
 	@Override
@@ -74,7 +73,7 @@ public class ReactionTimeNumberOptionsSelectionObject implements StrategyData {
 
 	@Override
 	public Integer getKey() {
-		return key;
+		return ConstantesStrategys.STRATEGY_REACTION_TIME_NUMBER_OPTIONS_SELECTION_OBJECT;
 	}
 
 }

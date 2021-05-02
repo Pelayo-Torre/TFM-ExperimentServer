@@ -10,6 +10,7 @@ import com.uniovi.es.business.experimentData.strategy.StrategyDataAbstract;
 import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 /**
  * Se calcula el nº de veces que se han pulsado las teclas de desplazamkiento de derecha e izquierda en componentes de texto
@@ -18,8 +19,9 @@ import com.uniovi.es.utils.Constantes;
  */
 public class NumberTimesArrowsLeftRight extends StrategyDataAbstract{
 
-	public NumberTimesArrowsLeftRight(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_NUMBER_TIMES_ARROWS_LEFT_RIGHT;
 	}
 	
 	@Override

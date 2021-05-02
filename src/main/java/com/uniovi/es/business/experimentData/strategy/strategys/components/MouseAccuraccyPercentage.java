@@ -2,11 +2,13 @@ package com.uniovi.es.business.experimentData.strategy.strategys.components;
 
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
 import com.uniovi.es.business.experimentData.strategy.StrategyDataAbstract;
+import com.uniovi.es.utils.ConstantesStrategys;
 
 public class MouseAccuraccyPercentage extends StrategyDataAbstract{
 
-	public MouseAccuraccyPercentage(Integer key) {
-		super(key);
+	@Override
+	public Integer getKey() {
+		return ConstantesStrategys.STRATEGY_MOUSE_ACCURACY_PERCENTAGE;
 	}
 	
 	@Override
