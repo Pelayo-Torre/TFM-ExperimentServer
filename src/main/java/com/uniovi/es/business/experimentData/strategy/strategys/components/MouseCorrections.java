@@ -103,11 +103,7 @@ public class MouseCorrections extends StrategyDataAbstract{
 		logger.info("[FINAL] - MouseCorrections - calculate");
 		return result;
 	}
-	
-	private Double calculateSlope(Event a, Event b) {
-		return (double) ( (b.getY() - a.getY()) / (b.getX() - a.getX()) );
-	}
-	
+		
 	/**
 	 * Calcula el número de correcciones a partir de una lista de eventos recibida
 	 * @param events lsta de eventos
@@ -127,13 +123,16 @@ public class MouseCorrections extends StrategyDataAbstract{
 				//Se comrprueba si las X de los puntos son iguales.
 				//Si son iguales es dividir entre 0, por lo que lo tomaremos como 0 de pendiente.
 				//Si no son iguales, se calcula la pendiente
-				if(a.getX() != b.getX()) {
-					slopeAB = calculateSlope(a, b);
+				if(a.getX() != null && b.getX() != null) {
+					if(a.getX().intValue() != b.getX().intValue()) {
+						slopeAB = calculateSlope(a.getX(), a.getY(), b.getX(), b.getY());
+					}
 				}
-				if(b.getX() != c.getX()) {
-					slopeBC = calculateSlope(b, c);
+				if(b.getX() != null && c.getX() != null) {
+					if(b.getX().intValue() != c.getX().intValue()) {
+						slopeBC = calculateSlope(b.getX(), b.getY(), c.getX(), c.getY());
+					}
 				}
-				
 				//Una vez calculadas las pendientes, se comprueba si son distintas (en caso de serlo, hay corrección)
 				if(slopeAB.doubleValue() != slopeBC.doubleValue()) {
 					result ++;
@@ -161,10 +160,10 @@ public class MouseCorrections extends StrategyDataAbstract{
 	 * @return
 	 */
 	private boolean hayCambio(Integer y3, Integer y2, Integer y1, Integer x3, Integer x2, Integer x1) {
-		Integer dividendo1 = y2-y1;
-		Integer dividendo2 = y3-y2;
-		Integer divisor1 = x2-x1;
-		Integer divisor2 = x3-x2;
+		int dividendo1 = y2-y1;
+		int dividendo2 = y3-y2;
+		int divisor1 = x2-x1;
+		int divisor2 = x3-x2;
 		
 		if(dividendo1 <= 0 && dividendo2 <= 0 && divisor1 < 0 && divisor2 < 0)
 			return false;

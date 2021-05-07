@@ -17,5 +17,8 @@ public interface UserDAO extends CrudRepository <User, Long> {
 	
 	@Query("SELECT u FROM User u WHERE u.sessionId = ?1")
 	public User getUserBySessionId(String sessionId);
+
+	@Query("SELECT u FROM User u WHERE u.processed = false AND u.experiment.id = ?1")
+	public List<User> getUsersNotProcessed(Long id);
 	
 }

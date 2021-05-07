@@ -71,9 +71,9 @@ public class MouseSpeedRealDistance implements StrategyData{
 						result.put(key, 0.0);
 					}
 					else {
-						time = time / 1000; //Paso a segundos
-						logger.info("\t \t Tiempo: " + time);
-						result.put(key, (double)Math.round((distance / time) * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
+						double timeD = time.doubleValue() / 1000; //Paso a segundos
+						logger.info("\t \t Tiempo: " + timeD);
+						result.put(key, (double)Math.round((distance / timeD) * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
 					}
 				}
 				else {

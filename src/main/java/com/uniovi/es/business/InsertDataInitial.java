@@ -20,6 +20,7 @@ import com.uniovi.es.business.experimentData.strategy.strategys.components.Mouse
 import com.uniovi.es.business.experimentData.strategy.strategys.components.MouseMovementTime;
 import com.uniovi.es.business.experimentData.strategy.strategys.components.MouseSpeedIdealDistance;
 import com.uniovi.es.business.experimentData.strategy.strategys.components.MouseSpeedRealDistance;
+import com.uniovi.es.business.experimentData.strategy.strategys.components.PathDeviation;
 import com.uniovi.es.business.experimentData.strategy.strategys.components.RealDistanceBetweenMouseAndComponent;
 import com.uniovi.es.business.experimentData.strategy.strategys.selectionObjects.NumberTimesChangedSelectionObject;
 import com.uniovi.es.business.experimentData.strategy.strategys.selectionObjects.OfferedOptionsSelectionObject;
@@ -29,6 +30,9 @@ import com.uniovi.es.business.experimentData.strategy.strategys.textFields.Numbe
 import com.uniovi.es.business.experimentData.strategy.strategys.textFields.NumberCharactersPerSecond;
 import com.uniovi.es.business.experimentData.strategy.strategys.textFields.NumberTimesArrowsLeftRight;
 import com.uniovi.es.business.experimentData.strategy.strategys.textFields.NumberWordsPerSecond;
+import com.uniovi.es.business.user.ip.IpCalculatorManager;
+import com.uniovi.es.business.user.ip.calculators.IpApi;
+import com.uniovi.es.business.user.ip.calculators.IpStack;
 
 
 
@@ -38,20 +42,21 @@ import com.uniovi.es.business.experimentData.strategy.strategys.textFields.Numbe
  *
  */
 @Configuration
-@ComponentScan(basePackages = "com.uniovi.es.experimentData")
+@ComponentScan(basePackages = "com.uniovi.es")
 public class InsertDataInitial {
 	
 	@PostConstruct
 	public void init() {	
-		
 		loadStrategys();
 		loadFilters();
+		loadIpsCalculators();
 	}
 	
+	/**
+	 * Se cargan las diferentes strategias de cálculos de datos definidas. 
+	 * Si se desea añadir una nueva estrategia, basta con crearla y añadirla aquí y crear la clase java extendiendo de StrategyDataAbstract
+	 */
 	private void loadStrategys() {
-		//Se cargan las diferentes strategias definidas. 
-		//Si se desea añadir una nueva estrategia, basta con crearla y añadirla aquí y crear la clase java extendiendo de StrategyDataAbstract
-		
 		StrategyDataManager.getInstance().addStrategyData(new TotalSceneTime());
 		StrategyDataManager.getInstance().addStrategyData(new ReactionTime());
 
@@ -83,24 +88,46 @@ public class InsertDataInitial {
 		StrategyDataManager.getInstance().addStrategyData(new MouseSpeedIdealDistance(mmt, idbmc));
 		StrategyDataManager.getInstance().addStrategyData(new MouseSpeedRealDistance(mmt, rdbmc));
 		StrategyDataManager.getInstance().addStrategyData(new MouseCorrections());
-		StrategyDataManager.getInstance().addStrategyData(new MouseAccuraccy());
-		StrategyDataManager.getInstance().addStrategyData(new MouseAccuraccyPercentage());
+		MouseAccuraccy ma = new MouseAccuraccy();
+		StrategyDataManager.getInstance().addStrategyData(ma);
+		StrategyDataManager.getInstance().addStrategyData(new MouseAccuraccyPercentage(ma));
 		StrategyDataManager.getInstance().addStrategyData(new NumberErrorClicks());
+		StrategyDataManager.getInstance().addStrategyData(new PathDeviation());
 	}
 	
+	/**
+	 * Se cargan los diferentes filtros definidos. 
+	 * Si se desea añadir un nuevo filtro, basta con crearlo y añadirlo aquí y crear la clase java implementando de FilterData
+	 */
 	private void loadFilters() {
-		
-		//Se cargan los diferentes filtros definidos. 
-		//Si se desea añadir un nuevo filtro, basta con crearlo y añadirlo aquí y crear la clase java extendiendo de FilterDataAbstract
-		
 		FilterDataManager.getInstance().addStrategyData(new FilterFullScene());
 		FilterDataManager.getInstance().addStrategyData(getFilterFullDemographicData());
-		
+	}
+	
+	/**
+	 * Se cargan los distintos strategys para realizar el cálculo de los datos datos de los usuarios a través de la IP.
+	 * Los strategys serán ejecutados en el orden en el que se añaden a la lista
+	 * Si se desea añadir un nuevo strategy basta con crear la clase correspondiente, implementar de IpCalculator 
+	 * y añadirla en el siguiente método
+	 */
+	private void loadIpsCalculators() {
+		IpCalculatorManager.getInstance().add(getIpStack());
+		IpCalculatorManager.getInstance().add(getIpApi());
 	}
 	
 	@Bean
 	public FilterFullDemographicData getFilterFullDemographicData() {
 		return new FilterFullDemographicData();
+	}
+	
+	@Bean
+	public IpApi getIpApi() {
+		return new IpApi();
+	}
+	
+	@Bean
+	public IpStack getIpStack() {
+		return new IpStack();
 	}
 	
 }

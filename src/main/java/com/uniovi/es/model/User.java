@@ -50,7 +50,7 @@ public class User implements Serializable {
 	//Campos obtenidos a partir de un servicio web 
 	private String continent;
 	private String country;
-	private String regionName;
+	private String regionname;
 	private String city;
 	//Indica si el usuario ya ha sido procesado por los servicios web de toma de datos
 	private boolean processed;
@@ -406,12 +406,12 @@ public class User implements Serializable {
 		this.country = country;
 	}
 
-	public String getRegionName() {
-		return regionName;
+	public String getRegionname() {
+		return regionname;
 	}
 
-	public void setRegionName(String regionName) {
-		this.regionName = regionName;
+	public void setRegionname(String regionname) {
+		this.regionname = regionname;
 	}
 
 	public String getCity() {
@@ -444,7 +444,7 @@ public class User implements Serializable {
 				+ ", sizeAvailW=" + sizeAvailW + ", sizeAvailH=" + sizeAvailH + ", scrColorDepth=" + scrColorDepth
 				+ ", scrPixelDepth=" + scrPixelDepth + ", remotePort=" + remotePort + ", timezone=" + timezone
 				+ ", timeStamp=" + timeStamp + ", continent=" + continent + ", country=" + country + ", regionName="
-				+ regionName + ", city=" + city + ", processed=" + processed + ", experiment=" + experiment
+				+ regionname + ", city=" + city + ", processed=" + processed + ", experiment=" + experiment
 				+ ", events=" + events + ", components=" + components + "]";
 	}
 	

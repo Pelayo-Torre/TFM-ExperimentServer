@@ -2,11 +2,10 @@ package com.uniovi.es.business.user;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
 
 import com.uniovi.es.model.User;
 
-@Service
+
 public interface UserDataService {
 
 	/**

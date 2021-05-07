@@ -3,10 +3,12 @@ package com.uniovi.es.business.user;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.uniovi.es.business.user.ip.IpCalculatorManager;
 import com.uniovi.es.model.User;
 
+@Service
 public class UserDataServiceImpl implements UserDataService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserDataServiceImpl.class);

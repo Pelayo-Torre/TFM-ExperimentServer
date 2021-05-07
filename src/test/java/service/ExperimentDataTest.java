@@ -1033,11 +1033,13 @@ public class ExperimentDataTest {
 		
 		//Registramos un componente de tipo texto
 		List<ComponentData> components = new ArrayList<ComponentData>();
-		components.add(new ComponentData("cars", scene, user, new Date().getTime(), 40, 30, 5, 10, Constantes.COMPONENT_RADIO_BUTTON, null));
+		ComponentData carsComp = new ComponentData("cars", scene, user, new Date().getTime(), 40, 30, 5, 10, Constantes.COMPONENT_RADIO_BUTTON, null);
+		components.add(carsComp);
 		components.add(new ComponentData("volvo", scene, user, new Date().getTime(), 40, 31, 5, 10, Constantes.COMPONENT_OPTION, "cars"));
 		components.add(new ComponentData("saab", scene, user, new Date().getTime(), 40, 32, 5, 10, Constantes.COMPONENT_OPTION, "cars"));
 		components.add(new ComponentData("fiat", scene, user, new Date().getTime(), 40, 33, 5, 10, Constantes.COMPONENT_OPTION, "cars"));
-		components.add(new ComponentData("audi", scene, user, new Date().getTime(), 40, 34, 5, 10, Constantes.COMPONENT_OPTION, "cars"));
+		ComponentData audiComp = new ComponentData("audi", scene, user, new Date().getTime(), 40, 34, 5, 10, Constantes.COMPONENT_OPTION, "cars");
+		components.add(audiComp);
 
 		components.forEach((component) -> ExperimentDataFactory.getSceneComponentDAO().insertComponent(component));
 		
@@ -1068,10 +1070,12 @@ public class ExperimentDataTest {
 		double audi = result.get("audi");
 		
 		double d = 0.0;
-		d += distance(initial.getX(), initial.getY(), onClick.getX(), onClick.getY());
+		double dAudi = 0.0;
+		d += distance(initial.getX(), initial.getY(), carsComp.getX(), carsComp.getY());
+		dAudi += distance(initial.getX(), initial.getY(), audiComp.getX(), audiComp.getY());
 		
 		assertTrue(cars == (double)Math.round(d * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
-		assertTrue(audi == 0L);
+		assertTrue(audi == (double)Math.round(dAudi * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
 	}
 	
 	@Test
@@ -1130,7 +1134,6 @@ public class ExperimentDataTest {
 				.calculate(scene, user.getSessionId());
 		
 		double cars = result.get("cars");
-		double audi = result.get("audi");
 		
 		double ideal = 0.0;
 		ideal += distance(initial.getX(), initial.getY(), onClick.getX(), onClick.getY());
@@ -1147,7 +1150,6 @@ public class ExperimentDataTest {
 		
 		double difference = (double)Math.round( (real - ideal) * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS;
 		assertTrue(cars == difference);
-		assertTrue(audi == 0L);
 	}
 	
 	@Test
@@ -1412,7 +1414,167 @@ public class ExperimentDataTest {
 		assertTrue(audi == 0);
 	}
 	
-	private Double distance(Integer x1, Integer y1, Integer x2, Integer y2) {
+	@Test
+	/**
+	 * Prueba la estrategia del cálculo del porcetaje de precisión
+	 */
+	public void mouseAccuraccyPercentage() {
+		//Se comienza registrando un usuario
+		
+		List<ExperimentDTO> dtos = experimentService.getExperiments();
+		Optional<Experiment> optional = experimentDAO.findById(dtos.get(0).id);
+		Experiment experiment = optional.get();
+		User user = new User("usuario23", experiment, 999, 5694, new Date().getTime(),"596", "es", "0:0:0:0:0:0:1");
+		
+		userDAO.save(user);		
+		String scene = "escena23";
+		
+		//Registramos un componente
+		ComponentData rb = new ComponentData("cars", scene, user, new Date().getTime(), 40, 30, 45, 35, Constantes.COMPONENT_TEXT_FIELD, null);
+		ExperimentDataFactory.getSceneComponentDAO().insertComponent(rb);
+		
+		//Registramos eventos
+		List<Event> events = new ArrayList<Event>();
+		events.add(new Event(scene, Constantes.EVENT_INIT_TRACKING, "-1", 1618660812000L, 0, 0, "-1", -1, user));
+		Event initial = new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661052000L, 10, 10, "-1", -1, user);
+		events.add(initial);
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661053000L, 15, 15, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661054000L, 18, 15, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661056000L, 20, 10, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661057000L, 30, 10, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661058000L, 35, 10, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661059000L, 30, 10, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661060000L, 30, 20, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661061000L, 30, 30, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661062000L, 30, 20, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661063000L, 20, 20, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661064000L, 10, 20, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661065000L, 20, 20, "-1", -1, user));
+		Event onClick = new Event(scene, Constantes.EVENT_ON_CLICK, "cars", 1618661066000L, 42, 32, "-1", -1, user);
+		events.add(onClick);
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661067000L, 0, 0, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_TRACKIND_END, "-1", 1618661885000L, 0, 0, "-1", -1, user));
+		
+		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
+	
+		@SuppressWarnings("unchecked")
+		Map<String, Double> result = (Map<String, Double>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_ACCURACY_PERCENTAGE)
+				.calculate(scene, user.getSessionId());
+		
+		double distance1 = (double)Math.round( (distance(rb.getX(), rb.getY(), rb.getxF(), rb.getyF())) * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS;
+		double distance2 = (double)Math.round( (distance(rb.getX(), rb.getY(), onClick.getX(), onClick.getY())) * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS;
+		
+		double percentage = (double)Math.round( (distance2 * 100 / distance1) * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS;
+		double cars = result.get("cars");
+				
+		assertTrue(cars == percentage);
+	}
+	
+	@Test
+	/**
+	 * Prueba la estrategia del cálculo de la desviación sobre la trayectoria ideal, cuando va por debajo
+	 */
+	public void pathDeviation_below() {
+		//Se comienza registrando un usuario
+		
+		List<ExperimentDTO> dtos = experimentService.getExperiments();
+		Optional<Experiment> optional = experimentDAO.findById(dtos.get(0).id);
+		Experiment experiment = optional.get();
+		User user = new User("usuario24", experiment, 999, 5694, new Date().getTime(),"596", "es", "0:0:0:0:0:0:1");
+		
+		userDAO.save(user);		
+		String scene = "escena24";
+		
+		//Registramos un componente
+		ComponentData rb = new ComponentData("cars", scene, user, new Date().getTime(), 100, 70, 105, 75, Constantes.COMPONENT_TEXT_FIELD, null);
+		ExperimentDataFactory.getSceneComponentDAO().insertComponent(rb);
+		
+		//Registramos eventos
+		List<Event> events = new ArrayList<Event>();
+		events.add(new Event(scene, Constantes.EVENT_INIT_TRACKING, "-1", 1618660812000L, 0, 0, "-1", -1, user));
+		Event initial = new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661052000L, 20, 20, "-1", -1, user);
+		events.add(initial);
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661053000L, 22, 30, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661054000L, 25, 32, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661056000L, 25, 35, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661057000L, 35, 40, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661058000L, 40, 25, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661059000L, 50, 18, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661060000L, 60, 18, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661061000L, 70, 10, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661062000L, 80, 40, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661063000L, 90, 50, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661064000L, 95, 55, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661065000L, 100, 70, "-1", -1, user));
+		Event onClick = new Event(scene, Constantes.EVENT_ON_CLICK, "cars", 1618661066000L, 102, 74, "-1", -1, user);
+		events.add(onClick);
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661067000L, 105, 80, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_TRACKIND_END, "-1", 1618661885000L, 0, 0, "-1", -1, user));
+		
+		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
+	
+		@SuppressWarnings("unchecked")
+		Map<String, Integer> result = (Map<String, Integer>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_PATH_DEVIATION)
+				.calculate(scene, user.getSessionId());
+		
+		int cars = result.get("cars");
+				
+		assertTrue(cars == -1);
+	}
+	
+	@Test
+	/**
+	 * Prueba la estrategia del cálculo de la desviación sobre la trayectoria ideal, cuando va por encima
+	 */
+	public void pathDeviation_above() {
+		//Se comienza registrando un usuario
+		
+		List<ExperimentDTO> dtos = experimentService.getExperiments();
+		Optional<Experiment> optional = experimentDAO.findById(dtos.get(0).id);
+		Experiment experiment = optional.get();
+		User user = new User("usuario25", experiment, 999, 5694, new Date().getTime(),"596", "es", "0:0:0:0:0:0:1");
+		
+		userDAO.save(user);		
+		String scene = "escena25";
+		
+		//Registramos un componente
+		ComponentData rb = new ComponentData("cars", scene, user, new Date().getTime(), 100, 20, 105, 75, Constantes.COMPONENT_TEXT_FIELD, null);
+		ExperimentDataFactory.getSceneComponentDAO().insertComponent(rb);
+		
+		//Registramos eventos
+		List<Event> events = new ArrayList<Event>();
+		events.add(new Event(scene, Constantes.EVENT_INIT_TRACKING, "-1", 1618660812000L, 0, 0, "-1", -1, user));
+		Event initial = new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661052000L, 20, 20, "-1", -1, user);
+		events.add(initial);
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661053000L, 22, 30, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661054000L, 25, 32, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661056000L, 25, 35, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661057000L, 35, 40, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661058000L, 40, 25, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661059000L, 50, 18, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661060000L, 60, 18, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661061000L, 70, 10, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661062000L, 80, 40, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661063000L, 90, 30, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661064000L, 95, 35, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661065000L, 100, 20, "-1", -1, user));
+		Event onClick = new Event(scene, Constantes.EVENT_ON_CLICK, "cars", 1618661066000L, 100, 20, "-1", -1, user);
+		events.add(onClick);
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661067000L, 105, 16, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_TRACKIND_END, "-1", 1618661885000L, 0, 0, "-1", -1, user));
+		
+		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
+	
+		@SuppressWarnings("unchecked")
+		Map<String, Integer> result = (Map<String, Integer>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_PATH_DEVIATION)
+				.calculate(scene, user.getSessionId());
+		
+		int cars = result.get("cars");
+				
+		assertTrue(cars == 1);
+	}
+	
+	private Double distance(int x1, int y1, int x2, int y2) {
 		return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
 	}
 }

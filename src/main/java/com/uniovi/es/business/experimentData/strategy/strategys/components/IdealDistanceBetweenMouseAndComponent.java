@@ -53,51 +53,23 @@ public class IdealDistanceBetweenMouseAndComponent extends StrategyDataAbstract{
 		
 		for(ComponentData component : components) {
 			logger.info("\t \t Componente: " + component.getComponentId());
-			logger.info("\t \t Obtenemos los primeros evento de ratón para saber la posición inicial del usuario");
 			
 			Event initialMouse = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
 					null, Constantes.EVENT_ON_MOUSE_MOVE, null);
-			Event initialClickComponent = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
-					component.getComponentId(), Constantes.EVENT_ON_CLICK, null);
-			Event initialDoubleClickComponent = ExperimentDataFactory.getEventDAO().getInitialEvent(sceneID, sessionID, 
-					component.getComponentId(), Constantes.EVENT_ON_DOUBLE_CLICK, null);
 			
-			logger.info("\t \t Eventos obtenidos: INITIAL: " + initialMouse 
-					+ "  INITIAL-CLICK-COMPONENT: " + initialClickComponent + "  INITIAL-DOUBLE-CLICK-COMPONENT: " + initialDoubleClickComponent);
+			logger.info("\t \t Posición del componente: (" + component.getX() + "," + component.getY() + ")");
 			
 			Double distance = 0.00;
 			if(initialMouse != null) {
-				if(initialClickComponent != null && initialDoubleClickComponent != null) {
-					//Nos quedamos con el de menor timeStamp
-					if(initialClickComponent.getTimeStamp() < initialDoubleClickComponent.getTimeStamp()) {
-						logger.info("\t \t Se calcula la distance desde el inicial hasta el evento de un click");
-						distance = distance(initialMouse.getX(), initialMouse.getY(), 
-								initialClickComponent.getX(), initialClickComponent.getY());
-					}
-					else {
-						logger.info("\t \t Se calcula la distance desde el inicial hasta el evento de doble click");
-						distance = distance(initialMouse.getX(), initialMouse.getY(), 
-								initialDoubleClickComponent.getX(), initialDoubleClickComponent.getY());
-					}
-				}
-				else {
-					if(initialClickComponent != null) {
-						logger.info("\t \t Se calcula la distance desde el inicial hasta el evento de un click");
-						distance = distance(initialMouse.getX(), initialMouse.getY(), 
-								initialClickComponent.getX(), initialClickComponent.getY());
-					}
-					else if(initialDoubleClickComponent != null) {
-						logger.info("\t \t Se calcula la distance desde el inicial hasta el evento de doble click");
-						distance = distance(initialMouse.getX(), initialMouse.getY(), 
-								initialDoubleClickComponent.getX(), initialDoubleClickComponent.getY());
-					}
+				if(component.getX() != null && component.getY() != null) {
+					logger.info("\t \t Se calcula la distance desde el inicial hasta la posición del componente");
+					distance = distance(initialMouse.getX(), initialMouse.getY(), 
+							component.getX(), component.getY());
 				}
 			}
 			result.put(component.getComponentId(), (double)Math.round(distance * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS);
 			logger.info("\t \t Resultado distancia con componente " + component.getComponentId() + ": " + distance);	
 			initialMouse = null;
-			initialClickComponent = null;
-			initialDoubleClickComponent = null;
 		}
 		components = null;
 		logger.info("[FINAL] - IdealDistanceBetweenMouseAndComponent - calculate");

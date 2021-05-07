@@ -4,6 +4,7 @@ package com.uniovi.es.business.experimentData.strategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  * Clase abstracata que implementa la interfaz StrategyData
  * Su principal propósito es el de no repetir código.
@@ -53,7 +54,22 @@ public abstract class StrategyDataAbstract implements StrategyData{
 	 * @param y2 coordenada Y del primer punto
 	 * @return la distancia entre ambos puntos
 	 */
-	public Double distance(Integer x1, Integer y1, Integer x2, Integer y2) {
+	public Double distance(int x1, int y1, int x2, int y2) {
 		return Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
+	}
+	
+	/**
+	 * Calcula la pendiente de una recta
+	 * @param a punto A
+	 * @param b punto B
+	 * @return la pendiente
+	 */
+	public Double calculateSlope(int x1, int y1, int x2, int y2) {
+		try {
+			return (double) ( (y2 - y1) / (x2 - x1) );
+		} catch(ArithmeticException e) {
+			return 0.0;
+		}
+		
 	}
 }

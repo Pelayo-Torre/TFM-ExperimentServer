@@ -95,12 +95,16 @@
 		}
 		
 		class Element {
-		  constructor(id,x,y,xF,yF) {
+		  constructor(id,x,y,xF,yF,sceneId) {
 		    this.id = id;
 		    this.x=x;
 		    this.y=y;
 		    this.xF=xF;
 		    this.yF=yF;
+		    this.sceneId=sceneId;
+		  }
+		  getScene(){
+			  return this.sceneId;
 		  }
 		  isOver(mX,mY) {
 			  if(this.x &lt; mX &amp;&amp; mX&lt; this.xF &amp;&amp; this.y&lt; mY &amp;&amp; mY&lt; this.yF){
@@ -115,7 +119,7 @@
 		function detectElement(x,y){
 			var found = -1 ;
 			elements.forEach ( function(entry){
-				if (entry.isOver(x,y)){
+				if (entry.isOver(x,y) &lt; entry.getScene() === sceneId) ){
 					found = entry.id;
 				}
 			});
@@ -125,15 +129,15 @@
 		function detectElementByName(name){
 			var found = -1;
 			elements.forEach ( function(entry){
-				if(entry.id === name){
+				if(entry.id === name &lt; entry.getScene() === sceneId)){
 					found = entry.id;
 				}
 			});
 			return found;
 		}
 		
-		function registerElement(id, x, y, xF, yF, typeId) {
-			elements.push( new Element(id,x,y,xF,yF));
+		function registerElement(id, x, y, xF, yF, typeId,sceneId) {
+			elements.push( new Element(id,x,y,xF,yF,sceneId));
 			addFocusAndBlurEvents(id);
 			if(typeId === COMPONENT_COMBOBOX || typeId === COMPONENT_OPTION){
 				addSelectionEvent(id);
@@ -370,7 +374,7 @@
 		
 		function registerComponent(sceneId, componentId, x, y, xF, yF, typeId, componentAssociated)
 		{
-			registerElement(componentId,x,y,xF,yF, typeId);
+			registerElement(componentId,x,y,xF,yF, typeId, sceneId);
 			console.log("REGISTRANDO COMPONENTE: " + componentId)
 		    var parametros = {
 		    	"timezone": (new Date()).getTimezoneOffset()/60 * (-1),

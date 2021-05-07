@@ -30,5 +30,6 @@ public class ConstantesStrategys {
 	public final static Integer STRATEGY_MOUSE_ACCURACY = 20;
 	public final static Integer STRATEGY_MOUSE_ACCURACY_PERCENTAGE = 21;
 	public final static Integer STRATEGY_NUMBER_ERROR_CLICKS = 22;
+	public final static Integer STRATEGY_PATH_DEVIATION = 23;
 
 }

@@ -13,7 +13,7 @@ public class StrategyDataManager {
 
 	private static StrategyDataManager instance;
 	
-	private Map<Integer, StrategyData> strategys = new HashMap<Integer, StrategyData>();
+	private Map<Integer, StrategyData> strategies = new HashMap<Integer, StrategyData>();
 	
 	private StrategyDataManager() {}
 	
@@ -25,20 +25,20 @@ public class StrategyDataManager {
 	}
 	
 	public StrategyData getStrategyData(Integer key) {
-		return this.strategys.get(key);
+		return this.strategies.get(key);
 	}
 	
 	public boolean hasStrategyData(Integer key) {
-		return this.strategys.containsKey(key);
+		return this.strategies.containsKey(key);
 	}
 	
 	public void addStrategyData(StrategyData strategy) {
 		if(!hasStrategyData(strategy.getKey()))
-			this.strategys.put(strategy.getKey(), strategy);
+			this.strategies.put(strategy.getKey(), strategy);
 	}
 
 	public Map<Integer, StrategyData> getStrategys() {
-		return strategys;
+		return strategies;
 	}
 		
 }

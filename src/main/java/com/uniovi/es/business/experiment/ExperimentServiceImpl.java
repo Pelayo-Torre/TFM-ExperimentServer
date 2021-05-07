@@ -23,6 +23,7 @@ import com.uniovi.es.business.experiment.commands.Close;
 import com.uniovi.es.business.experiment.commands.Delete;
 import com.uniovi.es.business.experiment.commands.Open;
 import com.uniovi.es.business.experiment.commands.ReOpen;
+import com.uniovi.es.business.user.UserDataService;
 import com.uniovi.es.business.validators.ExperimentValidator;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.ForbiddenException;
@@ -31,12 +32,14 @@ import com.uniovi.es.model.DemographicData;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
 import com.uniovi.es.model.Petition;
+import com.uniovi.es.model.User;
 import com.uniovi.es.model.types.StatusPetition;
 import com.uniovi.es.model.types.DemographicDataType;
 import com.uniovi.es.persistence.DemographicDataDAO;
 import com.uniovi.es.persistence.ExperimentDAO;
 import com.uniovi.es.persistence.InvestigatorDAO;
 import com.uniovi.es.persistence.PetitionDAO;
+import com.uniovi.es.persistence.UserDAO;
 import com.uniovi.es.utils.Identifier;
 
 @Service
@@ -60,6 +63,12 @@ public class ExperimentServiceImpl implements ExperimentService{
 	
 	@Autowired
 	private DemographicDataDAO demographicDataDAO;
+	
+	@Autowired
+	private UserDAO userDAO;
+	
+	@Autowired
+	private UserDataService userDataService;
 	
 	@Autowired
 	private UserInSession userInSession;
@@ -239,6 +248,16 @@ public class ExperimentServiceImpl implements ExperimentService{
 		
 		logger.info("\t \t Actualizando cambios en base de datos");
 		experimentDAO.save(experiment);
+		
+		//Se calculan los datos de los usuarios a partir de su IP
+		List<User> users = userDAO.getUsersNotProcessed(id.getId());
+		if(users != null && users.size() > 0) {
+			logger.info("\t \t Procesamiento de datos a partir de IP de " + users.size() + " usuairos");
+			userDataService.calculateIp(users);
+		}
+		else {
+			logger.info("\t \t No existen usuarios para procesar sus datos");
+		}
 		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- close experiment");
 	}
