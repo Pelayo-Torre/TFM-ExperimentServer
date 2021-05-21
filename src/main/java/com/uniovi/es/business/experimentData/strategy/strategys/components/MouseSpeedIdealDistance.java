@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
-import com.uniovi.es.business.experimentData.strategy.StrategyData;
+import com.uniovi.es.business.experimentData.strategy.DataStrategy;
 import com.uniovi.es.utils.Constantes;
 import com.uniovi.es.utils.ConstantesStrategys;
 
@@ -17,14 +17,14 @@ import com.uniovi.es.utils.ConstantesStrategys;
  * @author pelay
  *
  */
-public class MouseSpeedIdealDistance implements StrategyData {
+public class MouseSpeedIdealDistance implements DataStrategy {
 	
 	public static final Logger logger = LoggerFactory.getLogger(MouseSpeedIdealDistance.class);
 
-	private StrategyData strategyTime;	//Strategia de tiempo total
-	private StrategyData strategyDistance; //Strategia de la distancia ideal
+	private DataStrategy strategyTime;	//Strategia de tiempo total
+	private DataStrategy strategyDistance; //Strategia de la distancia ideal
 
-	public MouseSpeedIdealDistance(StrategyData strategyTime, StrategyData strategyDistance) {
+	public MouseSpeedIdealDistance(DataStrategy strategyTime, DataStrategy strategyDistance) {
 		this.strategyTime = strategyTime;
 		this.strategyDistance = strategyDistance;
 	}

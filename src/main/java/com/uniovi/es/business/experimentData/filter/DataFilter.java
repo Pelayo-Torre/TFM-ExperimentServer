@@ -1,6 +1,6 @@
 package com.uniovi.es.business.experimentData.filter;
 
-public interface FilterData {
+public interface DataFilter {
 
 	/**
 	 * Devuelve el identifcador de cada Filtro concreto

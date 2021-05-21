@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import com.uniovi.es.business.experimentData.filter.FilterDataManager;
-import com.uniovi.es.business.experimentData.filter.filters.FilterFullDemographicData;
-import com.uniovi.es.business.experimentData.filter.filters.FilterFullScene;
-import com.uniovi.es.business.experimentData.strategy.StrategyDataManager;
+import com.uniovi.es.business.experimentData.filter.DataManagerFilter;
+import com.uniovi.es.business.experimentData.filter.filters.FullDemographicDataFilter;
+import com.uniovi.es.business.experimentData.filter.filters.FullSceneFilter;
+import com.uniovi.es.business.experimentData.strategy.DataManagerStrategy;
 import com.uniovi.es.business.experimentData.strategy.strategys.NumberErrorClicks;
 import com.uniovi.es.business.experimentData.strategy.strategys.ReactionTime;
 import com.uniovi.es.business.experimentData.strategy.strategys.TotalSceneTime;
@@ -57,42 +57,42 @@ public class InsertDataInitial {
 	 * Si se desea añadir una nueva estrategia, basta con crearla y añadirla aquí y crear la clase java extendiendo de StrategyDataAbstract
 	 */
 	private void loadStrategys() {
-		StrategyDataManager.getInstance().addStrategyData(new TotalSceneTime());
-		StrategyDataManager.getInstance().addStrategyData(new ReactionTime());
+		DataManagerStrategy.getInstance().addStrategyData(new TotalSceneTime());
+		DataManagerStrategy.getInstance().addStrategyData(new ReactionTime());
 
 		//SELECTION OBJECTS
 		ReactionTimeSelectionObject rtc = new ReactionTimeSelectionObject();
 		OfferedOptionsSelectionObject ooc = new OfferedOptionsSelectionObject();
 		
-		StrategyDataManager.getInstance().addStrategyData(rtc);
-		StrategyDataManager.getInstance().addStrategyData(ooc);
-		StrategyDataManager.getInstance().addStrategyData(new ReactionTimeNumberOptionsSelectionObject(rtc, ooc));
-		StrategyDataManager.getInstance().addStrategyData(new NumberTimesChangedSelectionObject());
+		DataManagerStrategy.getInstance().addStrategyData(rtc);
+		DataManagerStrategy.getInstance().addStrategyData(ooc);
+		DataManagerStrategy.getInstance().addStrategyData(new ReactionTimeNumberOptionsSelectionObject(rtc, ooc));
+		DataManagerStrategy.getInstance().addStrategyData(new NumberTimesChangedSelectionObject());
 		
 		//TEXT FIELDS
-		StrategyDataManager.getInstance().addStrategyData(new NumberCharactersPerSecond());
-		StrategyDataManager.getInstance().addStrategyData(new NumberWordsPerSecond());
-		StrategyDataManager.getInstance().addStrategyData(new NumberCharactersDeleted());
-		StrategyDataManager.getInstance().addStrategyData(new NumberTimesArrowsLeftRight());
+		DataManagerStrategy.getInstance().addStrategyData(new NumberCharactersPerSecond());
+		DataManagerStrategy.getInstance().addStrategyData(new NumberWordsPerSecond());
+		DataManagerStrategy.getInstance().addStrategyData(new NumberCharactersDeleted());
+		DataManagerStrategy.getInstance().addStrategyData(new NumberTimesArrowsLeftRight());
 
 		//COMPONENTES
 		IdealDistanceBetweenMouseAndComponent idbmc = new IdealDistanceBetweenMouseAndComponent();
 		RealDistanceBetweenMouseAndComponent rdbmc = new RealDistanceBetweenMouseAndComponent();
 		
-		StrategyDataManager.getInstance().addStrategyData(idbmc);
-		StrategyDataManager.getInstance().addStrategyData(rdbmc);
-		StrategyDataManager.getInstance().addStrategyData(new DifferenceIdealAndRealDistance(rdbmc, idbmc));
+		DataManagerStrategy.getInstance().addStrategyData(idbmc);
+		DataManagerStrategy.getInstance().addStrategyData(rdbmc);
+		DataManagerStrategy.getInstance().addStrategyData(new DifferenceIdealAndRealDistance(rdbmc, idbmc));
 		
 		MouseMovementTime mmt = new MouseMovementTime();
-		StrategyDataManager.getInstance().addStrategyData(mmt);
-		StrategyDataManager.getInstance().addStrategyData(new MouseSpeedIdealDistance(mmt, idbmc));
-		StrategyDataManager.getInstance().addStrategyData(new MouseSpeedRealDistance(mmt, rdbmc));
-		StrategyDataManager.getInstance().addStrategyData(new MouseCorrections());
+		DataManagerStrategy.getInstance().addStrategyData(mmt);
+		DataManagerStrategy.getInstance().addStrategyData(new MouseSpeedIdealDistance(mmt, idbmc));
+		DataManagerStrategy.getInstance().addStrategyData(new MouseSpeedRealDistance(mmt, rdbmc));
+		DataManagerStrategy.getInstance().addStrategyData(new MouseCorrections());
 		MouseAccuraccy ma = new MouseAccuraccy();
-		StrategyDataManager.getInstance().addStrategyData(ma);
-		StrategyDataManager.getInstance().addStrategyData(new MouseAccuraccyPercentage(ma));
-		StrategyDataManager.getInstance().addStrategyData(new NumberErrorClicks());
-		StrategyDataManager.getInstance().addStrategyData(new PathDeviation());
+		DataManagerStrategy.getInstance().addStrategyData(ma);
+		DataManagerStrategy.getInstance().addStrategyData(new MouseAccuraccyPercentage(ma));
+		DataManagerStrategy.getInstance().addStrategyData(new NumberErrorClicks());
+		DataManagerStrategy.getInstance().addStrategyData(new PathDeviation());
 	}
 	
 	/**
@@ -100,8 +100,8 @@ public class InsertDataInitial {
 	 * Si se desea añadir un nuevo filtro, basta con crearlo y añadirlo aquí y crear la clase java implementando de FilterData
 	 */
 	private void loadFilters() {
-		FilterDataManager.getInstance().addStrategyData(new FilterFullScene());
-		FilterDataManager.getInstance().addStrategyData(getFilterFullDemographicData());
+		DataManagerFilter.getInstance().addStrategyData(new FullSceneFilter());
+		DataManagerFilter.getInstance().addStrategyData(getFilterFullDemographicData());
 	}
 	
 	/**
@@ -116,8 +116,8 @@ public class InsertDataInitial {
 	}
 	
 	@Bean
-	public FilterFullDemographicData getFilterFullDemographicData() {
-		return new FilterFullDemographicData();
+	public FullDemographicDataFilter getFilterFullDemographicData() {
+		return new FullDemographicDataFilter();
 	}
 	
 	@Bean

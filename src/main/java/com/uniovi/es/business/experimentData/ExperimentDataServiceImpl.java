@@ -47,10 +47,10 @@ import com.uniovi.es.business.dto.SceneDTO;
 import com.uniovi.es.business.dto.StrategyDataDTO;
 import com.uniovi.es.business.dto.UserDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
-import com.uniovi.es.business.experimentData.filter.FilterData;
-import com.uniovi.es.business.experimentData.filter.FilterDataManager;
-import com.uniovi.es.business.experimentData.strategy.StrategyData;
-import com.uniovi.es.business.experimentData.strategy.StrategyDataManager;
+import com.uniovi.es.business.experimentData.filter.DataFilter;
+import com.uniovi.es.business.experimentData.filter.DataManagerFilter;
+import com.uniovi.es.business.experimentData.strategy.DataStrategy;
+import com.uniovi.es.business.experimentData.strategy.DataManagerStrategy;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.model.DemographicData;
@@ -109,7 +109,7 @@ public class ExperimentDataServiceImpl implements ExperimentDataService{
 					if(data.filters != null && data.filters.size() > 0) {
 						logger.info("\t \t Número de filtros a aplicar: " + data.filters.size());
 						for(Integer filter : data.filters) {
-							FilterData f = FilterDataManager.getInstance().getFilterData(filter);
+							DataFilter f = DataManagerFilter.getInstance().getFilterData(filter);
 							if(f != null) {
 								valid = f.isValid(data.sceneID, sessionID);
 								logger.info("\t \t Resultado de la validación " + f.getName() + ": " + valid);
@@ -126,7 +126,7 @@ public class ExperimentDataServiceImpl implements ExperimentDataService{
 						for(Integer strategy : data.strategys) {
 							
 							logger.info("\t \t Ejecutando estrategia con identificador: " + strategy);
-							StrategyData sd = StrategyDataManager.getInstance().getStrategyData(strategy);
+							DataStrategy sd = DataManagerStrategy.getInstance().getStrategyData(strategy);
 							
 							StrategyDataDTO sdata = new StrategyDataDTO();
 							sdata.identifier = strategy;
@@ -180,9 +180,9 @@ public class ExperimentDataServiceImpl implements ExperimentDataService{
 		logger.info("[INICIO] EXPERIMENT DATA SERVICE -- getStrategys");
 		List<StrategyDataDTO> list = new ArrayList<StrategyDataDTO>();
 		
-		Map<Integer, StrategyData> strategys = StrategyDataManager.getInstance().getStrategys();
+		Map<Integer, DataStrategy> strategys = DataManagerStrategy.getInstance().getStrategys();
 		
-		for (Map.Entry<Integer, StrategyData> entry : strategys.entrySet()) {
+		for (Map.Entry<Integer, DataStrategy> entry : strategys.entrySet()) {
 			StrategyDataDTO dto = new StrategyDataDTO();
 			dto.abbreviation = entry.getValue().getPropertyAbbreviation();
 			dto.name = entry.getValue().getPropertyName();
@@ -198,9 +198,9 @@ public class ExperimentDataServiceImpl implements ExperimentDataService{
 		logger.info("[INICIO] EXPERIMENT DATA SERVICE -- getFilters");
 		List<FilterDTO> list = new ArrayList<FilterDTO>();
 		
-		Map<Integer, FilterData> filters = FilterDataManager.getInstance().getFilters();
+		Map<Integer, DataFilter> filters = DataManagerFilter.getInstance().getFilters();
 		
-		for (Map.Entry<Integer, FilterData> entry : filters.entrySet()) {
+		for (Map.Entry<Integer, DataFilter> entry : filters.entrySet()) {
 			FilterDTO dto = new FilterDTO();
 			dto.name = entry.getValue().getName();
 			dto.identifier = entry.getKey();

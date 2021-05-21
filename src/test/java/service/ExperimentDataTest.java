@@ -32,7 +32,7 @@ import com.uniovi.es.business.dto.AuthDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.experiment.ExperimentService;
-import com.uniovi.es.business.experimentData.strategy.StrategyDataManager;
+import com.uniovi.es.business.experimentData.strategy.DataManagerStrategy;
 import com.uniovi.es.business.investigator.InvestigatorService;
 import com.uniovi.es.exceptions.AttempsException;
 import com.uniovi.es.exceptions.ExperimentException;
@@ -133,7 +133,7 @@ public class ExperimentDataTest {
 		ExperimentDataFactory.getEventDAO().insertEvent(event4);
 		ExperimentDataFactory.getEventDAO().insertEvent(event5);
 		
-		long time = (Long) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_TOTAL_SCENE_TIME)
+		long time = (Long) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_TOTAL_SCENE_TIME)
 				.calculate(scene, user.getSessionId());
 		long resta = new Timestamp(event5.getTimeStamp()).getTime() - new Timestamp(event1.getTimeStamp()).getTime();
 		assertEquals(resta, time);
@@ -166,7 +166,7 @@ public class ExperimentDataTest {
 		ExperimentDataFactory.getEventDAO().insertEvent(event4);
 		ExperimentDataFactory.getEventDAO().insertEvent(event5);
 		
-		long time = (Long) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_REACTION_TIME)
+		long time = (Long) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_REACTION_TIME)
 				.calculate(scene, user.getSessionId());
 		long resta = new Timestamp(event2.getTimeStamp()).getTime() - new Timestamp(event1.getTimeStamp()).getTime();
 		assertEquals(resta, time);
@@ -202,7 +202,7 @@ public class ExperimentDataTest {
 		
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 		
-		int clicks = (Integer) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_ERROR_CLICKS)
+		int clicks = (Integer) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_ERROR_CLICKS)
 				.calculate(scene, user.getSessionId());
 		assertEquals(clicks, 3);
 	}
@@ -254,7 +254,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 		
 		@SuppressWarnings("unchecked")
-		Map<String, Integer> result = (Map<String, Integer>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_CHARACTERS_DELETED)
+		Map<String, Integer> result = (Map<String, Integer>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_CHARACTERS_DELETED)
 				.calculate(scene, user.getSessionId());
 		int inputTeclado = result.get("inputTeclado");
 		assertEquals(inputTeclado, 4);
@@ -321,7 +321,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 		
 		@SuppressWarnings("unchecked")
-		Map<String, Double> result = (Map<String, Double>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_CHARACTERS_PER_SECOND)
+		Map<String, Double> result = (Map<String, Double>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_CHARACTERS_PER_SECOND)
 				.calculate(scene, user.getSessionId());
 		
 		double inputTeclado = result.get("inputTeclado");
@@ -383,7 +383,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 		
 		@SuppressWarnings("unchecked")
-		Map<String, Integer> result = (Map<String, Integer>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_TIMES_ARROWS_LEFT_RIGHT)
+		Map<String, Integer> result = (Map<String, Integer>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_TIMES_ARROWS_LEFT_RIGHT)
 				.calculate(scene, user.getSessionId());
 		
 		int inputTeclado = result.get("inputTeclado");
@@ -442,7 +442,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 		
 		@SuppressWarnings("unchecked")
-		Map<String, Double> result = (Map<String, Double>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_WORDS_PER_SECOND)
+		Map<String, Double> result = (Map<String, Double>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_WORDS_PER_SECOND)
 				.calculate(scene, user.getSessionId());
 		
 		double inputTeclado = result.get("inputTeclado");
@@ -500,7 +500,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 		
 		@SuppressWarnings("unchecked")
-		Map<String, Integer> result = (Map<String, Integer>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_TIMES_CHANGED_SELECTION_OBJECT)
+		Map<String, Integer> result = (Map<String, Integer>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_TIMES_CHANGED_SELECTION_OBJECT)
 				.calculate(scene, user.getSessionId());
 		
 		int cars = result.get("cars");
@@ -555,7 +555,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 		
 		@SuppressWarnings("unchecked")
-		Map<String, Integer> result = (Map<String, Integer>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_TIMES_CHANGED_SELECTION_OBJECT)
+		Map<String, Integer> result = (Map<String, Integer>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_NUMBER_TIMES_CHANGED_SELECTION_OBJECT)
 				.calculate(scene, user.getSessionId());
 		
 		int cars = result.get("cars");
@@ -590,7 +590,7 @@ public class ExperimentDataTest {
 		components.forEach((component) -> ExperimentDataFactory.getSceneComponentDAO().insertComponent(component));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Integer> result = (Map<String, Integer>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_OFFERED_OPTIONS_SELECTION_OBJECT)
+		Map<String, Integer> result = (Map<String, Integer>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_OFFERED_OPTIONS_SELECTION_OBJECT)
 				.calculate(scene, user.getSessionId());
 		
 		int cars = result.get("cars");
@@ -625,7 +625,7 @@ public class ExperimentDataTest {
 		components.forEach((component) -> ExperimentDataFactory.getSceneComponentDAO().insertComponent(component));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Integer> result = (Map<String, Integer>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_OFFERED_OPTIONS_SELECTION_OBJECT)
+		Map<String, Integer> result = (Map<String, Integer>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_OFFERED_OPTIONS_SELECTION_OBJECT)
 				.calculate(scene, user.getSessionId());
 		
 		int cars = result.get("cars");
@@ -660,7 +660,7 @@ public class ExperimentDataTest {
 		components.forEach((component) -> ExperimentDataFactory.getSceneComponentDAO().insertComponent(component));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Integer> result = (Map<String, Integer>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_OFFERED_OPTIONS_SELECTION_OBJECT)
+		Map<String, Integer> result = (Map<String, Integer>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_OFFERED_OPTIONS_SELECTION_OBJECT)
 				.calculate(scene, user.getSessionId());
 		
 		int cars = result.get("cars");
@@ -715,7 +715,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Long> result = (Map<String, Long>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_REACTION_TIME_SELECTION_OBJECT)
+		Map<String, Long> result = (Map<String, Long>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_REACTION_TIME_SELECTION_OBJECT)
 				.calculate(scene, user.getSessionId());
 		
 		long cars = result.get("cars");
@@ -770,7 +770,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Long> result = (Map<String, Long>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_REACTION_TIME_SELECTION_OBJECT)
+		Map<String, Long> result = (Map<String, Long>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_REACTION_TIME_SELECTION_OBJECT)
 				.calculate(scene, user.getSessionId());
 		
 		long cars = result.get("cars");
@@ -825,7 +825,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Long> result = (Map<String, Long>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_REACTION_TIME_SELECTION_OBJECT)
+		Map<String, Long> result = (Map<String, Long>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_REACTION_TIME_SELECTION_OBJECT)
 				.calculate(scene, user.getSessionId());
 		
 		long cars = result.get("cars");
@@ -879,7 +879,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Double> result = (Map<String, Double>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_REACTION_TIME_NUMBER_OPTIONS_SELECTION_OBJECT)
+		Map<String, Double> result = (Map<String, Double>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_REACTION_TIME_NUMBER_OPTIONS_SELECTION_OBJECT)
 				.calculate(scene, user.getSessionId());
 		
 		double cars = result.get("cars");
@@ -934,7 +934,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Long> result = (Map<String, Long>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_MOVEMENT_TIME)
+		Map<String, Long> result = (Map<String, Long>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_MOVEMENT_TIME)
 				.calculate(scene, user.getSessionId());
 		
 		long cars = result.get("cars");
@@ -996,7 +996,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Double> result = (Map<String, Double>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_REAL_DISTANCE_BETWEEN_MOUSE_AND_COMPONENT)
+		Map<String, Double> result = (Map<String, Double>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_REAL_DISTANCE_BETWEEN_MOUSE_AND_COMPONENT)
 				.calculate(scene, user.getSessionId());
 		
 		double cars = result.get("cars");
@@ -1063,7 +1063,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Double> result = (Map<String, Double>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_IDEAL_DISTANCE_BETWEEN_MOUSE_AND_COMPONENT)
+		Map<String, Double> result = (Map<String, Double>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_IDEAL_DISTANCE_BETWEEN_MOUSE_AND_COMPONENT)
 				.calculate(scene, user.getSessionId());
 		
 		double cars = result.get("cars");
@@ -1130,7 +1130,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Double> result = (Map<String, Double>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_DIFFERENCE_IDEAL_AND_REAL_DISTANCE)
+		Map<String, Double> result = (Map<String, Double>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_DIFFERENCE_IDEAL_AND_REAL_DISTANCE)
 				.calculate(scene, user.getSessionId());
 		
 		double cars = result.get("cars");
@@ -1204,7 +1204,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Double> result = (Map<String, Double>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_SPEED_REAL_DISTANCE)
+		Map<String, Double> result = (Map<String, Double>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_SPEED_REAL_DISTANCE)
 				.calculate(scene, user.getSessionId());
 		
 		double cars = result.get("cars");
@@ -1279,7 +1279,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Double> result = (Map<String, Double>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_SPEED_IDEAL_DISTANCE)
+		Map<String, Double> result = (Map<String, Double>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_SPEED_IDEAL_DISTANCE)
 				.calculate(scene, user.getSessionId());
 		
 		double cars = result.get("cars");
@@ -1341,7 +1341,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Double> result = (Map<String, Double>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_ACCURACY)
+		Map<String, Double> result = (Map<String, Double>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_ACCURACY)
 				.calculate(scene, user.getSessionId());
 		
 		double cars = result.get("cars");
@@ -1404,7 +1404,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Integer> result = (Map<String, Integer>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_CORRECTIONS)
+		Map<String, Integer> result = (Map<String, Integer>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_CORRECTIONS)
 				.calculate(scene, user.getSessionId());
 		
 		int cars = result.get("cars");
@@ -1458,7 +1458,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Double> result = (Map<String, Double>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_ACCURACY_PERCENTAGE)
+		Map<String, Double> result = (Map<String, Double>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_MOUSE_ACCURACY_PERCENTAGE)
 				.calculate(scene, user.getSessionId());
 		
 		double distance1 = (double)Math.round( (distance(rb.getX(), rb.getY(), rb.getxF(), rb.getyF())) * Constantes.NUMBER_DECIMALS) / Constantes.NUMBER_DECIMALS;
@@ -1514,7 +1514,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Integer> result = (Map<String, Integer>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_PATH_DEVIATION)
+		Map<String, Integer> result = (Map<String, Integer>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_PATH_DEVIATION)
 				.calculate(scene, user.getSessionId());
 		
 		int cars = result.get("cars");
@@ -1566,7 +1566,7 @@ public class ExperimentDataTest {
 		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
 	
 		@SuppressWarnings("unchecked")
-		Map<String, Integer> result = (Map<String, Integer>) StrategyDataManager.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_PATH_DEVIATION)
+		Map<String, Integer> result = (Map<String, Integer>) DataManagerStrategy.getInstance().getStrategyData(ConstantesStrategys.STRATEGY_PATH_DEVIATION)
 				.calculate(scene, user.getSessionId());
 		
 		int cars = result.get("cars");

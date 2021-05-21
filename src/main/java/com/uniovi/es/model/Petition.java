@@ -2,12 +2,15 @@ package com.uniovi.es.model;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.uniovi.es.model.types.StatusPetition;
@@ -22,23 +25,30 @@ public class Petition implements Serializable {
 	private Long id;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private StatusPetition status;
 	
 	private Date answerDate;
+	
+	@Column(nullable = false)
 	private Date shippingDate;
 	
 	private String description;
 	
+	@Column(nullable = false)
 	private Boolean manager;
+	
+	@Column(nullable = false)
 	private Boolean creator;
 	
-	//Identificador del investigador que envía la petición
 	private Long idInvestigatorSend;
 	
 	@ManyToOne
+	@JoinColumn(nullable = false)
 	private Investigator investigator;
 	
 	@ManyToOne
+	@JoinColumn(nullable = false)
 	private Experiment experiment;
 	
 	Petition() {}

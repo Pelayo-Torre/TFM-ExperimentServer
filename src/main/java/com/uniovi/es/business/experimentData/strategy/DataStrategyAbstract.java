@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
  * @author pelayo
  *
  */
-public abstract class StrategyDataAbstract implements StrategyData{
+public abstract class DataStrategyAbstract implements DataStrategy{
 	
-	public static final Logger logger = LoggerFactory.getLogger(StrategyDataAbstract.class);
+	public static final Logger logger = LoggerFactory.getLogger(DataStrategyAbstract.class);
 		
 	/**
 	 * Elimina un caracter en una posición de la cadena que se le pasa por parámetro

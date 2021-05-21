@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.uniovi.es.business.dto.PetitionDTO;
 import com.uniovi.es.exceptions.PetitionException;
 import com.uniovi.es.persistence.PetitionDAO;
 import com.uniovi.es.persistence.PetitionNotRegisteredDAO;
@@ -20,8 +19,6 @@ public class PetitionValidator {
 	
 	@Autowired
 	private PetitionNotRegisteredDAO petitionNotRegisteredDAO;
-
-	public void validate(PetitionDTO dto) {}
 	
 	/**
 	 * Comprueba que no exista ya una petición en estado PENDIENTE O ACEPTADA 

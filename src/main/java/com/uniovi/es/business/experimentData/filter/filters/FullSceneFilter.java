@@ -3,16 +3,16 @@ package com.uniovi.es.business.experimentData.filter.filters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.uniovi.es.business.experimentData.filter.FilterData;
+import com.uniovi.es.business.experimentData.filter.DataFilter;
 import com.uniovi.es.business.experimentData.filter.PropertiesFilterManager;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
 import com.uniovi.es.utils.ConstantesFilters;
 
-public class FilterFullScene implements FilterData{
+public class FullSceneFilter implements DataFilter{
 
-	public static final Logger logger = LoggerFactory.getLogger(FilterFullScene.class);
+	public static final Logger logger = LoggerFactory.getLogger(FullSceneFilter.class);
 	
 	@Override
 	public String getName() {

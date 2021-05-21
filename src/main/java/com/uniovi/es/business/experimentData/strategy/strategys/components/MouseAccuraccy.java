@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
-import com.uniovi.es.business.experimentData.strategy.StrategyDataAbstract;
+import com.uniovi.es.business.experimentData.strategy.DataStrategyAbstract;
 import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
@@ -17,7 +17,7 @@ import com.uniovi.es.utils.ConstantesStrategys;
  * @author pelayo
  *
  */
-public class MouseAccuraccy extends StrategyDataAbstract{
+public class MouseAccuraccy extends DataStrategyAbstract{
 
 	@Override
 	public Integer getKey() {

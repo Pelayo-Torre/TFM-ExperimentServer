@@ -25,11 +25,14 @@ public class Experiment implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(nullable = false)
 	private String title;
-	@Column(name = "description", length = 10000)
+	
+	@Column(name = "description", length = 10000, nullable = false)
 	private String description;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private StatusExperiment status;
 	
 	@OneToMany(mappedBy = "experiment")
@@ -47,6 +50,7 @@ public class Experiment implements Serializable {
 	@OneToMany(mappedBy = "experiment")
 	private Set<DemographicData> demographicData = new HashSet<DemographicData>();
 		
+	@Column(nullable = false)
 	private Date creationDate;
 	
 	public Experiment() {

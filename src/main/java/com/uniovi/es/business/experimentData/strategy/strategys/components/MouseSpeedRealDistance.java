@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
-import com.uniovi.es.business.experimentData.strategy.StrategyData;
+import com.uniovi.es.business.experimentData.strategy.DataStrategy;
 import com.uniovi.es.utils.Constantes;
 import com.uniovi.es.utils.ConstantesStrategys;
 
@@ -17,14 +17,14 @@ import com.uniovi.es.utils.ConstantesStrategys;
  * Patrón composite
  * @author pelayo
  */
-public class MouseSpeedRealDistance implements StrategyData{
+public class MouseSpeedRealDistance implements DataStrategy{
 	
 	public static final Logger logger = LoggerFactory.getLogger(MouseSpeedRealDistance.class);
 
-	private StrategyData strategyTime;	//Strategia de tiempo total
-	private StrategyData StrategyDistance; //Strategia de la distancia real
+	private DataStrategy strategyTime;	//Strategia de tiempo total
+	private DataStrategy StrategyDistance; //Strategia de la distancia real
 
-	public MouseSpeedRealDistance(StrategyData strategyTime, StrategyData StrategyDistance) {
+	public MouseSpeedRealDistance(DataStrategy strategyTime, DataStrategy StrategyDistance) {
 		this.strategyTime = strategyTime;
 		this.StrategyDistance = StrategyDistance;
 	}

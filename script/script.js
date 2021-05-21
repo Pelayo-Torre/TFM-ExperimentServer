@@ -25,6 +25,8 @@
 		const COMPONENT_OPTION = 3;
 		const COMPONENT_RADIO_BUTTON = 4;
 		const COMPONENT_CHECK_BOX = 5;
+		
+		const user = createUser();
 	
 			
 		var list = [];
@@ -36,15 +38,32 @@
 		var pendingRequest = 0;
 		var newPage = null;
 		var elements =[]; 
+		var emittingData = false;
 		
-	var idExperiment = 2;
+	var idExperiment = 1;
 	var urlBase='http://localhost:8080'
 		
 		var url = urlBase + '/TrackerServer/restws/track';
 		var urlRegisterComponent = urlBase + '/TrackerServer/restws/registerComponent';
 		var urlRegisterUserData = urlBase +'/TrackerServer/restws/registerUserData';
 		var urlDemographicData = urlBase + '/TrackerServer/restws/registerDemographicData';
+		var urlExperimentStatus = urlBase + '/TrackerServer/restws/experiment/status/' + idExperiment;
 	
+	
+	
+		function createUser(){
+			if(localStorage.getItem("user") === null || localStorage.getItem("user") === undefined){
+				let lettrs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+				localStorage.setItem("user", 
+						lettrs[Math.floor(Math.random() * lettrs.length)] + 
+						lettrs[Math.floor(Math.random() * lettrs.length)] +
+						lettrs[Math.floor(Math.random() * lettrs.length)] +
+						(Math.floor(Math.random() * (999999999999 - 100000000000)) + 100000000000).toString() +
+						Date.now().toString()
+				);
+			}
+			return localStorage.getItem("user");
+		}
 	
 		function registerUserData()
 		{
@@ -74,9 +93,11 @@
 			    "sizeAvailH": screen.availHeight,
 			    "scrColorDepth": screen.colorDepth,
 			    "scrPixelDepth": screen.pixelDepth,
-			    "idExperiment" : idExperiment
+			    "idExperiment" : idExperiment,
+			    "sessionId" : user
 			};		
-			$.ajax({
+			if(emittingData){
+				$.ajax({
 					data:  JSON.stringify(parametros),  
 					url:   urlRegisterUserData,
 					type:  'post',
@@ -87,16 +108,21 @@
 							$("#result").html(response);
 					},
 				    async: false
-			});
+				});
+			}
 		}
 		
 		class Element {
-		  constructor(id,x,y,xF,yF) {
+		  constructor(id,x,y,xF,yF,sceneId) {
 		    this.id = id;
 		    this.x=x;
 		    this.y=y;
 		    this.xF=xF;
 		    this.yF=yF;
+		    this.sceneId=sceneId;
+		  }
+		  getScene(){
+			  return this.sceneId;
 		  }
 		  isOver(mX,mY) {
 			  if(this.x < mX && mX< this.xF && this.y< mY && mY< this.yF){
@@ -111,7 +137,7 @@
 		function detectElement(x,y){
 			var found = -1 ;
 			elements.forEach ( function(entry){
-				if (entry.isOver(x,y)){
+				if (entry.isOver(x,y) < entry.getScene() === sceneId) {
 					found = entry.id;
 				}
 			});
@@ -121,15 +147,15 @@
 		function detectElementByName(name){
 			var found = -1;
 			elements.forEach ( function(entry){
-				if(entry.id === name){
+				if(entry.id === name < entry.getScene() === sceneId){
 					found = entry.id;
 				}
 			});
 			return found;
 		}
 		
-		function registerElement(id, x, y, xF, yF, typeId) {
-			elements.push( new Element(id,x,y,xF,yF));
+		function registerElement(id, x, y, xF, yF, typeId,sceneId) {
+			elements.push( new Element(id,x,y,xF,yF,sceneId));
 			addFocusAndBlurEvents(id);
 			if(typeId === COMPONENT_COMBOBOX || typeId === COMPONENT_OPTION){
 				addSelectionEvent(id);
@@ -227,6 +253,7 @@
 		
 		function initTracking(_sceneId) {
 			trackingOn = true;
+			getExperimentStatus();
 			sceneId = _sceneId;
 			trackEvent(EVENT_INIT_TRACKING);
 			parent.addEventListener('scroll', function() {
@@ -365,8 +392,7 @@
 		
 		function registerComponent(sceneId, componentId, x, y, xF, yF, typeId, componentAssociated)
 		{
-			registerElement(componentId,x,y,xF,yF, typeId);
-			console.log("REGISTRANDO COMPONENTE: " + componentId)
+			registerElement(componentId,x,y,xF,yF, typeId, sceneId);
 		    var parametros = {
 		    	"timezone": (new Date()).getTimezoneOffset()/60 * (-1),
 				"sceneId" : sceneId,
@@ -378,9 +404,12 @@
 				"timeStamp": Date.now(),
 				"idExperiment" : idExperiment,
 				"typeId" : typeId,
-				"componentAssociated": componentAssociated
+				"componentAssociated": componentAssociated,
+			    "sessionId" : user
 			};
-			$.ajax({
+			
+			if(emittingData){
+				$.ajax({
 					data:  JSON.stringify(parametros),  
 					url:   urlRegisterComponent,
 					type:  'post',
@@ -390,7 +419,8 @@
 					success:  function (response) {
 						
 					}
-			});
+				});
+			}
 		}
 		
 		function deliverChunk(chunk)
@@ -398,9 +428,12 @@
 		    var parametros = {
 		    	"timezone": (new Date()).getTimezoneOffset()/60 * (-1),
 				"list" : chunk,
-				"idExperiment" : idExperiment
+				"idExperiment" : idExperiment,
+			    "sessionId" : user
 			};
-			$.ajax({
+			
+			if(emittingData){
+				$.ajax({
 					data:  JSON.stringify(parametros),  
 					url:   url,
 					type:  'post',
@@ -423,11 +456,12 @@
 				        console.log("Status: " + textStatus); 
 				        console.log("Error: " + errorThrown); 
 				    }
-			}).always(function(jqXHR, textStatus) {
-			    if (textStatus != "success") {
-			        alert("ERROR: " + jqXHR.statusText);
-			    }
-			});;
+				}).always(function(jqXHR, textStatus) {
+				    if (textStatus != "success") {
+				        alert("ERROR: " + jqXHR.statusText);
+				    }
+				});
+			}
 		}
 		
 		function deliverData(list)
@@ -459,7 +493,9 @@
 			    "sceneId":sceneId,
 			    "idExperiment" : idExperiment
 			};
-			$.ajax({
+			
+			if(emittingData){
+				$.ajax({
 					data:  parametros,
 					url:   url,
 					type:  'get',
@@ -470,6 +506,24 @@
 						$("#result").html(response);
 						paintTracking(response);
 					}
+				});
+			}
+		}
+		
+		function getExperimentStatus(){
+			
+			$.ajax({
+				url:   urlExperimentStatus,
+				type:  'get',
+				success:  function (response) {
+					if(response === 'OPEN'){
+						emittingData = true;
+					}
+					else{
+						emittingData = false;
+					}
+				},
+				error: function (){}
 			});
 		}
 		
@@ -523,7 +577,8 @@
 				"timezone": (new Date()).getTimezoneOffset()/60 * (-1),
 		    	"id": id,
 				"numberValue": value,
-				"idExperiment" : idExperiment
+				"idExperiment" : idExperiment,
+			    "sessionId" : user
 			};
 			postAJAXDemographicData(parametros);
 		}
@@ -533,7 +588,8 @@
 				"timezone": (new Date()).getTimezoneOffset()/60 * (-1),
 		    	"id": id,
 				"stringValue": value,
-				"idExperiment" : idExperiment
+				"idExperiment" : idExperiment,
+			    "sessionId" : user
 			};
 			postAJAXDemographicData(parametros);
 		}
@@ -543,26 +599,25 @@
 				"timezone": (new Date()).getTimezoneOffset()/60 * (-1),
 		    	"id": id,
 				"dateValue": value,
-				"idExperiment" : idExperiment
+				"idExperiment" : idExperiment,
+			    "sessionId" : user
 			};
 			postAJAXDemographicData(parametros);
 		}
 		
 		function postAJAXDemographicData(parametros){
-			$.ajax({
-				data:  JSON.stringify(parametros),  
-				url:   urlDemographicData,
-				type:  'post',
-				success:  function (response) {
-				},
-				error: function (){
-				}
-			});
+			if(emittingData){
+				$.ajax({
+					data:  JSON.stringify(parametros),  
+					url:   urlDemographicData,
+					type:  'post',
+					success:  function (response) {
+					},
+					error: function (){
+					}
+				});
+			}
 		}
 	
 
-	function registerGenero(value) {
-		postNumberDD(6, value);
-	}
-	
-	function registerProfesion(value) {postStringDD(7, value);}function registerLateralidad(value) {postNumberDD(8, value);}function registerEdad(value) {postDateDD(9, value);}
+function registerEdad(value) {postDateDD(3, value);}function registerGenero(value) {postStringDD(4, value);}

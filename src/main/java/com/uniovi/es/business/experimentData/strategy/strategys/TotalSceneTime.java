@@ -3,7 +3,7 @@ package com.uniovi.es.business.experimentData.strategy.strategys;
 import java.sql.Timestamp;
 
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
-import com.uniovi.es.business.experimentData.strategy.StrategyDataAbstract;
+import com.uniovi.es.business.experimentData.strategy.DataStrategyAbstract;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.ConstantesStrategys;
@@ -14,7 +14,7 @@ import com.uniovi.es.utils.ConstantesStrategys;
  * @author pelayo
  *
  */
-public class TotalSceneTime extends StrategyDataAbstract{
+public class TotalSceneTime extends DataStrategyAbstract{
 	
 	@Override
 	public Integer getKey() {

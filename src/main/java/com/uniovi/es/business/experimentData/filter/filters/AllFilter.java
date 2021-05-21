@@ -3,7 +3,7 @@ package com.uniovi.es.business.experimentData.filter.filters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.uniovi.es.business.experimentData.filter.FilterData;
+import com.uniovi.es.business.experimentData.filter.DataFilter;
 import com.uniovi.es.business.experimentData.filter.PropertiesFilterManager;
 import com.uniovi.es.utils.ConstantesFilters;
 
@@ -12,13 +12,13 @@ import com.uniovi.es.utils.ConstantesFilters;
  * @author pelayo
  *
  */
-public class FilterAll implements FilterData{
+public class AllFilter implements DataFilter{
 	
-	public static final Logger logger = LoggerFactory.getLogger(FilterAll.class);
+	public static final Logger logger = LoggerFactory.getLogger(AllFilter.class);
 	
-	private FilterData [] filters;
+	private DataFilter [] filters;
 	
-	public FilterAll(FilterData...filterDatas) {
+	public AllFilter(DataFilter...filterDatas) {
 		this.filters = filterDatas;
 	}
 
@@ -39,7 +39,7 @@ public class FilterAll implements FilterData{
 		
 		if(filters != null) {
 			logger.info("\t \t Número de filtros a aplicar: " + filters.length);
-			for(FilterData filter : filters) {
+			for(DataFilter filter : filters) {
 				if(filter != null) {
 					if(!filter.isValid(sceneID, sessionID)) {
 						logger.info("\t \t El filtro : " + filter.getName() + " no ha pasado la validación.");

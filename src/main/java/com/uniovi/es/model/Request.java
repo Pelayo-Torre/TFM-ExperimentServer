@@ -3,12 +3,14 @@ package com.uniovi.es.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.uniovi.es.model.types.StatusRequest;
@@ -23,12 +25,16 @@ public class Request implements Serializable {
 	private Long id;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private StatusRequest status;
 	
+	@Column(nullable = false)
 	private Date shippingDate;
+	
 	private Date answerDate;
 	
 	@ManyToOne
+	@JoinColumn(nullable = false)
 	private Investigator investigator;
 	
 	Request() {}

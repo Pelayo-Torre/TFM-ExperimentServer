@@ -25,14 +25,19 @@ public class Investigator implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(nullable = false)
 	private String name;
+	
+	@Column(nullable = false)
 	private String surname;
 	
-	@Column(unique = true) 
+	@Column(unique = true, nullable = false)
 	private String mail;
 	
+	@Column(nullable = false)
 	private String password;
 	
+	@Column(nullable = false)
 	private Date registrationDate;
 	
 	@OneToMany(mappedBy = "investigator")
@@ -42,6 +47,7 @@ public class Investigator implements Serializable {
 	private Set<Request> requests = new HashSet<Request>();
 	
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private Role role;
 	
 	public Investigator(String mail) {
@@ -139,4 +145,5 @@ public class Investigator implements Serializable {
 	public void setToValidated() {
 		this.setRole(Role.INVESTIGATOR_VALIDATED);
 	}
+	
 }

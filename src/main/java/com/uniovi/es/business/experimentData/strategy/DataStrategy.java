@@ -1,6 +1,6 @@
 package com.uniovi.es.business.experimentData.strategy;
 
-public interface StrategyData {
+public interface DataStrategy {
 
 	/**
 	 * Devuelve el resultado de la ejecución de la estrategia concreta que la implemente

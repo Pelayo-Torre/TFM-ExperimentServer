@@ -1381,7 +1381,7 @@ public class ExperimentTest {
 	
 	@Test
 	/**
-	 * Se prueba la seguridad de modificar el estado de un experimento del que no se es manager
+	 * Se prueba la seguridad de visualizar el estado de un experimento del que no se es manager
 	 * @throws InvestigatorException
 	 * @throws AttempsException
 	 * @throws ExperimentException

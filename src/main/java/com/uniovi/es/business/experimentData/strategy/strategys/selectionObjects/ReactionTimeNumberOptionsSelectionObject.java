@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
-import com.uniovi.es.business.experimentData.strategy.StrategyData;
+import com.uniovi.es.business.experimentData.strategy.DataStrategy;
 import com.uniovi.es.utils.Constantes;
 import com.uniovi.es.utils.ConstantesStrategys;
 
@@ -16,14 +16,14 @@ import com.uniovi.es.utils.ConstantesStrategys;
  * @author pelayo
  *
  */
-public class ReactionTimeNumberOptionsSelectionObject implements StrategyData {
+public class ReactionTimeNumberOptionsSelectionObject implements DataStrategy {
 	
 	public static final Logger logger = LoggerFactory.getLogger(ReactionTimeNumberOptionsSelectionObject.class);
 	
-	private StrategyData strategyReactionTime;
-	private StrategyData strategyOfferedOptions;
+	private DataStrategy strategyReactionTime;
+	private DataStrategy strategyOfferedOptions;
 
-	public ReactionTimeNumberOptionsSelectionObject(StrategyData strategyReactionTime, StrategyData strategyOfferedOptions) {
+	public ReactionTimeNumberOptionsSelectionObject(DataStrategy strategyReactionTime, DataStrategy strategyOfferedOptions) {
 		this.strategyReactionTime = strategyReactionTime;
 		this.strategyOfferedOptions = strategyOfferedOptions;
 	}

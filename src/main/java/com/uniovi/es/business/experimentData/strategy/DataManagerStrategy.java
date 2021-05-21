@@ -9,22 +9,22 @@ import java.util.Map;
  * @author pelayo
  *
  */
-public class StrategyDataManager {
+public class DataManagerStrategy {
 
-	private static StrategyDataManager instance;
+	private static DataManagerStrategy instance;
 	
-	private Map<Integer, StrategyData> strategies = new HashMap<Integer, StrategyData>();
+	private Map<Integer, DataStrategy> strategies = new HashMap<Integer, DataStrategy>();
 	
-	private StrategyDataManager() {}
+	private DataManagerStrategy() {}
 	
-	public static StrategyDataManager getInstance() {
+	public static DataManagerStrategy getInstance() {
 		if(instance == null) {
-			instance = new StrategyDataManager();
+			instance = new DataManagerStrategy();
 		}
 		return instance;
 	}
 	
-	public StrategyData getStrategyData(Integer key) {
+	public DataStrategy getStrategyData(Integer key) {
 		return this.strategies.get(key);
 	}
 	
@@ -32,12 +32,12 @@ public class StrategyDataManager {
 		return this.strategies.containsKey(key);
 	}
 	
-	public void addStrategyData(StrategyData strategy) {
+	public void addStrategyData(DataStrategy strategy) {
 		if(!hasStrategyData(strategy.getKey()))
 			this.strategies.put(strategy.getKey(), strategy);
 	}
 
-	public Map<Integer, StrategyData> getStrategys() {
+	public Map<Integer, DataStrategy> getStrategys() {
 		return strategies;
 	}
 		

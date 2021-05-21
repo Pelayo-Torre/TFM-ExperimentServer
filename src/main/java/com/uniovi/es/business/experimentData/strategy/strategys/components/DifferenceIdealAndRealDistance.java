@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
-import com.uniovi.es.business.experimentData.strategy.StrategyData;
+import com.uniovi.es.business.experimentData.strategy.DataStrategy;
 import com.uniovi.es.utils.Constantes;
 import com.uniovi.es.utils.ConstantesStrategys;
 
@@ -17,14 +17,14 @@ import com.uniovi.es.utils.ConstantesStrategys;
  * @author pelayo
  *
  */
-public class DifferenceIdealAndRealDistance implements StrategyData {
+public class DifferenceIdealAndRealDistance implements DataStrategy {
 	
 	public static final Logger logger = LoggerFactory.getLogger(DifferenceIdealAndRealDistance.class);
 	
-	private StrategyData strategy1;
-	private StrategyData strategy2;
+	private DataStrategy strategy1;
+	private DataStrategy strategy2;
 
-	public DifferenceIdealAndRealDistance(StrategyData strategy1, StrategyData strategy2) {
+	public DifferenceIdealAndRealDistance(DataStrategy strategy1, DataStrategy strategy2) {
 		this.strategy1 = strategy1;
 		this.strategy2 = strategy2;
 	}

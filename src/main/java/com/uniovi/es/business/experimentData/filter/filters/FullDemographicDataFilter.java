@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.uniovi.es.business.experimentData.filter.FilterData;
+import com.uniovi.es.business.experimentData.filter.DataFilter;
 import com.uniovi.es.business.experimentData.filter.PropertiesFilterManager;
 import com.uniovi.es.model.DemographicData;
 import com.uniovi.es.model.DemographicDataDate;
@@ -18,12 +18,12 @@ import com.uniovi.es.persistence.UserDAO;
 import com.uniovi.es.utils.ConstantesFilters;
 
 @Component
-public class FilterFullDemographicData implements FilterData{
+public class FullDemographicDataFilter implements DataFilter{
 	
 	@Autowired
 	private UserDAO userDAO;
 	
-	public static final Logger logger = LoggerFactory.getLogger(FilterFullDemographicData.class);
+	public static final Logger logger = LoggerFactory.getLogger(FullDemographicDataFilter.class);
 
 	@Override
 	public boolean isValid(String sceneID, String sessionID) {

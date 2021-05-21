@@ -544,7 +544,7 @@ public class PetitionTest {
 	//Nuevos tests
 	@Test
 	/**
-	 * Se prueba a rechazar una aceptar una petición como investegador que no recibe la petición.
+	 * Se prueba a rechazar  una petición como investegador que no recibe la petición.
 	 * @throws PetitionException
 	 */
 	public void test21ResponseAPetitionSecurityERROR001() throws PetitionException, InvestigatorException, ExperimentException, AttempsException, ForbiddenException {

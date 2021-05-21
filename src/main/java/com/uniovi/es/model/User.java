@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -56,6 +57,7 @@ public class User implements Serializable {
 	private boolean processed;
 	
 	@ManyToOne
+	@JoinColumn(nullable = false)
 	private Experiment experiment;
 	
 	@OneToMany(mappedBy = "user")

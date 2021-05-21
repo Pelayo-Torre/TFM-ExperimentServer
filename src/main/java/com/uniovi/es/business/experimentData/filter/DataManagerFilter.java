@@ -10,22 +10,22 @@ import java.util.Map;
  * @author pelayo
  *
  */
-public class FilterDataManager {
+public class DataManagerFilter {
 
-	private static FilterDataManager instance;
+	private static DataManagerFilter instance;
 	
-	private Map<Integer, FilterData> filters = new HashMap<Integer, FilterData>();
+	private Map<Integer, DataFilter> filters = new HashMap<Integer, DataFilter>();
 	
-	private FilterDataManager() {}
+	private DataManagerFilter() {}
 	
-	public static FilterDataManager getInstance() {
+	public static DataManagerFilter getInstance() {
 		if(instance == null) {
-			instance = new FilterDataManager();
+			instance = new DataManagerFilter();
 		}
 		return instance;
 	}
 	
-	public FilterData getFilterData(Integer key) {
+	public DataFilter getFilterData(Integer key) {
 		return this.filters.get(key);
 	}
 	
@@ -33,12 +33,12 @@ public class FilterDataManager {
 		return this.filters.containsKey(key);
 	}
 	
-	public void addStrategyData(FilterData filter) {
+	public void addStrategyData(DataFilter filter) {
 		if(!hasFilterData(filter.getKey()))
 			this.filters.put(filter.getKey(), filter);
 	}
 
-	public Map<Integer, FilterData> getFilters() {
+	public Map<Integer, DataFilter> getFilters() {
 		return filters;
 	}
 	

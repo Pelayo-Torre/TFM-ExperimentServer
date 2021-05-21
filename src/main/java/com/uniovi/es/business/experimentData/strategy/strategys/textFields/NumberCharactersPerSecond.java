@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.uniovi.es.business.experimentData.strategy.PropetiesStrategyManager;
-import com.uniovi.es.business.experimentData.strategy.StrategyDataAbstract;
+import com.uniovi.es.business.experimentData.strategy.DataStrategyAbstract;
 import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
@@ -21,7 +21,7 @@ import com.uniovi.es.utils.ConstantesStrategys;
  * @author pelay
  *
  */
-public class NumberCharactersPerSecond extends StrategyDataAbstract{
+public class NumberCharactersPerSecond extends DataStrategyAbstract{
 
 	@Override
 	public Integer getKey() {
