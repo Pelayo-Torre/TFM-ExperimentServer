@@ -9,12 +9,11 @@ public class NoteDTO {
 	public String title;
 	public String description;
 	public Date creationDate;
-	
+	public String author;
 	
 	@Override
 	public String toString() {
 		return "NoteDTO [id=" + id + ", idExperiment=" + idExperiment + ", title=" + title + ", description="
-				+ description + ", creationDate=" + creationDate + "]";
+				+ description + ", creationDate=" + creationDate + ", author=" + author + "]";
 	}
-	
 }

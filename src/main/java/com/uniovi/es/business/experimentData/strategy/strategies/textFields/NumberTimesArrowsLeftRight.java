@@ -1,4 +1,4 @@
-package com.uniovi.es.business.experimentData.strategy.strategys.textFields;
+package com.uniovi.es.business.experimentData.strategy.strategies.textFields;
 
 import java.util.ArrayList;
 import java.util.HashMap;

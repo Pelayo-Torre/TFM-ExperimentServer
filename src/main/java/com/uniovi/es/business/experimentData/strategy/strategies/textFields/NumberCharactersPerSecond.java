@@ -1,4 +1,4 @@
-package com.uniovi.es.business.experimentData.strategy.strategys.textFields;
+package com.uniovi.es.business.experimentData.strategy.strategies.textFields;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.uniovi.es.business.experimentData.strategy.strategys.components;
+package com.uniovi.es.business.experimentData.strategy.strategies.components;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,5 +1,7 @@
 package com.uniovi.es.business.authentication;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +33,8 @@ public class AuthenticationService {
 	@Autowired
 	private InvestigatorDAO investigatorDAO;
 	
+	private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+	
 	/**
 	 * Realiza la autenticación del usuario en el sistema
 	 * 
@@ -42,8 +46,8 @@ public class AuthenticationService {
 			throws AttempsException {
 
 		if (loginService.blocked(dto.mail)) {
-			throw new AttempsException(
-					"Usuario bloquedo por sobrepasar el número de intentos");
+			logger.error("[ERROR] La cuenta del usuario con email: " + dto.mail + " está bloqueada.");
+			throw new AttempsException("601");
 		}
 
 		Authentication authentication = authenticationManager.authenticate(
@@ -57,14 +61,8 @@ public class AuthenticationService {
 
 		Investigator investigator = getUserByMail(authentication.getName());
 
-//		if (user.getAssociation() != null) {
-//			return ResponseEntity.ok(new Response(user.getLogin(), token,
-//					user.getStatus(), user.getAssociation().getStatus(),
-//					details.getAuthorities()));
-//		} else {
-			return ResponseEntity.ok(new Response(investigator.getMail(), token,
+		return ResponseEntity.ok(new Response(investigator.getMail(), token,
 					details.getAuthorities()));
-		//}
 
 	}
 	

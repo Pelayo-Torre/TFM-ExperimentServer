@@ -1,4 +1,4 @@
-package com.uniovi.es.business.experimentData.strategy.strategys;
+package com.uniovi.es.business.experimentData.strategy.strategies;
 
 import java.sql.Timestamp;
 

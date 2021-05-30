@@ -9,27 +9,27 @@ import com.uniovi.es.business.experimentData.filter.DataManagerFilter;
 import com.uniovi.es.business.experimentData.filter.filters.FullDemographicDataFilter;
 import com.uniovi.es.business.experimentData.filter.filters.FullSceneFilter;
 import com.uniovi.es.business.experimentData.strategy.DataManagerStrategy;
-import com.uniovi.es.business.experimentData.strategy.strategys.NumberErrorClicks;
-import com.uniovi.es.business.experimentData.strategy.strategys.ReactionTime;
-import com.uniovi.es.business.experimentData.strategy.strategys.TotalSceneTime;
-import com.uniovi.es.business.experimentData.strategy.strategys.components.DifferenceIdealAndRealDistance;
-import com.uniovi.es.business.experimentData.strategy.strategys.components.IdealDistanceBetweenMouseAndComponent;
-import com.uniovi.es.business.experimentData.strategy.strategys.components.MouseAccuraccy;
-import com.uniovi.es.business.experimentData.strategy.strategys.components.MouseAccuraccyPercentage;
-import com.uniovi.es.business.experimentData.strategy.strategys.components.MouseCorrections;
-import com.uniovi.es.business.experimentData.strategy.strategys.components.MouseMovementTime;
-import com.uniovi.es.business.experimentData.strategy.strategys.components.MouseSpeedIdealDistance;
-import com.uniovi.es.business.experimentData.strategy.strategys.components.MouseSpeedRealDistance;
-import com.uniovi.es.business.experimentData.strategy.strategys.components.PathDeviation;
-import com.uniovi.es.business.experimentData.strategy.strategys.components.RealDistanceBetweenMouseAndComponent;
-import com.uniovi.es.business.experimentData.strategy.strategys.selectionObjects.NumberTimesChangedSelectionObject;
-import com.uniovi.es.business.experimentData.strategy.strategys.selectionObjects.OfferedOptionsSelectionObject;
-import com.uniovi.es.business.experimentData.strategy.strategys.selectionObjects.ReactionTimeSelectionObject;
-import com.uniovi.es.business.experimentData.strategy.strategys.selectionObjects.ReactionTimeNumberOptionsSelectionObject;
-import com.uniovi.es.business.experimentData.strategy.strategys.textFields.NumberCharactersDeleted;
-import com.uniovi.es.business.experimentData.strategy.strategys.textFields.NumberCharactersPerSecond;
-import com.uniovi.es.business.experimentData.strategy.strategys.textFields.NumberTimesArrowsLeftRight;
-import com.uniovi.es.business.experimentData.strategy.strategys.textFields.NumberWordsPerSecond;
+import com.uniovi.es.business.experimentData.strategy.strategies.NumberErrorClicks;
+import com.uniovi.es.business.experimentData.strategy.strategies.ReactionTime;
+import com.uniovi.es.business.experimentData.strategy.strategies.TotalSceneTime;
+import com.uniovi.es.business.experimentData.strategy.strategies.components.DifferenceIdealAndRealDistance;
+import com.uniovi.es.business.experimentData.strategy.strategies.components.IdealDistanceBetweenMouseAndComponent;
+import com.uniovi.es.business.experimentData.strategy.strategies.components.MouseAccuraccy;
+import com.uniovi.es.business.experimentData.strategy.strategies.components.MouseAccuraccyPercentage;
+import com.uniovi.es.business.experimentData.strategy.strategies.components.MouseCorrections;
+import com.uniovi.es.business.experimentData.strategy.strategies.components.MouseMovementTime;
+import com.uniovi.es.business.experimentData.strategy.strategies.components.MouseSpeedIdealDistance;
+import com.uniovi.es.business.experimentData.strategy.strategies.components.MouseSpeedRealDistance;
+import com.uniovi.es.business.experimentData.strategy.strategies.components.PathDeviation;
+import com.uniovi.es.business.experimentData.strategy.strategies.components.RealDistanceBetweenMouseAndComponent;
+import com.uniovi.es.business.experimentData.strategy.strategies.selectionObjects.NumberTimesChangedSelectionObject;
+import com.uniovi.es.business.experimentData.strategy.strategies.selectionObjects.OfferedOptionsSelectionObject;
+import com.uniovi.es.business.experimentData.strategy.strategies.selectionObjects.ReactionTimeNumberOptionsSelectionObject;
+import com.uniovi.es.business.experimentData.strategy.strategies.selectionObjects.ReactionTimeSelectionObject;
+import com.uniovi.es.business.experimentData.strategy.strategies.textFields.NumberCharactersDeleted;
+import com.uniovi.es.business.experimentData.strategy.strategies.textFields.NumberCharactersPerSecond;
+import com.uniovi.es.business.experimentData.strategy.strategies.textFields.NumberTimesArrowsLeftRight;
+import com.uniovi.es.business.experimentData.strategy.strategies.textFields.NumberWordsPerSecond;
 import com.uniovi.es.business.user.ip.IpCalculatorManager;
 import com.uniovi.es.business.user.ip.calculators.IpApi;
 import com.uniovi.es.business.user.ip.calculators.IpStack;
@@ -47,16 +47,16 @@ public class InsertDataInitial {
 	
 	@PostConstruct
 	public void init() {	
-		loadStrategys();
+		loadStrategies();
 		loadFilters();
-		loadIpsCalculators();
+		loadIpCalculators();
 	}
 	
 	/**
 	 * Se cargan las diferentes strategias de cálculos de datos definidas. 
 	 * Si se desea añadir una nueva estrategia, basta con crearla y añadirla aquí y crear la clase java extendiendo de StrategyDataAbstract
 	 */
-	private void loadStrategys() {
+	private void loadStrategies() {
 		DataManagerStrategy.getInstance().addStrategyData(new TotalSceneTime());
 		DataManagerStrategy.getInstance().addStrategyData(new ReactionTime());
 
@@ -110,7 +110,7 @@ public class InsertDataInitial {
 	 * Si se desea añadir un nuevo strategy basta con crear la clase correspondiente, implementar de IpCalculator 
 	 * y añadirla en el siguiente método
 	 */
-	private void loadIpsCalculators() {
+	private void loadIpCalculators() {
 		IpCalculatorManager.getInstance().add(getIpStack());
 		IpCalculatorManager.getInstance().add(getIpApi());
 	}

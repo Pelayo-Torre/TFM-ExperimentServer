@@ -239,6 +239,7 @@ public class DtoAssembler {
 		dto.title = note.getTitle();
 		dto.description = note.getDescrition();
 		dto.creationDate = note.getCreationDate();
+		dto.author = note.getInvestigator().getName() + " " + note.getInvestigator().getSurname();
 		
 		return dto;
 	}

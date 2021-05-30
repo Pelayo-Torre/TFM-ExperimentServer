@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginService {
 	
-	private final static int NUM_MAX_ATTEMPS = 5;
+	private final static int NUM_MAX_ATTEMPS = 10;
 	private Map<String, Integer> dictionary;
 	private Map<String, Date> dictionaryDates;
 	

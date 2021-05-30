@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Note implements Serializable {
@@ -24,6 +25,10 @@ public class Note implements Serializable {
 	@JoinColumn(nullable = false)
 	private Experiment experiment;
 	
+	@OneToOne
+	@JoinColumn(nullable = false)
+	private Investigator investigator;
+	
 	@Column(nullable = false)
 	private String title;
 	
@@ -35,9 +40,10 @@ public class Note implements Serializable {
 	
 	Note() {}
 	
-	public Note(Experiment experiment) {
+	public Note(Experiment experiment, Investigator investigator) {
 		this.creationDate = new Date();
 		Associations.NoteExperiment.link(this, experiment);
+		this.setInvestigator(investigator);
 	}
 
 	public String getTitle() {
@@ -75,5 +81,15 @@ public class Note implements Serializable {
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
+
+	public Investigator getInvestigator() {
+		return investigator;
+	}
+
+	public void setInvestigator(Investigator investigator) {
+		this.investigator = investigator;
+	}
+	
+	
 
 }

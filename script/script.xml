@@ -137,7 +137,7 @@
 		function detectElement(x,y){
 			var found = -1 ;
 			elements.forEach ( function(entry){
-				if (entry.isOver(x,y) &lt; entry.getScene() === sceneId) {
+				if (entry.isOver(x,y) &amp;&amp; entry.getScene() === sceneId) {
 					found = entry.id;
 				}
 			});
@@ -147,7 +147,7 @@
 		function detectElementByName(name){
 			var found = -1;
 			elements.forEach ( function(entry){
-				if(entry.id === name &lt; entry.getScene() === sceneId){
+				if(entry.id === name &amp;&amp; entry.getScene() === sceneId){
 					found = entry.id;
 				}
 			});

@@ -14,10 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.uniovi.es.business.authentication.UserInSession;
+import com.uniovi.es.business.binnacle.BinnacleService;
 import com.uniovi.es.business.dto.DemographicDataDTO;
 import com.uniovi.es.business.dto.DemographicDataTypeDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
+import com.uniovi.es.business.dto.NoteDTO;
 import com.uniovi.es.business.dto.assembler.DtoAssembler;
 import com.uniovi.es.business.experiment.commands.Close;
 import com.uniovi.es.business.experiment.commands.Delete;
@@ -28,6 +30,7 @@ import com.uniovi.es.business.validators.ExperimentValidator;
 import com.uniovi.es.exceptions.ExperimentException;
 import com.uniovi.es.exceptions.ForbiddenException;
 import com.uniovi.es.exceptions.InvestigatorException;
+import com.uniovi.es.exceptions.NoteException;
 import com.uniovi.es.model.DemographicData;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.Investigator;
@@ -69,6 +72,9 @@ public class ExperimentServiceImpl implements ExperimentService{
 	
 	@Autowired
 	private UserDataService userDataService;
+	
+	@Autowired
+	private BinnacleService binnacleService;
 	
 	@Autowired
 	private UserInSession userInSession;
@@ -130,11 +136,11 @@ public class ExperimentServiceImpl implements ExperimentService{
 		Optional<Experiment> optional = experimentDAO.findById(dto.id);
 		Experiment experiment = getExperiment(optional);
 		
-		//Solo se puede modificar si el experimento está en estado CREADO
-		if(!experiment.isCreated()) {
-			logger.error("[ERROR - 114] -- Los datos del experimento solo pueden ser modificados en estado CREADO.");
-			throw new ExperimentException("114");
-		}
+//		//Solo se puede modificar si el experimento está en estado CREADO
+//		if(!experiment.isCreated()) {
+//			logger.error("[ERROR - 114] -- Los datos del experimento solo pueden ser modificados en estado CREADO.");
+//			throw new ExperimentException("114");
+//		}
 		
 		experimentValidator.validate(dto);		
 		DtoAssembler.fillData(experiment, dto);
@@ -142,13 +148,15 @@ public class ExperimentServiceImpl implements ExperimentService{
 		logger.info("\t \t Actualizando cambios en base de datos");
 		experimentDAO.save(experiment);
 		
-		//Se actualizan los datos demográficos del experimento
-		logger.info("\t \t Se borran los datos previamente asociados.");
-		demographicDataDAO.deleteDemographicDataByExperiment(experiment.getId());
-		if(dto.demographicData != null && dto.demographicData.size() != 0) {
-			logger.info("\t \t Creación de los datos demográficos del experimento. TOTAL: " + dto.demographicData.size());
-			for(DemographicDataDTO dd : dto.demographicData) {
-				demographicDataDAO.save(new DemographicData(dd.name, DemographicDataType.valueOf(dd.type), experiment));
+		//Se actualizan los datos demográficos del experimento si el experimento está en estado creado
+		if(experiment.isCreated()) {
+			logger.info("\t \t Se borran los datos previamente asociados.");
+			demographicDataDAO.deleteDemographicDataByExperiment(experiment.getId());
+			if(dto.demographicData != null && dto.demographicData.size() != 0) {
+				logger.info("\t \t Creación de los datos demográficos del experimento. TOTAL: " + dto.demographicData.size());
+				for(DemographicDataDTO dd : dto.demographicData) {
+					demographicDataDAO.save(new DemographicData(dd.name, DemographicDataType.valueOf(dd.type), experiment));
+				}
 			}
 		}
 		
@@ -200,6 +208,9 @@ public class ExperimentServiceImpl implements ExperimentService{
 		logger.info("\t \t Actualizando cambios en base de datos");
 		experimentDAO.save(experiment);
 		
+		logger.info("\t \t Se registra una nota de cambio de estado");
+		registerNote(experiment.getId(), "Apertura de experimento", "Se produce la apertura del experimento.");
+		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- open experiment");
 	}
 
@@ -224,6 +235,9 @@ public class ExperimentServiceImpl implements ExperimentService{
 		
 		logger.info("\t \t Actualizando cambios en base de datos");
 		experimentDAO.save(experiment);
+		
+		logger.info("\t \t Se registra una nota de cambio de estado");
+		registerNote(experiment.getId(), "Reapertura de experimento", "Se produce la reapertura del experimento.");
 		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- reOpen experiment");
 	}
@@ -258,6 +272,9 @@ public class ExperimentServiceImpl implements ExperimentService{
 		else {
 			logger.info("\t \t No existen usuarios para procesar sus datos");
 		}
+		
+		logger.info("\t \t Se registra una nota de cambio de estado");
+		registerNote(experiment.getId(), "Cierre de experimento", "Se produce el cierre del experimento.");
 		
 		logger.info("[FINAL] EXPERIMENT SERVICE -- close experiment");
 	}
@@ -393,7 +410,21 @@ public class ExperimentServiceImpl implements ExperimentService{
 		}
 		return investigator;
 	}
-
 	
+	private void registerNote(Long idExperiment, String title, String description) {
+		NoteDTO note = new NoteDTO();
+		note.idExperiment = idExperiment;
+		note.title = title;
+		note.description = description;
+		try {
+			binnacleService.registerNote(note);
+		} catch (NoteException e) {
+			logger.error("[ERROR] -- Error al registrar la nota de cambio de estado. Excepción de bitácora: " + e);
+		} catch (ExperimentException e) {
+			logger.error("[ERROR] -- Error al registrar la nota de cambio de estado. Excepción de experimento: " + e);
+		} catch (ForbiddenException e) {
+			logger.error("[ERROR] -- Error al registrar la nota de cambio de estado. Excepción de permisos:" + e);
+		}
+	}
 
 }

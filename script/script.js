@@ -40,7 +40,7 @@
 		var elements =[]; 
 		var emittingData = false;
 		
-	var idExperiment = 1;
+	var idExperiment = 2;
 	var urlBase='http://localhost:8080'
 		
 		var url = urlBase + '/TrackerServer/restws/track';
@@ -137,7 +137,7 @@
 		function detectElement(x,y){
 			var found = -1 ;
 			elements.forEach ( function(entry){
-				if (entry.isOver(x,y) < entry.getScene() === sceneId) {
+				if (entry.isOver(x,y) && entry.getScene() === sceneId) {
 					found = entry.id;
 				}
 			});
@@ -147,7 +147,7 @@
 		function detectElementByName(name){
 			var found = -1;
 			elements.forEach ( function(entry){
-				if(entry.id === name < entry.getScene() === sceneId){
+				if(entry.id === name && entry.getScene() === sceneId){
 					found = entry.id;
 				}
 			});
@@ -620,4 +620,3 @@
 		}
 	
 
-function registerEdad(value) {postDateDD(3, value);}function registerGenero(value) {postStringDD(4, value);}

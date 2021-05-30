@@ -43,7 +43,7 @@ public class BinnacleServiceImpl implements BinnacleService{
 	
 	@Autowired
 	private UserInSession userInSession;
-
+	
 	@Override
 	public void registerNote(NoteDTO dto) throws NoteException, ExperimentException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE SERVICE -- register note");
@@ -61,7 +61,7 @@ public class BinnacleServiceImpl implements BinnacleService{
 		isInvestigatorAssociatedExperiment(dto.idExperiment);
 		noteValidator.validate(dto);
 		
-		Note note = new Note(experiment);
+		Note note = new Note(experiment, userInSession.getInvestigator());
 		DtoAssembler.fillData(note, dto);
 		
 		logger.info("\t \t Registrando la nota en base de datos.");
@@ -142,7 +142,7 @@ public class BinnacleServiceImpl implements BinnacleService{
 		Note note = getNote(optional);
 		
 		isInvestigatorAssociatedExperiment(note.getExperiment().getId());
-		
+				
 		logger.info("[FINAL] BINNACLE SERVICE -- detail note");
 		return DtoAssembler.toDto(note);
 	}
