@@ -287,7 +287,7 @@ public class DtoAssembler {
 	
 	public static void fillData(Request request, RequestDTO dto) {
 		request.setAnswerDate(dto.answerDate);
-		request.setShippingDate(dto.shippingDate);
+		//request.setShippingDate(dto.shippingDate);
 	}
 	
 	public static void fillData(Petition petition, PetitionNotRegistered p) {

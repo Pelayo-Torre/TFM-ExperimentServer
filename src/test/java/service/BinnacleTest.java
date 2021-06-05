@@ -103,9 +103,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Prueba el registro de una nota en la bitácora de un experimento de manera correcta
-	 * @throws InvestigatorException
-	 * @throws ExperimentException
-	 * @throws NoteException
 	 */
 	public void test10RegisterNote() throws InvestigatorException, ExperimentException, NoteException, ForbiddenException {
 				
@@ -130,8 +127,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Se prueba a añadir una nota a un experimento que no se encuentra registrado en el sistema
-	 * @throws ExperimentException experimento no registrado en el sistema
-	 * @throws NoteException
 	 */
 	public void test11RegisterNoteERROR100() throws ExperimentException, NoteException, ForbiddenException{
 		
@@ -152,8 +147,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Se prueba a registrar una nota sin título
-	 * @throws ExperimentException
-	 * @throws NoteException el título es obligatorio
 	 */
 	public void test12RegisterNoteERROR401() throws ExperimentException, NoteException, ForbiddenException{
 		
@@ -176,8 +169,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Se prueba a registrar una nota sin descripción
-	 * @throws ExperimentException
-	 * @throws NoteException la descripción es obligatoria
 	 */
 	public void test13RegisterNoteERROR402() throws ExperimentException, NoteException, ForbiddenException{
 		List<ExperimentDTO> experiments = experimentService.getExperiments();
@@ -199,7 +190,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Se prueba la edición de los datos de una nota de una bitácora
-	 * @throws NoteException
 	 */
 	public void test14UpdateNote() throws NoteException, ExperimentException, ForbiddenException, AttempsException, InvestigatorException {
 		
@@ -257,7 +247,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Prueba la edición de una nota que no existe en el sistema
-	 * @throws NoteException La nota especificada no se encuentra registrada en el sistema
 	 */
 	public void test15UpdateNoteERROR400() throws NoteException, ForbiddenException {
 		
@@ -279,7 +268,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Prueba la edición de una nota que no tiene título
-	 * @throws NoteException La nota especificada no tiene título
 	 */
 	public void test16UpdateNoteERROR401() throws NoteException, ExperimentException, ForbiddenException, InvestigatorException, AttempsException {
 		
@@ -337,7 +325,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Prueba la edición de una nota que no tiene descripción
-	 * @throws NoteException La nota especificada no tiene descripción
 	 */
 	public void test17UpdateNoteERROR402() throws NoteException, ExperimentException, ForbiddenException, AttempsException, InvestigatorException {
 		//CREAMOS OTRO INVESTIGADOR
@@ -393,8 +380,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Prueba el obtener las notas de un experimento
-	 * @throws NoteException
-	 * @throws ExperimentException
 	 */
 	public void test18NotesByExperiment() throws NoteException, ExperimentException, ForbiddenException, InvestigatorException, AttempsException{
 		
@@ -444,7 +429,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Prueba el obtener el detalle de una nota
-	 * @throws NoteException
 	 */
 	public void test20DetailNote() throws NoteException, ExperimentException, ForbiddenException, InvestigatorException, AttempsException{
 		//CREAMOS OTRO INVESTIGADOR
@@ -495,7 +479,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Prueba el obtener el detalle de una nota que no se encuentra registrada en el sistema
-	 * @throws NoteException la nota no existe
 	 */
 	public void test21DetailNoteERROR400() throws NoteException, ForbiddenException{
 		
@@ -511,7 +494,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Se prueba la eliminación de una nota de un experimento
-	 * @throws NoteException
 	 */
 	public void test22DeleteNote() throws NoteException, ExperimentException, ForbiddenException{
 		
@@ -542,7 +524,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Se prueba a eliminar una nota que no existe en el sistema
-	 * @throws NoteException la nota no eiste en el sistema
 	 */
 	public void test23DeleteNoteERROR400() throws NoteException, ForbiddenException {
 		
@@ -558,7 +539,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Se prueba a eliminar una nota por un investigador que no está asociado al experimento
-	 * @throws NoteException
 	 */
 	public void test23DeleteNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException, ForbiddenException, InvestigatorException{
 		
@@ -628,7 +608,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Se prueba a acceder al detalle de una nota por un investigador que no está asociado al experimento
-	 * @throws NoteException
 	 */
 	public void test24DetailNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException, ForbiddenException, InvestigatorException{
 		
@@ -694,7 +673,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Se prueba a registrar una nota por un investigador que no está asociado al experimento
-	 * @throws NoteException
 	 */
 	public void test25RegisterNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException{
 		
@@ -729,7 +707,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Se prueba a actualizar los datos una nota por un investigador que no está asociado al experimento
-	 * @throws NoteException
 	 */
 	public void test26UpdateNoteByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException, ForbiddenException{
 		
@@ -766,7 +743,6 @@ public class BinnacleTest {
 	@Test
 	/**
 	 * Se prueba a obtener todas las notas de un experiento por un investigador que no está asociado al experimento
-	 * @throws NoteException
 	 */
 	public void test27GetAllNotesByInvestigatorNotAssociated() throws NoteException, ExperimentException, AttempsException{
 		
@@ -786,6 +762,84 @@ public class BinnacleTest {
 		
 		try {
 			binnacleService.getNotesByExperiment(experiments.get(experiments.size() - 1).id);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (ForbiddenException e) {
+			assertEquals("403", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a añadir una nota a un experimento que no se encuentra registrado en el sistema
+	 */
+	public void test28RegisterNoteERROR100() throws ExperimentException, NoteException, ForbiddenException{
+		
+		//CREAMOS UNA NOTA
+		NoteDTO noteDTO = new NoteDTO();
+		noteDTO.title = "Creación de experimento";
+		noteDTO.description = "Se ha creado el experimento para hacer pruebas sobre personas entre 12 y 16 años";
+		noteDTO.idExperiment = ID_NOT_EXIST;
+				
+		try {
+			binnacleService.registerNote(noteDTO);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (ExperimentException e) {
+			assertEquals("100", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a eliminar una nota que no existe en el sistema
+	 */
+	public void test29DeleteNoteERROR400() throws NoteException, ForbiddenException {
+		
+		try {
+			Identifier identifier = new Identifier(null);
+			binnacleService.deleteNote(identifier);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (NoteException e) {
+			assertEquals("400", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Prueba el obtener el detalle de una nota que no se encuentra registrada en el sistema
+	 */
+	public void test30DetailNoteERROR400() throws NoteException, ForbiddenException{
+		
+		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
+		try {
+			binnacleService.detail(null);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (NoteException e) {
+			assertEquals("400", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Prueba el obtener las notas de un experimento que no existe en el sistema
+	 */
+	public void test31NotesByExperimentERROR100() throws NoteException, ExperimentException, ForbiddenException, InvestigatorException, AttempsException{		
+		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
+		try {
+			binnacleService.getNotesByExperiment(null);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (ExperimentException e) {
+			assertEquals("100", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Prueba el obtener las notas de un experimento que no existe en el sistema
+	 */
+	public void test32NotesByExperimentERROR() throws NoteException, ExperimentException, ForbiddenException, InvestigatorException, AttempsException{		
+		//OBTENEMOS LAS NOTAS DE UN EXPERIMENTO
+		try {
+			binnacleService.getNotesByExperiment(ID_NOT_EXIST);
 			Assert.fail("Debe lanzarse excepción.");
 		} catch (ForbiddenException e) {
 			assertEquals("403", e.getMessage());

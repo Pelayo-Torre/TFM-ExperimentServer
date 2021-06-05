@@ -13,6 +13,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
@@ -618,5 +619,93 @@ public class InvestigatorTest {
 		}
 	}
 
+	@Test
+	/**
+	 * Se prueba a iniciar sesión sin esecificar el email
+	 */
+	public void test32AuthenticateInvestigatorERROR602Mail() {
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = null;
+		authDTO.password = "123456789";
+		
+		try {
+			authenticateUser.authenticateUser(authDTO);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (AttempsException e) {
+			assertEquals("602", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a iniciar sesión sin especificar la contraseña
+	 */
+	public void test33AuthenticateInvestigatorERROR602Password() {
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "pelayogtorre@gmail.com";
+		authDTO.password = null;
+		
+		try {
+			authenticateUser.authenticateUser(authDTO);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (AttempsException e) {
+			assertEquals("602", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a iniciar sesión con crednciales incorrectas
+	 */
+	public void test34AuthenticateInvestigatorERROR() {
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "pelayogtorre@gmail.com";
+		authDTO.password = "987654321";
+		
+		try {
+			authenticateUser.authenticateUser(authDTO);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (InternalAuthenticationServiceException | AttempsException e) {}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a registrar un investigador con correo erróneo
+	 * @throws InvestigatorException el formato del correo electrónico es erróneo
+	 */
+	public void test35UpdateInvestigatorError209() throws InvestigatorException, ForbiddenException, AttempsException{
+		
+		//REGISTRAMOS UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Elisa";
+		dto.surname = "Torre";
+		dto.mail = "elisa34@gmail.com";
+		dto.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto);
+		
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "elisa34@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//ACTUALIZAMOS LOS DATOS
+		dto = new InvestigatorDTO();
+		dto.name = "Elisa";
+		dto.surname = "Torre";
+		dto.mail = "elisa34gmailcom";
+		dto.id = investigatorService.getInvestigatorByMail("elisa34@gmail.com").id;
+		
+		try {
+			investigatorService.updateInvestigator(dto);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (InvestigatorException e) {
+			assertEquals("209", e.getMessage());
+		}
+	}
 	
 }

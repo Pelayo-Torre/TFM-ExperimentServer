@@ -1,5 +1,6 @@
 package service;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -425,10 +426,10 @@ public class ExperimentTest {
 	
 	@Test
 	/**
-	 * Se prueba la edición de un experimento de manera incorrecta (El estado del experimento es CREADO)
+	 * Se prueba la edición de un experimento de manera incorrecta (El estado del experimento es CREADO y se editan los datos demográficos)
 	 * @throws ExperimentException el estado del experimento debe ser CREATED
 	 */
-	public void test18UpdateExperimentERROR114() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException{
+	public void test18UpdateExperimentERROR() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException{
 		
 		//REGISTRAMOS UN INVESTIGADOR
 		InvestigatorDTO dto = new InvestigatorDTO();
@@ -464,12 +465,20 @@ public class ExperimentTest {
 		experientDTO.description = "Experimento en Langreo para edades comprendidas entre los 50 y 60 años";
 		experientDTO.id = id;
 		
-		try {
-			experimentService.update(experientDTO);
-			Assert.fail("Debe lanzarse excepción.");
-		} catch (ExperimentException e) {
-			assertEquals("114", e.getMessage());
-		}
+		DemographicDataDTO dd3 = new DemographicDataDTO();
+		dd3.name = "Profesion";
+		dd3.type = DemographicDataType.STRING.name();
+		
+		experientDTO.demographicData = new ArrayList<DemographicDataDTO>();
+		experientDTO.demographicData.add(dd3);
+		
+		experimentService.update(experientDTO);
+		
+		//SE COMPRUEBA QUE LOS DATOS DEMOGRÁFICOS NO SON LOS QUE SEAN ACTUALIZADO
+		experientDTO = experimentService.getDetail(experiments.get(experiments.size()-1).id);
+		
+		assertNotNull(experientDTO);
+		assertNull(null, experientDTO.demographicData);
 	}
 	
 	@Test
@@ -1507,4 +1516,174 @@ public class ExperimentTest {
 		assertNotNull(experiments);
 		assertEquals(0, experiments.size());
 	}
+	
+	@Test
+	/**
+	 * Se prueba la edición de un experimento de manera incorrecta (nombre del dato demográfico sin especificar)
+	 * @throws ExperimentException el nombre del dato no se ha especificado
+	 */
+	public void test43UpdateExperimentERROR111() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException{
+		
+		//REGISTRAMOS UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Felix";
+		dto.surname = "Garcia";
+		dto.mail = "felixDe@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "felixDe@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Sama de Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 22 a 44 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("felixDe@gmail.com").id;
+		
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		Long id = experiments.get(experiments.size()-1).id;
+		
+		//CAMBIAMOS EL ESTADO del experimento		
+		experimentService.open(new Identifier(id));
+		
+		//EDITAMOS UN EXPERIMENTO
+		experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento de personas entre 30 y 40 años";
+		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
+		experientDTO.id = id;
+		
+		DemographicDataDTO dd3 = new DemographicDataDTO();
+		dd3.name = null;
+		dd3.type = DemographicDataType.STRING.name();
+		
+		experientDTO.demographicData = new ArrayList<DemographicDataDTO>();
+		experientDTO.demographicData.add(dd3);
+		
+		try {
+			experimentService.update(experientDTO);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (ExperimentException e) {
+			assertEquals("111", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba la edición de un experimento de manera incorrecta (tipo del dato demográfico sin especificar)
+	 * @throws ExperimentException el tipo del dato no se ha especificado
+	 */
+	public void test44UpdateExperimentERROR112() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException{
+		
+		//REGISTRAMOS UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Rosa";
+		dto.surname = "Garcia";
+		dto.mail = "rsa34@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "rsa34@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Sama de Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 22 a 44 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("rsa34@gmail.com").id;
+		
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		Long id = experiments.get(experiments.size()-1).id;
+		
+		//CAMBIAMOS EL ESTADO del experimento		
+		experimentService.open(new Identifier(id));
+		
+		//EDITAMOS UN EXPERIMENTO
+		experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento de personas entre 30 y 40 años";
+		experientDTO.description = "Prueba en ordenadores con personas de 30 a 40 años";
+		experientDTO.id = id;
+		
+		DemographicDataDTO dd3 = new DemographicDataDTO();
+		dd3.name = "Profesión";
+		dd3.type = null;
+		
+		experientDTO.demographicData = new ArrayList<DemographicDataDTO>();
+		experientDTO.demographicData.add(dd3);
+		
+		try {
+			experimentService.update(experientDTO);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (ExperimentException e) {
+			assertEquals("112", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a obtener la lista de investigadores asociados a un experimento por investigador no asociado al experimento
+	 * @throws ForbiddenException el investigador no está asociado al experimento
+	 */
+	public void test45InvestigatorsOfExperimentsERROR117() throws ExperimentException, InvestigatorException, AttempsException, ForbiddenException{
+		
+		//REGISTRAMOS UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Pedro";
+		dto.surname = "Garcia";
+		dto.mail = "pedro4555@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "pedro4555@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento de Rodolfo";
+		experientDTO.description = "Prueba en ordenadores para Rodolfo";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("pedro4555@gmail.com").id;
+				
+		experimentService.register(experientDTO);
+		
+		//recuperamos el experimento
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//REGISTRAMOS UN NUEVO INVESTIGADOR
+		dto = new InvestigatorDTO();
+		dto.name = "Graciela";
+		dto.surname = "Garcia";
+		dto.mail = "graciela1@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMOS SESIÓN
+		authDTO = new AuthDTO();
+		authDTO.mail = "graciela1@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		try {
+			experimentService.getInvestigatorsOfExperiment(experiments.get(experiments.size()-1).id);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (ForbiddenException e) {
+			assertEquals("117", e.getMessage());
+		}
+		
+	}
+	
 }

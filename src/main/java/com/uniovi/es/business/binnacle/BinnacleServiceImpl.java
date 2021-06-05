@@ -98,6 +98,11 @@ public class BinnacleServiceImpl implements BinnacleService{
 	public List<NoteDTO> getNotesByExperiment(Long idExperiment) throws ExperimentException, NoteException, ForbiddenException {
 		logger.info("[INICIO] BINNACLE SERVICE -- notes by experiment");
 		
+		if(idExperiment == null) {
+			logger.error("[ERROR - 100] -- El experimento especificado no se encuentra registrado en el sistema");
+			throw new ExperimentException("100");
+		}
+		
 		isInvestigatorAssociatedExperiment(idExperiment);
 		List<Note> notes = binnacleDAO.findNotesByExperiment(idExperiment);
 		

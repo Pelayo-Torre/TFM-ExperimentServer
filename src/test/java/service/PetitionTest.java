@@ -866,11 +866,82 @@ public class PetitionTest {
 	@Test
 	/**
 	 * Se prueba a enviar una petición por un investigador que no está asociado al experimento
+	 * @throws ForbiddenException el investigador no es gestor del experimento
+	 */
+	public void test26RegisterPetitionERROR309() throws InvestigatorException, ExperimentException, PetitionException, AttempsException, ForbiddenException{
+		
+		//CREAMOS otro investigador
+		InvestigatorDTO dto2 = new InvestigatorDTO();
+		dto2.name = "Oliverio";
+		dto2.surname = "Torre";
+		dto2.mail = "oliverio@gmail.com";
+		dto2.password = "123456789";
+		
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto2);
+		
+		//INICIAMOS SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "oliverio@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//REGISTRAMOS UN EXPERIMENTO ASOCIADO AL INVESTIGDOR ANTERIOR
+		ExperimentDTO experientDTO = new ExperimentDTO();
+		experientDTO.title = "Experimento en Langreo";
+		experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
+		experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("oliverio@gmail.com").id;
+		
+		experimentService.register(experientDTO);
+		List<ExperimentDTO> experiments = experimentService.getExperiments();
+		
+		//CREAMOS otro investigador
+		dto2 = new InvestigatorDTO();
+		dto2.name = "atom23";
+		dto2.surname = "Torre";
+		dto2.mail = "atom23@gmail.com";
+		dto2.password = "123456789";
+				
+		//LO GUARDAMOS EN BASE DE DATOS
+		investigatorService.registerInvestigator(dto2);
+		
+		//CREAMOS LA PETICIÓN
+		PetitionDTO petitionDTO = new PetitionDTO();
+		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
+		petitionDTO.mail = "atom23@gmail.com";
+		petitionDTO.manager = false;
+		
+		petitionService.register(petitionDTO);
+				
+		//INICIAMOS SESIÓN con el usuario asociado como no gestor
+		authDTO = new AuthDTO();
+		authDTO.mail = "atom23@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//CREAMOS LA PETICIÓN
+		petitionDTO = new PetitionDTO();
+		petitionDTO.idExperiment = (experiments.get(experiments.size()-1).id);
+		petitionDTO.mail = "pelayo1234@gmail.com";
+		petitionDTO.manager = false;
+		
+		//ENVIAMOS UNA PETICIÓN
+		try {
+			petitionService.register(petitionDTO);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (ForbiddenException e) {
+			assertEquals("309", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a enviar una petición por un investigador que está asociado al experimento pero no como gestor
 	 * @throws InvestigatorException
 	 * @throws ExperimentException
 	 * @throws PetitionException, ya existe una petición
 	 */
-	public void test26RegisterPetitionERROR309() throws InvestigatorException, ExperimentException, PetitionException, AttempsException, ForbiddenException{
+	public void test27RegisterPetitionERROR309() throws InvestigatorException, ExperimentException, PetitionException, AttempsException, ForbiddenException{
 		
 		//CREAMOS otro investigador
 		InvestigatorDTO dto2 = new InvestigatorDTO();
@@ -915,6 +986,23 @@ public class PetitionTest {
 			Assert.fail("Debe lanzarse excepción.");
 		} catch (ForbiddenException e) {
 			assertEquals("309", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a cancelar una petición que se existe en el sistema
+	 * @throws PetitionException la petición no existe en el sistema
+	 */
+	public void test28CancelPetitionERRORNotExist() throws PetitionException, AttempsException, InvestigatorException, ExperimentException, ForbiddenException{
+		//CANCELAMOS LA PETICIÓN
+		Identifier identifier = new Identifier(ID_NOT_EXIST);
+		
+		try {
+			petitionService.cancel(identifier);
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (PetitionException e) {
+			assertEquals("300", e.getMessage());
 		}
 	}
 

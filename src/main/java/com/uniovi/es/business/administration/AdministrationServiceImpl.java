@@ -136,6 +136,11 @@ public class AdministrationServiceImpl implements AdministrationService{
 	public List<RequestDTO> getPendingRequests() throws AdministrationException, ForbiddenException {
 		logger.info("[INICIO] ADMINISTRATION SERVICE -- pending requests");
 		
+		if(userInSession.getInvestigator() == null || !userInSession.getInvestigator().isAdministrator()) {
+			logger.error("[ERROR -- 508] - Solamente un Investigador con rol ADMINISTRATOR puede establecerle a otro investigador el rol ADMINISTRATOR");
+			throw new ForbiddenException("508");
+		}
+		
 		List<RequestDTO> list = DtoAssembler.toListRequests(administrationDAO.getPendingRequests());
 		
 		logger.info("[FINAL] ADMINISTRATION SERVICE -- pending requests");

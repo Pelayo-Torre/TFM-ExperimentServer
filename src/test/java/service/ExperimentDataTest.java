@@ -3,6 +3,7 @@ package service;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -29,9 +30,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.uniovi.es.ExperimentServerApplication;
 import com.uniovi.es.business.authentication.AuthenticationService;
 import com.uniovi.es.business.dto.AuthDTO;
+import com.uniovi.es.business.dto.DemographicDataDTO;
 import com.uniovi.es.business.dto.ExperimentDTO;
 import com.uniovi.es.business.dto.InvestigatorDTO;
 import com.uniovi.es.business.experiment.ExperimentService;
+import com.uniovi.es.business.experimentData.filter.DataManagerFilter;
 import com.uniovi.es.business.experimentData.strategy.DataManagerStrategy;
 import com.uniovi.es.business.investigator.InvestigatorService;
 import com.uniovi.es.exceptions.AttempsException;
@@ -42,11 +45,13 @@ import com.uniovi.es.model.ComponentData;
 import com.uniovi.es.model.Event;
 import com.uniovi.es.model.Experiment;
 import com.uniovi.es.model.User;
+import com.uniovi.es.model.types.DemographicDataType;
 import com.uniovi.es.persistence.ExperimentDAO;
 import com.uniovi.es.persistence.UserDAO;
 import com.uniovi.es.persistence.experimentData.ConnectionProvider;
 import com.uniovi.es.persistence.experimentData.ExperimentDataFactory;
 import com.uniovi.es.utils.Constantes;
+import com.uniovi.es.utils.ConstantesFilters;
 import com.uniovi.es.utils.ConstantesStrategys;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -100,6 +105,14 @@ public class ExperimentDataTest {
 			experientDTO.title = "Experimento en Langreo";
 			experientDTO.description = "Prueba en ordenadores con niños de 12 a 16 años";
 			experientDTO.idInvestigator = investigatorService.getInvestigatorByMail("manelcorte@gmail.com").id;
+			
+			experientDTO.demographicData = new ArrayList<DemographicDataDTO>();
+			
+			DemographicDataDTO dd = new DemographicDataDTO();
+			dd.name = "Profesion";
+			dd.type = DemographicDataType.STRING.name();
+			
+			experientDTO.demographicData.add(dd);
 			
 			experimentService.register(experientDTO);
 			primeraVez = false;
@@ -1572,6 +1585,150 @@ public class ExperimentDataTest {
 		int cars = result.get("cars");
 				
 		assertTrue(cars == 1);
+	}
+	
+	@Test
+	/**
+	 * Se prueba el filtro de escena completa que devuelve verdadero cuando la escena es completa
+	 */
+	public void fullSceneFilterTrue() {
+		//Se comienza registrando un usuario
+		List<ExperimentDTO> dtos = experimentService.getExperiments();
+		Optional<Experiment> optional = experimentDAO.findById(dtos.get(0).id);
+		Experiment experiment = optional.get();
+		User user = new User("usuario26", experiment, 999, 5694, new Date().getTime(),"596", "es", "0:0:0:0:0:0:1");
+		
+		userDAO.save(user);		
+		String scene = "escena26";
+		
+		//Registramos un componente
+		ComponentData rb = new ComponentData("cars", scene, user, new Date().getTime(), 100, 20, 105, 75, Constantes.COMPONENT_TEXT_FIELD, null);
+		ExperimentDataFactory.getSceneComponentDAO().insertComponent(rb);
+		
+		//Registramos eventos
+		List<Event> events = new ArrayList<Event>();
+		events.add(new Event(scene, Constantes.EVENT_INIT_TRACKING, "-1", 1618660812000L, 0, 0, "-1", -1, user));
+		Event initial = new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661052000L, 20, 20, "-1", -1, user);
+		events.add(initial);
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661053000L, 22, 30, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661054000L, 25, 32, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661056000L, 25, 35, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661057000L, 35, 40, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661058000L, 40, 25, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661059000L, 50, 18, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661060000L, 60, 18, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661061000L, 70, 10, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661062000L, 80, 40, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661063000L, 90, 30, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661064000L, 95, 35, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661065000L, 100, 20, "-1", -1, user));
+		Event onClick = new Event(scene, Constantes.EVENT_ON_CLICK, "cars", 1618661066000L, 100, 20, "-1", -1, user);
+		events.add(onClick);
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661067000L, 105, 16, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_TRACKIND_END, "-1", 1618661885000L, 0, 0, "-1", -1, user));
+		
+		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
+	
+		boolean result = 
+				DataManagerFilter.getInstance().getFilterData(ConstantesFilters.FILTER_FULL_SCENE).isValid(scene, user.getSessionId());
+
+		assertTrue(result);
+	}
+	
+	@Test
+	/**
+	 * Se prueba el filtro de escena completa que devuelve falso cuando la escena no es completa
+	 */
+	public void fullSceneFilterFalse() {
+		//Se comienza registrando un usuario
+		List<ExperimentDTO> dtos = experimentService.getExperiments();
+		Optional<Experiment> optional = experimentDAO.findById(dtos.get(0).id);
+		Experiment experiment = optional.get();
+		User user = new User("usuario27", experiment, 999, 5694, new Date().getTime(),"596", "es", "0:0:0:0:0:0:1");
+		
+		userDAO.save(user);		
+		String scene = "escena27";
+		
+		//Registramos un componente
+		ComponentData rb = new ComponentData("cars", scene, user, new Date().getTime(), 100, 20, 105, 75, Constantes.COMPONENT_TEXT_FIELD, null);
+		ExperimentDataFactory.getSceneComponentDAO().insertComponent(rb);
+		
+		//Registramos eventos
+		List<Event> events = new ArrayList<Event>();
+		events.add(new Event(scene, Constantes.EVENT_INIT_TRACKING, "-1", 1618660812000L, 0, 0, "-1", -1, user));
+		Event initial = new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661052000L, 20, 20, "-1", -1, user);
+		events.add(initial);
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661053000L, 22, 30, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661054000L, 25, 32, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661056000L, 25, 35, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661057000L, 35, 40, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661058000L, 40, 25, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661059000L, 50, 18, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661060000L, 60, 18, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661061000L, 70, 10, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661062000L, 80, 40, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661063000L, 90, 30, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661064000L, 95, 35, "-1", -1, user));
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661065000L, 100, 20, "-1", -1, user));
+		Event onClick = new Event(scene, Constantes.EVENT_ON_CLICK, "cars", 1618661066000L, 100, 20, "-1", -1, user);
+		events.add(onClick);
+		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661067000L, 105, 16, "-1", -1, user));
+		
+		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
+	
+		boolean result = 
+				DataManagerFilter.getInstance().getFilterData(ConstantesFilters.FILTER_FULL_SCENE).isValid(scene, user.getSessionId());
+
+		assertFalse(result);
+	}
+	
+	@Test
+	/**
+	 * Prueba el filtro de datos demográficos completos cuando no están completos
+	 */
+	public void fullDemographicDataFilter() {
+		//EJECUTAR POR SEPARADO
+		//Se comienza registrando un usuario
+//		List<ExperimentDTO> dtos = experimentService.getExperiments();
+//		Optional<Experiment> optional = experimentDAO.findById(dtos.get(0).id);
+//		Experiment experiment = optional.get();
+//		User user = new User("usuario26", experiment, 999, 5694, new Date().getTime(),"596", "es", "0:0:0:0:0:0:1");
+//		
+//		userDAO.save(user);		
+//		String scene = "escena26";
+//		
+//		//Registramos un componente
+//		ComponentData rb = new ComponentData("cars", scene, user, new Date().getTime(), 100, 20, 105, 75, Constantes.COMPONENT_TEXT_FIELD, null);
+//		ExperimentDataFactory.getSceneComponentDAO().insertComponent(rb);
+//		
+//		//Registramos eventos
+//		List<Event> events = new ArrayList<Event>();
+//		events.add(new Event(scene, Constantes.EVENT_INIT_TRACKING, "-1", 1618660812000L, 0, 0, "-1", -1, user));
+//		Event initial = new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661052000L, 20, 20, "-1", -1, user);
+//		events.add(initial);
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661053000L, 22, 30, "-1", -1, user));
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661054000L, 25, 32, "-1", -1, user));
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661056000L, 25, 35, "-1", -1, user));
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661057000L, 35, 40, "-1", -1, user));
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661058000L, 40, 25, "-1", -1, user));
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661059000L, 50, 18, "-1", -1, user));
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661060000L, 60, 18, "-1", -1, user));
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661061000L, 70, 10, "-1", -1, user));
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661062000L, 80, 40, "-1", -1, user));
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661063000L, 90, 30, "-1", -1, user));
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661064000L, 95, 35, "-1", -1, user));
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661065000L, 100, 20, "-1", -1, user));
+//		Event onClick = new Event(scene, Constantes.EVENT_ON_CLICK, "cars", 1618661066000L, 100, 20, "-1", -1, user);
+//		events.add(onClick);
+//		events.add(new Event(scene, Constantes.EVENT_ON_MOUSE_MOVE, "-1", 1618661067000L, 105, 16, "-1", -1, user));
+//		events.add(new Event(scene, Constantes.EVENT_TRACKIND_END, "-1", 1618661885000L, 0, 0, "-1", -1, user));
+//
+//		events.forEach((event) -> ExperimentDataFactory.getEventDAO().insertEvent(event));
+//	
+//		boolean result = 
+//				DataManagerFilter.getInstance().getFilterData(ConstantesFilters.FILTER_FULL_DEMOGRAPHIC_DATA).isValid(scene, user.getSessionId());
+//
+//		assertFalse(result);
 	}
 	
 	private Double distance(int x1, int y1, int x2, int y2) {

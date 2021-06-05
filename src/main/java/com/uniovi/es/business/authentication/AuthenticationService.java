@@ -44,6 +44,11 @@ public class AuthenticationService {
 	 */
 	public ResponseEntity<?> authenticateUser(AuthDTO dto)
 			throws AttempsException {
+		
+		if(dto == null || dto.mail == null || dto.password == null) {
+			logger.error("[ERROR] Las credenciales son obligatorias: " + dto);
+			throw new AttempsException("602");
+		}
 
 		if (loginService.blocked(dto.mail)) {
 			logger.error("[ERROR] La cuenta del usuario con email: " + dto.mail + " está bloqueada.");

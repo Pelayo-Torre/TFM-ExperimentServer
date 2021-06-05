@@ -3,6 +3,7 @@ package service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -83,6 +84,9 @@ public class AdministrationTest {
 	}
 
 	@Test
+	/**
+	 * Se registra una solicitud de aprobación de cuenta de manera correcta
+	 */
 	public void test10RegisterRequest() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
 		
 		//COMENZAMOS CREANDO UN INVESTIGADOR
@@ -109,6 +113,12 @@ public class AdministrationTest {
 		
 		administrationService.register(requestDTO);
 		
+		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR 
+		authDTO = new AuthDTO();
+		authDTO.mail = "celia@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
 		//OBTENEMOS LA solicitud
 		List<RequestDTO> requests = administrationService.getPendingRequests();
 		
@@ -117,6 +127,9 @@ public class AdministrationTest {
 	}
 
 	@Test
+	/**
+	 * Se registra una solicitude de aprobación de cuenta de un investigador que está con rol Validado
+	 */
 	public void test11RegisterRequestERROR_ROL() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
 		
 		Investigator investigator = new Investigator("escanciano@gmail.com");
@@ -150,6 +163,9 @@ public class AdministrationTest {
 	}
 	
 	@Test
+	/**
+	 * Registrar una solicitud de aprobación de cuenta donde el investigador ya tiene una solicitud registrada
+	 */
 	public void test12RegisterRequestERRORRequestsAlreadyRegistered() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
 		
 		//COMENZAMOS CREANDO UN INVESTIGADOR
@@ -176,11 +192,22 @@ public class AdministrationTest {
 		
 		administrationService.register(requestDTO);
 		
+		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR
+		authDTO = new AuthDTO();
+		authDTO.mail = "celia@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
 		//OBTENEMOS LA solicitud
 		List<RequestDTO> requests = administrationService.getPendingRequests();
 		
 		assertEquals(dto.id, requests.get(requests.size() - 1).idInvestigator);
 		assertEquals(StatusRequest.PENDING.name(), requests.get(requests.size() - 1).status);
+		
+		authDTO = new AuthDTO();
+		authDTO.mail = "cunino@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
 		
 		//SE VUELVE A REGISTRAR UNA NUEVA SOLICITUD
 		requestDTO = new RequestDTO();
@@ -195,6 +222,9 @@ public class AdministrationTest {
 	}
 	
 	@Test
+	/**
+	 * Se prueba a enviar una solicitud por un investigador que no es el que se encuentra en sesión
+	 */
 	public void test13RegisterRequestERROR_InvestigatorNotInSession() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
 		
 		//COMENZAMOS CREANDO UN INVESTIGADOR
@@ -237,6 +267,9 @@ public class AdministrationTest {
 	}
 	
 	@Test
+	/**
+	 * Prueba a aceptar una petición de manera correcta
+	 */
 	public void test14AcceptRequest() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
 		
 		//COMENZAMOS CREANDO UN INVESTIGADOR
@@ -263,17 +296,17 @@ public class AdministrationTest {
 		
 		administrationService.register(requestDTO);
 		
+		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR 
+		authDTO = new AuthDTO();
+		authDTO.mail = "celia@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
 		//OBTENEMOS LA solicitud
 		List<RequestDTO> requests = administrationService.getPendingRequests();
 		
 		assertEquals(dto.id, requests.get(requests.size() - 1).idInvestigator);
 		assertEquals(StatusRequest.PENDING.name(), requests.get(requests.size() - 1).status);
-			
-		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR PARA ACEPTAR LA SOLICTUD
-		authDTO = new AuthDTO();
-		authDTO.mail = "celia@gmail.com";
-		authDTO.password = "123456789";
-		authenticateUser.authenticateUser(authDTO);
 		
 		administrationService.accept(new Identifier(requests.get(requests.size() - 1).id));
 		
@@ -312,20 +345,21 @@ public class AdministrationTest {
 		//REGISTRAMOS la solicitud
 		RequestDTO requestDTO = new RequestDTO();
 		requestDTO.idInvestigator = dto.id;
+		requestDTO.shippingDate = new Date();
 		
 		administrationService.register(requestDTO);
+		
+		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR 
+		authDTO = new AuthDTO();
+		authDTO.mail = "celia@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
 		
 		//OBTENEMOS LA solicitud
 		List<RequestDTO> requests = administrationService.getPendingRequests();
 		
 		assertEquals(dto.id, requests.get(requests.size() - 1).idInvestigator);
 		assertEquals(StatusRequest.PENDING.name(), requests.get(requests.size() - 1).status);
-			
-		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR PARA ACEPTAR LA SOLICTUD
-		authDTO = new AuthDTO();
-		authDTO.mail = "celia@gmail.com";
-		authDTO.password = "123456789";
-		authenticateUser.authenticateUser(authDTO);
 		
 		administrationService.reject(new Identifier(requests.get(requests.size() - 1).id));
 		
@@ -341,6 +375,9 @@ public class AdministrationTest {
 	}
 	
 	@Test
+	/**
+	 * Se prueba a aceptar una solicitud cuando el investigador que la acepta no es administrador
+	 */
 	public void test16AcceptRequestERROR_InvestigatorIsNotAdministrator() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
 		
 		//COMENZAMOS CREANDO UN INVESTIGADOR
@@ -367,11 +404,22 @@ public class AdministrationTest {
 		
 		administrationService.register(requestDTO);
 		
+		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR 
+		authDTO = new AuthDTO();
+		authDTO.mail = "celia@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
 		//OBTENEMOS LA solicitud
 		List<RequestDTO> requests = administrationService.getPendingRequests();
 		
 		assertEquals(dto.id, requests.get(requests.size() - 1).idInvestigator);
 		assertEquals(StatusRequest.PENDING.name(), requests.get(requests.size() - 1).status);
+		
+		authDTO = new AuthDTO();
+		authDTO.mail = "leopoldo@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
 		
 		try {
 			administrationService.accept(new Identifier(requests.get(requests.size() - 1).id));
@@ -382,6 +430,9 @@ public class AdministrationTest {
 	}
 	
 	@Test
+	/**
+	 * Prueba a rechazar una solicitud en estado RECHAZADA
+	 */
 	public void test17RejectRequestERROR_RequestNotPending() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
 		
 		//COMENZAMOS CREANDO UN INVESTIGADOR
@@ -408,17 +459,17 @@ public class AdministrationTest {
 		
 		administrationService.register(requestDTO);
 		
+		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR 
+		authDTO = new AuthDTO();
+		authDTO.mail = "celia@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
 		//OBTENEMOS LA solicitud
 		List<RequestDTO> requests = administrationService.getPendingRequests();
 		
 		assertEquals(dto.id, requests.get(requests.size() - 1).idInvestigator);
 		assertEquals(StatusRequest.PENDING.name(), requests.get(requests.size() - 1).status);
-			
-		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR PARA ACEPTAR LA SOLICTUD
-		authDTO = new AuthDTO();
-		authDTO.mail = "celia@gmail.com";
-		authDTO.password = "123456789";
-		authenticateUser.authenticateUser(authDTO);
 		
 		administrationService.reject(new Identifier(requests.get(requests.size() - 1).id));
 		
@@ -429,7 +480,7 @@ public class AdministrationTest {
 		
 		//SE PRUEBA A ACEPTAR LA PETICIÓN RECHAZADA
 		try {
-			administrationService.accept(new Identifier(requests.get(requests.size() - 1).id));
+			administrationService.reject(new Identifier(requests.get(requests.size() - 1).id));
 			Assert.fail("Debe lanzarse excepción.");
 		} catch (AdministrationException e) {
 			assertEquals("504", e.getMessage());
@@ -437,6 +488,9 @@ public class AdministrationTest {
 	}
 	
 	@Test
+	/**
+	 * Se prueba a aceptar una solicitud que no se encuentra registrada en el sistema
+	 */
 	public void test18AcceptRequestERROR_RequestNotFound() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
 		
 		//REGISTRAMOS la solicitud
@@ -453,6 +507,9 @@ public class AdministrationTest {
 	}
 	
 	@Test
+	/**
+	 * Prueba a convertir a un investigador en administrador
+	 */
 	public void test19ConvertInvestigatorAdministrator() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
 		
 		//COMENZAMOS CREANDO UN INVESTIGADOR
@@ -483,6 +540,9 @@ public class AdministrationTest {
 	}
 	
 	@Test
+	/**
+	 * Prueba a convertir a un investigador en administrador cuando ya es administrador
+	 */
 	public void test20ConvertInvestigatorAdministratorERROR_InvestigatorIsAlreadyAdministrator() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
 		
 		//COMENZAMOS CREANDO UN INVESTIGADOR
@@ -521,6 +581,9 @@ public class AdministrationTest {
 	}
 	
 	@Test
+	/**
+	 * Prueba a convertir a un investigador en administrador cuando no es administrador
+	 */
 	public void test21ConvertInvestigatorAdministratorERROR_InvestigatorNotIsAdministrator() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
 		
 		//COMENZAMOS CREANDO UN INVESTIGADOR
@@ -549,6 +612,264 @@ public class AdministrationTest {
 		} catch (ForbiddenException e) {
 			assertEquals("507", e.getMessage());
 		}		
+	}
+	
+	@Test
+	/**
+	 * Prueba a aceptar una petición que está en estado ACEPTADA
+	 */
+	public void test22AcceptRequestNotPending() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
+		
+		//COMENZAMOS CREANDO UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Alferdo";
+		dto.surname = "Garcia";
+		dto.mail = "alferdo@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMO SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "alferdo@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//OBTENEMOS EL INVESTIGADOR PARA SABER SU ID
+		dto = investigatorService.getInvestigatorByMail("alferdo@gmail.com");
+		
+		//REGISTRAMOS la solicitud
+		RequestDTO requestDTO = new RequestDTO();
+		requestDTO.idInvestigator = dto.id;
+		
+		administrationService.register(requestDTO);
+		
+		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR PARA ACEPTAR LA SOLICITUD
+		authDTO = new AuthDTO();
+		authDTO.mail = "celia@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//OBTENEMOS LA solicitud
+		List<RequestDTO> requests = administrationService.getPendingRequests();
+		
+		assertEquals(dto.id, requests.get(requests.size() - 1).idInvestigator);
+		assertEquals(StatusRequest.PENDING.name(), requests.get(requests.size() - 1).status);
+			
+		administrationService.accept(new Identifier(requests.get(requests.size() - 1).id));
+		
+		RequestDTO r = administrationService.getDetail(requests.get(requests.size() - 1).id);
+		
+		assertEquals(dto.id, r.idInvestigator);
+		assertEquals(StatusRequest.ACCEPTED.name(), r.status);
+		
+		//OBTENEMOS EL INVESTIGADOR Y COMRPOBAMOS QUE HA CAMBIADO SUR ROL
+		InvestigatorDTO inDto = investigatorService.getDetail(r.idInvestigator);
+		
+		assertEquals(Role.INVESTIGATOR_VALIDATED.name(), inDto.role);
+		
+		//VOLVEMOS A ACEPTAR LA PETICIÓN
+		try {
+			administrationService.accept(new Identifier(requests.get(requests.size() - 1).id));
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (AdministrationException e) {
+			assertEquals("504", e.getMessage());
+		}		
+	}
+	
+	@Test
+	/**
+	 * Prueba a aceptar una petición que está en estado RECHAZADA
+	 */
+	public void test23AcceptRequestNotPending() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
+		
+		//COMENZAMOS CREANDO UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Julio";
+		dto.surname = "Salinas";
+		dto.mail = "julio22@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMO SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "julio22@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//OBTENEMOS EL INVESTIGADOR PARA SABER SU ID
+		dto = investigatorService.getInvestigatorByMail("julio22@gmail.com");
+		
+		//REGISTRAMOS la solicitud
+		RequestDTO requestDTO = new RequestDTO();
+		requestDTO.idInvestigator = dto.id;
+		
+		administrationService.register(requestDTO);
+		
+		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR 
+		authDTO = new AuthDTO();
+		authDTO.mail = "celia@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//OBTENEMOS LA solicitud
+		List<RequestDTO> requests = administrationService.getPendingRequests();
+		
+		assertEquals(dto.id, requests.get(requests.size() - 1).idInvestigator);
+		assertEquals(StatusRequest.PENDING.name(), requests.get(requests.size() - 1).status);
+			
+		administrationService.reject(new Identifier(requests.get(requests.size() - 1).id));
+		
+		RequestDTO r = administrationService.getDetail(requests.get(requests.size() - 1).id);
+		
+		assertEquals(dto.id, r.idInvestigator);
+		assertEquals(StatusRequest.REJECTED.name(), r.status);
+		
+		//OBTENEMOS EL INVESTIGADOR Y COMRPOBAMOS QUE HA CAMBIADO SUR ROL
+		InvestigatorDTO inDto = investigatorService.getDetail(r.idInvestigator);
+		
+		assertEquals(Role.INVESTIGATOR_EVALUATION.name(), inDto.role);
+		
+		//ACEPTAMOS LA PETICIÓN
+		try {
+			administrationService.accept(new Identifier(requests.get(requests.size() - 1).id));
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (AdministrationException e) {
+			assertEquals("504", e.getMessage());
+		}		
+	}
+	
+	@Test
+	/**
+	 * Se prueba a rechazar una solicitud cuando el investigador que la rechazar no es administrador
+	 */
+	public void test24RejectRequestERROR_InvestigatorIsNotAdministrator() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
+		
+		//COMENZAMOS CREANDO UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Elías";
+		dto.surname = "Garcia";
+		dto.mail = "elias34@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMO SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "elias34@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//OBTENEMOS EL INVESTIGADOR PARA SABER SU ID
+		dto = investigatorService.getInvestigatorByMail("elias34@gmail.com");
+		
+		//REGISTRAMOS la solicitud
+		RequestDTO requestDTO = new RequestDTO();
+		requestDTO.idInvestigator = dto.id;
+		
+		administrationService.register(requestDTO);
+		
+		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR 
+		authDTO = new AuthDTO();
+		authDTO.mail = "celia@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//OBTENEMOS LA solicitud
+		List<RequestDTO> requests = administrationService.getPendingRequests();
+		
+		assertEquals(dto.id, requests.get(requests.size() - 1).idInvestigator);
+		assertEquals(StatusRequest.PENDING.name(), requests.get(requests.size() - 1).status);
+		
+		authDTO = new AuthDTO();
+		authDTO.mail = "elias34@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		try {
+			administrationService.reject(new Identifier(requests.get(requests.size() - 1).id));
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (ForbiddenException e) {
+			assertEquals("502", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Se prueba a rechazar una solicitud que no se encuentra registrada en el sistema
+	 */
+	public void test25RejectRequestERROR_RequestNotFound() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
+		
+		//REGISTRAMOS la solicitud
+		RequestDTO requestDTO = new RequestDTO();
+		requestDTO.id = ID_NOT_EXIST;
+		
+		//SE PRUEBA A ACEPTAR LA PETICIÓN
+		try {
+			administrationService.reject(new Identifier(requestDTO.id));
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (AdministrationException e) {
+			assertEquals("505", e.getMessage());
+		}
+	}
+	
+	@Test
+	/**
+	 * Prueba a rechazar una solicitud en estado ACEPTADA
+	 */
+	public void test26RejectRequestERROR_RequestNotPending() throws InvestigatorException, AttempsException, AdministrationException, ForbiddenException {
+		
+		//COMENZAMOS CREANDO UN INVESTIGADOR
+		InvestigatorDTO dto = new InvestigatorDTO();
+		dto.name = "Loliba";
+		dto.surname = "Garcia";
+		dto.mail = "loliba@gmail.com";
+		dto.password = "123456789";
+		
+		investigatorService.registerInvestigator(dto);
+		
+		//INICIAMO SESIÓN
+		AuthDTO authDTO = new AuthDTO();
+		authDTO.mail = "loliba@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//OBTENEMOS EL INVESTIGADOR PARA SABER SU ID
+		dto = investigatorService.getInvestigatorByMail("loliba@gmail.com");
+		
+		//REGISTRAMOS la solicitud
+		RequestDTO requestDTO = new RequestDTO();
+		requestDTO.idInvestigator = dto.id;
+		
+		administrationService.register(requestDTO);
+		
+		//NOS LOGUEAMOS AHORA COMO ADMINISTRADOR 
+		authDTO = new AuthDTO();
+		authDTO.mail = "celia@gmail.com";
+		authDTO.password = "123456789";
+		authenticateUser.authenticateUser(authDTO);
+		
+		//OBTENEMOS LA solicitud
+		List<RequestDTO> requests = administrationService.getPendingRequests();
+		
+		assertEquals(dto.id, requests.get(requests.size() - 1).idInvestigator);
+		assertEquals(StatusRequest.PENDING.name(), requests.get(requests.size() - 1).status);
+		
+		administrationService.accept(new Identifier(requests.get(requests.size() - 1).id));
+		
+		RequestDTO r = administrationService.getDetail(requests.get(requests.size() - 1).id);
+		
+		assertEquals(dto.id, r.idInvestigator);
+		assertEquals(StatusRequest.ACCEPTED.name(), r.status);
+		
+		//SE PRUEBA A ACEPTAR LA PETICIÓN RECHAZADA
+		try {
+			administrationService.reject(new Identifier(requests.get(requests.size() - 1).id));
+			Assert.fail("Debe lanzarse excepción.");
+		} catch (AdministrationException e) {
+			assertEquals("504", e.getMessage());
+		}
 	}
 	
 }
